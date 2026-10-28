@@ -1,0 +1,23 @@
+---
+import Button from './Button.astro';
+
+interface Props {
+	eyebrow?: string;
+	title?: string;
+	class?: string;
+}
+
+const {
+	eyebrow = 'Something good starts with a conversation',
+	title = 'Pull up a chair.',
+	class: className = '',
+} = Astro.props;
+---
+
+<section class:list={['project-invitation', 'arch-pattern', className]}>
+	<div class="section-inner">
+		<p class="eyebrow">{eyebrow}</p>
+		<h2 class="display-title">{title}</h2>
+		<Button href="/contact" variant="light">Start a Project</Button>
+	</div>
+</section>

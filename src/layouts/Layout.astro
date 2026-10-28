@@ -1,23 +1,40 @@
+---
+import '@fontsource/anton/400.css';
+import '@fontsource/dm-sans/400.css';
+import '@fontsource/dm-sans/500.css';
+import '@fontsource/dm-sans/700.css';
+import '../styles/global.css';
+import Header from '../components/site/Header.astro';
+import Footer from '../components/site/Footer.astro';
+
+interface Props {
+	title?: string;
+	description?: string;
+	showFooter?: boolean;
+}
+
+const {
+	title = 'Stillroom — Brand & Digital for Hospitality',
+	description = 'An independent creative studio for hospitality, food, and the places that bring people together.',
+	showFooter = true,
+} = Astro.props;
+---
+
 <!doctype html>
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="description" content={description} />
+		<meta name="theme-color" content="#fff7eb" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<title>{title}</title>
 	</head>
 	<body>
-		<slot />
+		<a class="skip-link" href="#main-content">Skip to content</a>
+		<Header />
+		<main id="main-content"><slot /></main>
+		{showFooter && <Footer />}
 	</body>
 </html>
-
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>

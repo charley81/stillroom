@@ -1,0 +1,9 @@
+{
+  "title": "Morrow",
+  "sector": "Bakery & coffee",
+  "summary": "A bright new ritual for a better kind of everyday.",
+  "services": ["Strategy", "Identity", "Digital"],
+  "cardImage": "/images/381-1910.webp",
+  "order": 6,
+  "detailAvailable": false
+}

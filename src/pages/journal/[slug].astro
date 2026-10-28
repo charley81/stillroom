@@ -1,0 +1,59 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import ArticleCard from '../../components/content/ArticleCard.astro';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+	const articles = await getCollection('journalArticles', ({ data }) => data.detailAvailable);
+	return articles.map((article) => ({ params: { slug: article.id }, props: { article } }));
+}
+
+interface Props { article: CollectionEntry<'journalArticles'> }
+const { article } = Astro.props;
+const allArticles = (await getCollection('journalArticles')).sort((a, b) => a.data.order - b.data.order);
+const related = allArticles.filter((entry) => entry.id !== article.id).slice(0, 2);
+const displayDate = article.data.date.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric', timeZone: 'UTC' }).toUpperCase();
+---
+
+<Layout title={`${article.data.title} — Stillroom Journal`} description={article.data.excerpt}>
+	<section class="article-intro">
+		<div class="section-inner"><a class="back-link" href="/journal">← Back to Journal</a><p class="eyebrow">{article.data.category} / {article.data.readTime}</p></div>
+		<h1>{article.data.title}</h1>
+		<div class="article-meta"><div><strong>BY {article.data.author.toUpperCase()}</strong><br /><time datetime={article.data.date.toISOString()}>{displayDate}</time></div><p class="lede">{article.data.excerpt}</p></div>
+	</section>
+
+	<div class="article-hero"><img src="/images/387-4032.webp" alt="The Good Table before opening" /></div>
+
+	<section class="article-body article-body--first">
+		<p class="eyebrow red">01 / The feeling of a place</p>
+		<div class="article-body__copy">
+			<p>Some places stay with you long after you’ve left. Not because they were the grandest, or the newest, or the hardest table to get. You remember them because of how they made you feel.</p>
+			<p>A chair pulled out before you asked. A menu that felt good in your hands. The particular warmth of a room as the evening settled in. Small things, perhaps. But together, they become the reason you want to return.</p>
+			<h2>More than what’s<br />on the plate.</h2>
+			<p>We talk a lot about food when we talk about restaurants. And rightly so. But a meal never arrives on its own. It arrives in a setting, with a voice, carried by people who shape the experience as much as the kitchen does.</p>
+			<p>Before the first course, a place has already told you something about itself. The sign outside. The words on the website. The way you’re greeted. Each detail sets an expectation; the best places find a way to keep that promise, quietly and consistently.</p>
+			<p>That’s where identity becomes more than a logo. It becomes a way of making decisions. What belongs here? What feels like us? What would make someone feel at home?</p>
+			<h2>The details do<br />the talking.</h2>
+			<p>A good menu doesn’t just list dishes. It gives you a sense of the people behind them. A room’s materials, its music, even the space between the tables all add to the story. These things don’t need to match perfectly. They need to feel like they come from the same place.</p>
+			<p>When the details are considered together, the experience feels natural. Nothing is working too hard to explain itself. You can relax into it. And that ease is often the thing you remember.</p>
+		</div>
+	</section>
+
+	<section class="pull-quote"><p class="eyebrow">A note to come back to</p><blockquote>“The places we love<br />don’t just feed us.<br />They make us feel<br />we belong.”</blockquote></section>
+
+	<section class="article-body article-body--second">
+		<p class="eyebrow">02 / A reason to return</p>
+		<div class="article-body__copy">
+			<h2>Familiar, without<br />standing still.</h2>
+			<p>There’s a particular pleasure in returning to a place you know. The familiar table. The person who remembers your order. The sense that, for a little while, you’re part of its rhythm.</p>
+			<p>That familiarity isn’t the same as sameness. A place can change its menu, refresh its rooms, or grow into something new while keeping hold of its character. What matters is knowing what sits at the heart of it — and giving that room to evolve.</p>
+			<p>For us, that’s the work of hospitality branding: finding what makes a place itself, then helping it show up in every part of the experience. From the first impression to the last little detail.</p>
+			<h2>Make something<br />worth returning to.</h2>
+			<p>The most memorable places aren’t trying to be everything to everyone. They have a point of view. They know who they are, who they’re there for, and what they want to put into the world.</p>
+			<p>Start there. With the people, the purpose, and the feeling you want someone to take away. Then let the details follow. Because a place stays with us when it gives us something to carry — and a reason to come back.</p>
+			<div class="article-end"><p><strong>WORDS BY STILLROOM</strong></p><p>An independent creative studio for hospitality, food, and the places that bring people together.</p><a class="back-link" href="/journal">← Back to Journal</a></div>
+		</div>
+	</section>
+
+	<section class="related"><h2>A little more<br />food for thought.</h2><div class="related-grid">{related.map((entry) => <ArticleCard article={entry} />)}</div></section>
+</Layout>

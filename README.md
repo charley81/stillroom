@@ -1,46 +1,44 @@
-# Astro Starter Kit: Basics
+# Stillroom website
+
+Responsive Astro implementation of the approved Figma `final` designs.
+
+## Commands
 
 ```sh
-pnpm create astro@latest -- --template basics
+pnpm install
+pnpm dev
+pnpm check
+pnpm build
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Routes
 
-## 🚀 Project Structure
+- `/`
+- `/services`
+- `/work`
+- `/work/[slug]`
+- `/contact`
+- `/about`
+- `/journal`
+- `/journal/[slug]`
+- `404.astro` for unknown routes
 
-Inside of your Astro project, you'll see the following folders and files:
+## Content
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
-```
+Work Projects and Journal Articles use Astro content collections:
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+- `src/content/work-projects/`
+- `src/content/journal-articles/`
+- Schemas: `src/content.config.ts`
 
-## 🧞 Commands
+Each entry supplies its listing card. Entries with `detailAvailable: true` also receive a generated detail route. This keeps listing and detail content in one source while allowing card-only entries until full detail content is available.
 
-All commands are run from the root of the project, from a terminal:
+## Structure
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
+- `src/components/site/`: shared site modules such as the header, footer, buttons, and project invitation
+- `src/components/content/`: Work Project and Journal Article cards
+- `src/layouts/Layout.astro`: document shell and shared site chrome
+- `src/styles/global.css`: design tokens, shared layout rules, and responsive styling
+- `public/images/`: optimized WebP exports from Figma
 
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+The newsletter and project inquiry forms validate in the browser. Submission is intentionally inactive until external services or API endpoints are provided.

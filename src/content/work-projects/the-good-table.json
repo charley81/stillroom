@@ -1,0 +1,11 @@
+{
+  "title": "The Good Table",
+  "sector": "Restaurant",
+  "summary": "Giving a neighbourhood restaurant a generous new voice.",
+  "services": ["Brand strategy", "Identity", "Art direction"],
+  "cardImage": "/images/381-1863.webp",
+  "order": 1,
+  "detailAvailable": true,
+  "tagline": "A generous new voice. Always a seat at the table.",
+  "introduction": "A neighbourhood restaurant with good food, good company, and a brand that makes everyone feel like a regular."
+}

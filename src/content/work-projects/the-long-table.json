@@ -1,0 +1,9 @@
+{
+  "title": "The Long Table",
+  "sector": "Wine bar",
+  "summary": "Turning a love of good wine into an invitation for everyone.",
+  "services": ["Positioning", "Identity", "Menus"],
+  "cardImage": "/images/381-1901.webp",
+  "order": 5,
+  "detailAvailable": false
+}

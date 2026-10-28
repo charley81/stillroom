@@ -1,0 +1,49 @@
+<footer class="site-footer">
+	<div class="footer-grid">
+		<section class="newsletter" aria-labelledby="newsletter-title">
+			<p class="eyebrow">A note from Stillroom</p>
+			<h2 id="newsletter-title">Good things, every so often.</h2>
+			<p>Ideas on hospitality, culture, and design.</p>
+			<form class="newsletter-form" data-inactive-form novalidate>
+				<label class="sr-only" for="newsletter-email">Your email address</label>
+				<input id="newsletter-email" name="email" type="email" placeholder="Your email address" required />
+				<button type="submit">Subscribe <span aria-hidden="true">→</span></button>
+				<p class="form-status" aria-live="polite"></p>
+			</form>
+		</section>
+
+		<nav class="footer-links" aria-label="Footer navigation">
+			<div>
+				<h3>Contact Us</h3>
+				<a href="/contact">Contact</a>
+				<span>Email</span>
+				<span>Instagram</span>
+				<span>LinkedIn</span>
+			</div>
+			<div>
+				<h3>Company</h3>
+				<a href="/">Home</a>
+				<a href="/about">About</a>
+				<a href="/work">Work</a>
+				<a href="/services">Services</a>
+				<a href="/journal">Journal</a>
+			</div>
+		</nav>
+	</div>
+	<a class="wordmark footer-wordmark" href="/">stillroom<span>®</span></a>
+	<div class="footer-meta">
+		<span>© Stillroom 2026</span>
+		<span>Independent by nature.</span>
+	</div>
+</footer>
+
+<script>
+	document.querySelectorAll<HTMLFormElement>('[data-inactive-form]').forEach((form) => {
+		form.addEventListener('submit', (event) => {
+			event.preventDefault();
+			const status = form.querySelector<HTMLElement>('.form-status');
+			if (!form.reportValidity()) return;
+			if (status) status.textContent = 'This form is ready to connect to your newsletter service.';
+		});
+	});
+</script>

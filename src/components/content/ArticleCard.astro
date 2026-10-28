@@ -1,0 +1,27 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+	article: CollectionEntry<'journalArticles'>;
+}
+
+const { article } = Astro.props;
+const href = article.data.detailAvailable ? `/journal/${article.id}` : undefined;
+const date = article.data.date.toLocaleDateString('en-GB', {
+	day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC',
+}).toUpperCase();
+---
+
+<article class="article-card">
+	{href ? (
+		<a class="article-card__image" href={href} aria-label={`Read ${article.data.title}`}>
+			<img src={article.data.image} alt="" loading="lazy" />
+		</a>
+	) : (
+		<div class="article-card__image"><img src={article.data.image} alt="" loading="lazy" /></div>
+	)}
+	<p class="eyebrow">{article.data.category} / {article.data.readTime}</p>
+	<h2>{href ? <a href={href}>{article.data.title}</a> : article.data.title}</h2>
+	<p>{article.data.excerpt}</p>
+	<div class="article-card__meta"><time datetime={article.data.date.toISOString()}>{date}</time>{href ? <a href={href}>Read the story →</a> : <span class="red">Read the story →</span>}</div>
+</article>
