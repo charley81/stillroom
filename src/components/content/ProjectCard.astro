@@ -1,24 +1,40 @@
 ---
-import type { CollectionEntry } from 'astro:content';
+import type { CollectionEntry } from 'astro:content'
 
 interface Props {
-	project: CollectionEntry<'workProjects'>;
+  project: CollectionEntry<'workProjects'>
 }
 
-const { project } = Astro.props;
-const href = project.data.detailAvailable ? `/work/${project.id}` : undefined;
+const { project } = Astro.props
+const href = project.data.detailAvailable ? `/work/${project.id}` : undefined
 ---
 
 <article class="project-card">
-	{href ? (
-		<a class="project-card__image" href={href} aria-label={`View ${project.data.title}`}>
-			<img src={project.data.cardImage} alt="" loading="lazy" />
-		</a>
-	) : (
-		<div class="project-card__image"><img src={project.data.cardImage} alt="" loading="lazy" /></div>
-	)}
-	<h2>{href ? <a href={href}>{project.data.title} <span aria-hidden="true">→</span></a> : <span>{project.data.title} <span aria-hidden="true">→</span></span>}</h2>
-	<p class="eyebrow">{project.data.sector} | View project</p>
-	<p>{project.data.summary}</p>
-	<p class="muted">{project.data.services.join(' / ')}</p>
+  {href ? (
+    <a
+      class="project-card__image"
+      href={href}
+      aria-label={`View ${project.data.title}`}
+    >
+      <img src={project.data.cardImage} alt="" loading="lazy" />
+    </a>
+  ) : (
+    <div class="project-card__image">
+      <img src={project.data.cardImage} alt="" loading="lazy" />
+    </div>
+  )}
+  <h2>
+    {href ? (
+      <a href={href}>
+        {project.data.title} <span aria-hidden="true">→</span>
+      </a>
+    ) : (
+      <span>
+        {project.data.title} <span aria-hidden="true">→</span>
+      </span>
+    )}
+  </h2>
+  <p class="eyebrow">{project.data.sector} | View project</p>
+  <p>{project.data.summary}</p>
+  <p class="muted">{project.data.services.join(' / ')}</p>
 </article>

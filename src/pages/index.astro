@@ -1,99 +1,235 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Button from '../components/site/Button.astro';
-import ProjectInvitation from '../components/site/ProjectInvitation.astro';
+import Layout from '../layouts/Layout.astro'
+import Button from '../components/site/Button.astro'
+import ProjectInvitation from '../components/site/ProjectInvitation.astro'
 ---
 
 <Layout>
-	<section class="home-hero">
-		<p class="eyebrow">Brand & digital for the world of hospitality</p>
-		<h1>Good places.<br />Great company.</h1>
-		<div class="home-hero__actions">
-			<Button href="/work" variant="solid">View Our Work</Button>
-			<Button href="/contact">Start a Project</Button>
-		</div>
-		<img class="home-hero__art" src="/images/368-8150.webp" alt="Hospitality objects arranged as a Stillroom collage" />
-	</section>
+  <section class="home-hero">
+    <p class="eyebrow">Brand & digital for the world of hospitality</p>
+    <h1>
+      Good places.
+      <br />
+      Great company.
+    </h1>
+    <div class="home-hero__actions">
+      <Button href="/work" variant="solid">
+        View Our Work
+      </Button>
+      <Button href="/contact">Start a Project</Button>
+    </div>
+    <img
+      class="home-hero__art"
+      src="/images/368-8150.webp"
+      alt="Hospitality objects arranged as a Stillroom collage"
+    />
+  </section>
 
-	<section class="client-strip">
-		<div class="section-inner"><p class="eyebrow">A few good connections / Sample clients</p></div>
-		<div class="client-grid" aria-label="Selected clients">
-			<div><strong>Orlo House</strong><span>A quieter kind of stay</span></div>
-			<div><strong>Juniper</strong><span>Café & aperitivo</span></div>
-			<div><strong>Fieldwork</strong><span>Rooted in the everyday</span></div>
-			<div><strong>The Long Table</strong><span>Pull up a chair</span></div>
-			<div><strong>Morrow</strong><span>Good things ahead</span></div>
-		</div>
-	</section>
+  <section class="client-strip">
+    <div class="section-inner">
+      <p class="eyebrow">A few good connections / Sample clients</p>
+    </div>
+    <div class="client-grid" aria-label="Selected clients">
+      <div>
+        <strong>Orlo House</strong>
+        <span>A quieter kind of stay</span>
+      </div>
+      <div>
+        <strong>Juniper</strong>
+        <span>Café & aperitivo</span>
+      </div>
+      <div>
+        <strong>Fieldwork</strong>
+        <span>Rooted in the everyday</span>
+      </div>
+      <div>
+        <strong>The Long Table</strong>
+        <span>Pull up a chair</span>
+      </div>
+      <div>
+        <strong>Morrow</strong>
+        <span>Good things ahead</span>
+      </div>
+    </div>
+  </section>
 
-	<section class="home-work">
-		<div class="section-heading-row">
-			<div><p class="eyebrow">01 / Selected work</p><h2 class="display-medium">Full of character.</h2></div>
-			<a class="red" href="/work">View Our Work →</a>
-		</div>
-		<div class="feature-grid">
-			<article class="feature-project">
-				<a href="/work/the-good-table"><img src="/images/368-8191.webp" alt="The Good Table brand collage" /></a>
-				<h3><a href="/work/the-good-table">The Good Table →</a></h3>
-				<p>A little character. A lasting impression.</p>
-			</article>
-			<article class="feature-project">
-				<img src="/images/368-8198.webp" alt="Orlo House brand collage" />
-				<h3>Orlo House</h3>
-				<p>A little character. A lasting impression.</p>
-			</article>
-		</div>
-	</section>
+  <section class="home-work">
+    <div class="section-heading-row">
+      <div>
+        <p class="eyebrow">01 / Selected work</p>
+        <h2 class="display-medium">Full of character.</h2>
+      </div>
+      <a class="red" href="/work">
+        View Our Work →
+      </a>
+    </div>
+    <div class="feature-grid">
+      <article class="feature-project">
+        <a href="/work/the-good-table">
+          <img src="/images/368-8191.webp" alt="The Good Table brand collage" />
+        </a>
+        <h3>
+          <a href="/work/the-good-table">The Good Table →</a>
+        </h3>
+        <p>A little character. A lasting impression.</p>
+      </article>
+      <article class="feature-project">
+        <img src="/images/368-8198.webp" alt="Orlo House brand collage" />
+        <h3>Orlo House</h3>
+        <p>A little character. A lasting impression.</p>
+      </article>
+    </div>
+  </section>
 
-	<section class="numbered-services arch-pattern">
-		<div class="section-inner"><p class="eyebrow">02 / What we do</p></div>
-		<div class="service-list">
-			<a href="/services"><span>1</span><span>Brand strategy</span><small>Find your voice and your point of view.</small></a>
-			<a href="/services"><span>2</span><span>Visual identity</span><small>Make every detail feel like you.</small></a>
-			<a href="/services"><span>3</span><span>Digital experiences</span><small>Create a first impression that lasts.</small></a>
-			<a href="/services"><span>4</span><span>Campaign & content</span><small>Tell one story, across every touchpoint.</small></a>
-		</div>
-	</section>
+  <section class="numbered-services arch-pattern">
+    <div class="section-inner">
+      <p class="eyebrow">02 / What we do</p>
+    </div>
+    <div class="service-list">
+      <a href="/services">
+        <span>1</span>
+        <span>Brand strategy</span>
+        <small>Find your voice and your point of view.</small>
+      </a>
+      <a href="/services">
+        <span>2</span>
+        <span>Visual identity</span>
+        <small>Make every detail feel like you.</small>
+      </a>
+      <a href="/services">
+        <span>3</span>
+        <span>Digital experiences</span>
+        <small>Create a first impression that lasts.</small>
+      </a>
+      <a href="/services">
+        <span>4</span>
+        <span>Campaign & content</span>
+        <small>Tell one story, across every touchpoint.</small>
+      </a>
+    </div>
+  </section>
 
-	<section class="section-pad home-sectors">
-		<div class="section-inner">
-			<p class="eyebrow">Made for the world of hospitality</p>
-			<h2 class="display-medium">Restaurants / Boutique hotels<br />Cafés & bars / Food & drink</h2>
-		</div>
-	</section>
+  <section class="section-pad home-sectors">
+    <div class="section-inner">
+      <p class="eyebrow">Made for the world of hospitality</p>
+      <h2 class="display-medium">
+        Restaurants / Boutique hotels
+        <br />
+        Cafés & bars / Food & drink
+      </h2>
+    </div>
+  </section>
 
-	<section class="studio-split">
-		<div>
-			<p class="eyebrow">Independent by nature</p>
-			<h2 class="display-medium">Small team.<br />Plenty of soul.</h2>
-			<p class="lede">A senior-led team with a shared love of hospitality. We work closely, think clearly and make brands with character.</p>
-			<a class="red" href="/about">Meet Stillroom →</a>
-		</div>
-		<img src="/images/368-8334.webp" alt="Stillroom studio collage" />
-	</section>
+  <section class="studio-split">
+    <div>
+      <p class="eyebrow">Independent by nature</p>
+      <h2 class="display-medium">
+        Small team.
+        <br />
+        Plenty of soul.
+      </h2>
+      <p class="lede">
+        A senior-led team with a shared love of hospitality. We work closely,
+        think clearly and make brands with character.
+      </p>
+      <a class="red" href="/about">
+        Meet Stillroom →
+      </a>
+    </div>
+    <img src="/images/368-8334.webp" alt="Stillroom studio collage" />
+  </section>
 
-	<section class="project-invitation home-testimonial arch-pattern">
-		<div class="section-inner"><p class="eyebrow">Words from the other side of the table</p><h2 class="display-medium">“They found what made us different — and made it impossible to miss.”</h2><p>Sample client quote / Name, role & business</p></div>
-	</section>
+  <section class="project-invitation home-testimonial arch-pattern">
+    <div class="section-inner">
+      <p class="eyebrow">Words from the other side of the table</p>
+      <h2 class="display-medium">
+        “They found what made us different — and made it impossible to miss.”
+      </h2>
+      <p>Sample client quote / Name, role & business</p>
+    </div>
+  </section>
 
-	<section class="section-pad home-process">
-		<div class="section-inner"><p class="eyebrow">How we work</p><h2 class="display-medium">Good chemistry.</h2><a class="red process-link" href="/services">Our process →</a></div>
-		<div class="process-grid">
-			<div><strong>1</strong><h3>Discover</h3><p>Clear thinking.<br />Close collaboration.<br />A shared ambition.</p></div>
-			<div><strong>2</strong><h3>Define</h3><p>Clear thinking.<br />Close collaboration.<br />A shared ambition.</p></div>
-			<div><strong>3</strong><h3>Create</h3><p>Clear thinking.<br />Close collaboration.<br />A shared ambition.</p></div>
-			<div><strong>4</strong><h3>Launch</h3><p>Clear thinking.<br />Close collaboration.<br />A shared ambition.</p></div>
-		</div>
-	</section>
+  <section class="section-pad home-process">
+    <div class="section-inner">
+      <p class="eyebrow">How we work</p>
+      <h2 class="display-medium">Good chemistry.</h2>
+      <a class="red process-link" href="/services">
+        Our process →
+      </a>
+    </div>
+    <div class="process-grid">
+      <div>
+        <strong>1</strong>
+        <h3>Discover</h3>
+        <p>
+          Clear thinking.
+          <br />
+          Close collaboration.
+          <br />A shared ambition.
+        </p>
+      </div>
+      <div>
+        <strong>2</strong>
+        <h3>Define</h3>
+        <p>
+          Clear thinking.
+          <br />
+          Close collaboration.
+          <br />A shared ambition.
+        </p>
+      </div>
+      <div>
+        <strong>3</strong>
+        <h3>Create</h3>
+        <p>
+          Clear thinking.
+          <br />
+          Close collaboration.
+          <br />A shared ambition.
+        </p>
+      </div>
+      <div>
+        <strong>4</strong>
+        <h3>Launch</h3>
+        <p>
+          Clear thinking.
+          <br />
+          Close collaboration.
+          <br />A shared ambition.
+        </p>
+      </div>
+    </div>
+  </section>
 
-	<section class="home-journal">
-		<div class="section-heading-row"><div><p class="eyebrow">Notes from Stillroom</p><h2 class="display-medium">Food for thought.</h2></div><a class="red" href="/journal">View Journal →</a></div>
-		<div class="home-journal-grid">
-			<article><img src="/images/368-8464.webp" alt="" /><h3><a href="/journal/what-makes-a-place-stay-with-us">What makes a place stay with us?</a></h3></article>
-			<article><img src="/images/368-8468.webp" alt="" /><h3>The quiet power of a good menu.</h3></article>
-			<article><img src="/images/368-8472.webp" alt="" /><h3>From screen to table.</h3></article>
-		</div>
-	</section>
+  <section class="home-journal">
+    <div class="section-heading-row">
+      <div>
+        <p class="eyebrow">Notes from Stillroom</p>
+        <h2 class="display-medium">Food for thought.</h2>
+      </div>
+      <a class="red" href="/journal">
+        View Journal →
+      </a>
+    </div>
+    <div class="home-journal-grid">
+      <article>
+        <img src="/images/368-8464.webp" alt="" />
+        <h3>
+          <a href="/journal/what-makes-a-place-stay-with-us">
+            What makes a place stay with us?
+          </a>
+        </h3>
+      </article>
+      <article>
+        <img src="/images/368-8468.webp" alt="" />
+        <h3>The quiet power of a good menu.</h3>
+      </article>
+      <article>
+        <img src="/images/368-8472.webp" alt="" />
+        <h3>From screen to table.</h3>
+      </article>
+    </div>
+  </section>
 
-	<ProjectInvitation />
+  <ProjectInvitation />
 </Layout>

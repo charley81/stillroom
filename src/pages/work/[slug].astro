@@ -1,56 +1,141 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
-import Layout from '../../layouts/Layout.astro';
+import { getCollection, type CollectionEntry } from 'astro:content'
+import Layout from '../../layouts/Layout.astro'
 
 export async function getStaticPaths() {
-	const projects = await getCollection('workProjects', ({ data }) => data.detailAvailable);
-	return projects.map((project) => ({ params: { slug: project.id }, props: { project } }));
+  const projects = await getCollection(
+    'workProjects',
+    ({ data }) => data.detailAvailable,
+  )
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }))
 }
 
-interface Props { project: CollectionEntry<'workProjects'> }
-const { project } = Astro.props;
+interface Props {
+  project: CollectionEntry<'workProjects'>
+}
+const { project } = Astro.props
 ---
 
-<Layout title={`${project.data.title} — Stillroom`} description={project.data.summary}>
-	<section class="detail-intro">
-		<div class="section-inner"><a class="back-link" href="/work">← Back to Work</a></div>
-		<div class="detail-intro__grid">
-			<div>
-				<h1>{project.data.title}</h1>
-				<h2>{project.data.tagline}</h2>
-				<p class="lede">{project.data.introduction}</p>
-			</div>
-			<img src="/images/381-2490.webp" alt="Tomato vine illustration for The Good Table" />
-		</div>
-	</section>
+<Layout
+  title={`${project.data.title} — Stillroom`}
+  description={project.data.summary}
+>
+  <section class="detail-intro">
+    <div class="section-inner">
+      <a class="back-link" href="/work">
+        ← Back to Work
+      </a>
+    </div>
+    <div class="detail-intro__grid">
+      <div>
+        <h1>{project.data.title}</h1>
+        <h2>{project.data.tagline}</h2>
+        <p class="lede">{project.data.introduction}</p>
+      </div>
+      <img
+        src="/images/381-2490.webp"
+        alt="Tomato vine illustration for The Good Table"
+      />
+    </div>
+  </section>
 
-	<img class="full-bleed-image" src="/images/381-2491.webp" alt="A welcoming table at The Good Table restaurant" />
+  <img
+    class="full-bleed-image"
+    src="/images/381-2491.webp"
+    alt="A welcoming table at The Good Table restaurant"
+  />
 
-	<section class="case-copy">
-		<div class="case-copy__row"><p class="eyebrow">The challenge</p><div><h2>A local favourite.<br />Ready for its next chapter.</h2><p class="lede">The Good Table had all the ingredients of a neighbourhood institution: seasonal food, familiar faces, and a generous welcome. Its identity needed to express that warmth with the same care as the kitchen.</p></div></div>
-		<div class="case-copy__row"><p class="eyebrow">Our contribution</p><div><h2>Good food. Good company.<br />One distinctive voice.</h2><p class="lede">We built the brand around a simple invitation: there’s always a seat. A confident serif wordmark, hand-drawn produce, and a warm, tactile palette bring that idea to life across menus, matchboxes, and every little touch at the table.</p></div></div>
-	</section>
+  <section class="case-copy">
+    <div class="case-copy__row">
+      <p class="eyebrow">The challenge</p>
+      <div>
+        <h2>
+          A local favourite.
+          <br />
+          Ready for its next chapter.
+        </h2>
+        <p class="lede">
+          The Good Table had all the ingredients of a neighbourhood institution:
+          seasonal food, familiar faces, and a generous welcome. Its identity
+          needed to express that warmth with the same care as the kitchen.
+        </p>
+      </div>
+    </div>
+    <div class="case-copy__row">
+      <p class="eyebrow">Our contribution</p>
+      <div>
+        <h2>
+          Good food. Good company.
+          <br />
+          One distinctive voice.
+        </h2>
+        <p class="lede">
+          We built the brand around a simple invitation: there’s always a seat.
+          A confident serif wordmark, hand-drawn produce, and a warm, tactile
+          palette bring that idea to life across menus, matchboxes, and every
+          little touch at the table.
+        </p>
+      </div>
+    </div>
+  </section>
 
-	<section class="brand-gallery">
-		<div class="brand-gallery__inner">
-			<p class="eyebrow">The identity, in good company</p>
-			<img src="/images/381-2505.webp" alt="The Good Table printed identity suite" />
-			<div class="brand-gallery__pair">
-				<div class="project-invitation brand-panel"><div><h2 class="display-medium">The Good Table</h2><h3>Good food.<br />Good company.<br />Always a seat.</h3></div><p class="brand-panel__descriptor">Neighbourhood restaurant</p></div>
-				<img src="/images/381-2511.webp" alt="The Good Table menu and matchbox" />
-			</div>
-			<img src="/images/381-2601.webp" alt="The Good Table restaurant exterior" />
-		</div>
-	</section>
+  <section class="brand-gallery">
+    <div class="brand-gallery__inner">
+      <p class="eyebrow">The identity, in good company</p>
+      <img
+        src="/images/381-2505.webp"
+        alt="The Good Table printed identity suite"
+      />
+      <div class="brand-gallery__pair">
+        <div class="project-invitation brand-panel">
+          <div>
+            <h2 class="display-medium">The Good Table</h2>
+            <h3>
+              Good food.
+              <br />
+              Good company.
+              <br />
+              Always a seat.
+            </h3>
+          </div>
+          <p class="brand-panel__descriptor">Neighbourhood restaurant</p>
+        </div>
+        <img
+          src="/images/381-2511.webp"
+          alt="The Good Table menu and matchbox"
+        />
+      </div>
+      <img
+        src="/images/381-2601.webp"
+        alt="The Good Table restaurant exterior"
+      />
+    </div>
+  </section>
 
-	<section class="outcome">
-		<div class="section-inner"><p class="eyebrow">The outcome</p></div>
-		<h2>A brand that feels like a warm welcome.</h2>
-		<p class="lede">A cohesive identity that carries the restaurant’s generous spirit from the first impression to the last little detail. Recognisable on the street. Memorable at the table.</p>
-	</section>
+  <section class="outcome">
+    <div class="section-inner">
+      <p class="eyebrow">The outcome</p>
+    </div>
+    <h2>A brand that feels like a warm welcome.</h2>
+    <p class="lede">
+      A cohesive identity that carries the restaurant’s generous spirit from the
+      first impression to the last little detail. Recognisable on the street.
+      Memorable at the table.
+    </p>
+  </section>
 
-	<section class="next-project">
-		<img src="/images/381-2696.webp" alt="Orlo House brand materials" />
-		<div class="next-project__copy"><p class="eyebrow">Next project / 02</p><h2>Orlo House →</h2><h3 class="display-small">A slower kind of stay.<br />A lasting first impression.</h3></div>
-	</section>
+  <section class="next-project">
+    <img src="/images/381-2696.webp" alt="Orlo House brand materials" />
+    <div class="next-project__copy">
+      <p class="eyebrow">Next project / 02</p>
+      <h2>Orlo House →</h2>
+      <h3 class="display-small">
+        A slower kind of stay.
+        <br />A lasting first impression.
+      </h3>
+    </div>
+  </section>
 </Layout>

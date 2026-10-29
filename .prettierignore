@@ -1,0 +1,7 @@
+# Dependencies and generated output
+node_modules/
+dist/
+.astro/
+
+# Package manager lockfile
+pnpm-lock.yaml

@@ -1,26 +1,66 @@
 ---
-import { getCollection } from 'astro:content';
-import ArticleCard from '../../components/content/ArticleCard.astro';
-import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content'
+import ArticleCard from '../../components/content/ArticleCard.astro'
+import Layout from '../../layouts/Layout.astro'
 
-const articles = (await getCollection('journalArticles')).sort((a, b) => a.data.order - b.data.order);
-const featured = articles.find((article) => article.data.featured)!;
-const latest = articles.filter((article) => !article.data.featured);
+const articles = (await getCollection('journalArticles')).sort(
+  (a, b) => a.data.order - b.data.order,
+)
+const featured = articles.find((article) => article.data.featured)!
+const latest = articles.filter((article) => !article.data.featured)
 ---
 
-<Layout title="Journal — Stillroom" description="Ideas and observations about hospitality, culture and design.">
-	<section class="journal-intro">
-		<div class="section-inner"><p class="eyebrow">Journal / Notes from Stillroom</p></div>
-		<div class="journal-intro__grid"><h1>Food for<br />thought.</h1><div><div class="notebook-art"><img src="/images/387-3818.webp" alt="" /></div><p class="lede">Ideas, observations, and the things we keep coming back to.</p></div></div>
-	</section>
+<Layout
+  title="Journal — Stillroom"
+  description="Ideas and observations about hospitality, culture and design."
+>
+  <section class="journal-intro">
+    <div class="section-inner">
+      <p class="eyebrow">Journal / Notes from Stillroom</p>
+    </div>
+    <div class="journal-intro__grid">
+      <h1>
+        Food for
+        <br />
+        thought.
+      </h1>
+      <div>
+        <div class="notebook-art">
+          <img src="/images/387-3818.webp" alt="" />
+        </div>
+        <p class="lede">
+          Ideas, observations, and the things we keep coming back to.
+        </p>
+      </div>
+    </div>
+  </section>
 
-	<article class="featured-article">
-		<a href={`/journal/${featured.id}`}><img src={featured.data.image} alt="The Good Table before opening" /></a>
-		<div class="featured-article__copy"><p class="eyebrow">Featured / {featured.data.category} / {featured.data.readTime}</p><h2><a href={`/journal/${featured.id}`}>{featured.data.title}</a></h2><p>{featured.data.excerpt}</p><a class="red" href={`/journal/${featured.id}`}>21 Oct 2026 &nbsp; / &nbsp; Read the story →</a></div>
-	</article>
+  <article class="featured-article">
+    <a href={`/journal/${featured.id}`}>
+      <img src={featured.data.image} alt="The Good Table before opening" />
+    </a>
+    <div class="featured-article__copy">
+      <p class="eyebrow">
+        Featured / {featured.data.category} / {featured.data.readTime}
+      </p>
+      <h2>
+        <a href={`/journal/${featured.id}`}>{featured.data.title}</a>
+      </h2>
+      <p>{featured.data.excerpt}</p>
+      <a class="red" href={`/journal/${featured.id}`}>
+        21 Oct 2026 &nbsp; / &nbsp; Read the story →
+      </a>
+    </div>
+  </article>
 
-	<section class="latest-articles">
-		<div class="section-inner section-pad" style="padding-bottom:0"><h2 class="display-medium">Fresh from the notebook.</h2></div>
-		<div class="article-list">{latest.map((article) => <ArticleCard article={article} />)}</div>
-	</section>
+  <section class="latest-articles">
+    <div class="section-inner section-pad" style="padding-bottom:0">
+      <h2 class="display-medium">Fresh from the notebook.</h2>
+    </div>
+    <div class="article-list">
+      {latest.map((article) => (
+        <ArticleCard article={article} />
+      ))}
+    </div>
+  </section>
 </Layout>
