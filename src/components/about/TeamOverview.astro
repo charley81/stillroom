@@ -1,0 +1,50 @@
+---
+const team = [
+  {
+    name: 'Alex Morgan',
+    role: 'Founder / Creative direction',
+    portrait: '/figma-assets/alex-morgan.png',
+    bio: 'Alex brings a love of hospitality and a clear creative point of view to the studio, guiding every project from first conversation to final detail.',
+  },
+  {
+    name: 'Maya Chen',
+    role: 'Strategy / Design',
+    portrait: '/figma-assets/maya-chen.png',
+    bio: 'Maya connects the story to the system, finding what makes a place distinctive and shaping identities with warmth, clarity and character.',
+  },
+  {
+    name: 'Sam Rivera',
+    role: 'Digital / Collaboration',
+    portrait: '/figma-assets/sam-rivera.png',
+    bio: 'Sam brings brands to life online, pairing thoughtful design with intuitive digital experiences that make every interaction feel considered.',
+  },
+]
+---
+
+<section class="flex h-[2298.233px] flex-col gap-8 overflow-hidden px-4 py-16 md:h-[1175px] md:gap-16 md:px-8 md:py-32">
+  <div class="grid w-full grid-cols-1 gap-4 md:grid-cols-2 md:gap-16">
+    <h2 class="m-0 font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[72px] md:leading-[1.05]">
+      Good company.
+    </h2>
+    <p class="m-0 leading-[27px] text-dark">
+      A close-knit team, with the right collaborators around the table.
+      Strategy, design and digital working together from the start.
+    </p>
+  </div>
+  <div class="grid w-full grid-cols-1 gap-8 md:grid-cols-3">
+    {team.map((person) => (
+      <article class="flex flex-col gap-4 overflow-hidden py-8 md:gap-8">
+        <img
+          class="h-[358.078px] w-full rounded-md object-cover object-top md:h-[480px]"
+          src={person.portrait}
+          alt=""
+        />
+        <h3 class="m-0 font-display text-[36px] leading-[1.05] font-normal text-dark uppercase">
+          {person.name}
+        </h3>
+        <p class="m-0 leading-5 text-primary uppercase">{person.role}</p>
+        <p class="m-0 leading-[27px] text-dark-grey">{person.bio}</p>
+      </article>
+    ))}
+  </div>
+</section>

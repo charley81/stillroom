@@ -1,0 +1,25 @@
+---
+import Button from '../site/Button.astro'
+---
+
+<section class="flex h-[512px] flex-col items-center gap-16 px-4 py-16 text-center md:h-[1200px] md:gap-8 md:px-16 md:py-32">
+  <p class="m-0 w-full font-body text-base leading-[15.6px] font-normal text-dark-grey uppercase">
+    Brand strategy, identity & websites for independent hospitality
+  </p>
+  <h1 class="m-0 w-full font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[128px] md:leading-[158px]">
+    Good places.
+    <br />
+    Great company.
+  </h1>
+  <div class="flex w-full flex-col justify-center gap-4 md:flex-row md:gap-10">
+    <Button href="/contact" variant="solid">
+      Start a Project
+    </Button>
+    <Button href="/work">View Our Work</Button>
+  </div>
+  <img
+    class="hidden h-[460px] w-full max-w-[1312px] object-cover md:block"
+    src="/figma-assets/hospitality-hero.png"
+    alt="Hospitality objects arranged as a Stillroom collage"
+  />
+</section>

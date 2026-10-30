@@ -1,0 +1,38 @@
+---
+import type { CollectionEntry } from 'astro:content'
+
+interface Props {
+  article: CollectionEntry<'journalArticles'>
+}
+
+const { article } = Astro.props
+---
+
+<article class="mx-4 grid h-[723.447px] w-[calc(100%_-_32px)] grid-cols-1 overflow-hidden md:mx-8 md:h-[640px] md:w-[calc(100%_-_64px)] md:grid-cols-[minmax(0,752fr)_minmax(0,624fr)]">
+  <a class="h-[277.447px] w-full md:h-[640px]" href={`/journal/${article.id}`}>
+    <img
+      class="h-[277.447px] w-full object-cover md:h-[640px]"
+      src={article.data.image}
+      alt="The Good Table before opening"
+    />
+  </a>
+  <div class="m-0 flex h-[446px] w-full flex-col justify-center gap-4 bg-primary px-4 py-16 text-light md:my-[44.5px] md:h-[551px] md:gap-[clamp(16px,2.223vw,32px)] md:p-[clamp(32px,4.445vw,64px)]">
+    <p class="m-0 font-body text-base leading-5 font-normal text-light uppercase">
+      Featured / {article.data.category} / {article.data.readTime}
+    </p>
+    <h2 class="m-0 font-display text-5xl leading-12 font-normal uppercase md:text-[clamp(48px,5vw,72px)] md:leading-[1.05]">
+      <a class="hover:text-light-grey" href={`/journal/${article.id}`}>
+        {article.data.title}
+      </a>
+    </h2>
+    <p class="m-0 w-full max-w-[448px] text-base leading-[27px]">
+      {article.data.excerpt}
+    </p>
+    <a
+      class="m-0 leading-[24.3px] font-bold text-light hover:text-dark"
+      href={`/journal/${article.id}`}
+    >
+      21 Oct 2026 &nbsp; / &nbsp; Read the story →
+    </a>
+  </div>
+</article>

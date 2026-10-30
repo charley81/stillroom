@@ -1,0 +1,32 @@
+---
+import ClientLogos from '../site/ClientLogos.astro'
+---
+
+<section class="flex h-[1123px] flex-col gap-8 overflow-hidden px-4 py-16 text-left md:h-[995px] md:px-8 md:py-32">
+  <p class="m-0 font-body text-base leading-5 font-normal text-primary uppercase">
+    In good company
+  </p>
+  <h2 class="m-0 font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[72px] md:leading-[1.05]">
+    Made for people
+    <br />
+    who care.
+  </h2>
+  <div class="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-16">
+    <p class="m-0 text-base leading-[27px] text-dark">
+      Restaurants, hotels, cafés and food & drink brands. Different worlds,
+      united by a belief that the details matter.
+    </p>
+    <a
+      class="m-0 text-left text-base leading-[24.3px] font-bold text-primary hover:text-dark md:text-right"
+      href="/work"
+    >
+      Explore our work →
+    </a>
+  </div>
+  <div class="flex h-auto flex-col gap-8 py-8 md:h-[417px]">
+    <p class="m-0 font-body text-base leading-[14.85px] font-black text-dark-grey uppercase">
+      Explorations in hospitality / Concept brands
+    </p>
+    <ClientLogos variant="proof" />
+  </div>
+</section>

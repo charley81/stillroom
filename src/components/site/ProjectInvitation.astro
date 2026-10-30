@@ -4,20 +4,35 @@ import Button from './Button.astro'
 interface Props {
   eyebrow?: string
   title?: string
-  class?: string
+  variant?: 'default' | 'work' | 'about'
 }
 
 const {
   eyebrow = 'Something good starts with a conversation',
   title = 'Pull up a chair.',
-  class: className = '',
+  variant = 'default',
 } = Astro.props
+
+const heights = {
+  default: 'h-[329px] md:h-[526px]',
+  work: 'h-[350px] md:h-[536px]',
+  about: 'h-[313px] md:h-[526px]',
+}
 ---
 
-<section class:list={['project-invitation', 'arch-pattern', className]}>
-  <div class="section-inner">
-    <p class="eyebrow">{eyebrow}</p>
-    <h2 class="display-title">{title}</h2>
+<section
+  class:list={[
+    "relative isolate flex flex-col items-stretch gap-8 overflow-hidden bg-primary bg-[length:1440px_1002px] bg-left-top bg-no-repeat px-4 py-16 text-light after:absolute after:inset-0 after:-z-10 after:bg-dark after:opacity-[0.64] after:content-[''] md:px-8 md:py-32",
+    heights[variant],
+  ]}
+>
+  <div class="flex w-full max-w-none flex-col gap-8 p-0">
+    <p class="m-0 font-body text-base leading-[16.2px] font-normal text-light-grey uppercase">
+      {eyebrow}
+    </p>
+    <h2 class="m-0 font-display text-5xl leading-12 font-normal text-light uppercase md:text-[126px] md:leading-[132.3px]">
+      {title}
+    </h2>
     <Button href="/contact" variant="light">
       Start a Project
     </Button>

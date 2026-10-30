@@ -1,0 +1,23 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import ArticleCard from '../content/ArticleCard.astro'
+
+interface Props {
+  articles: CollectionEntry<'journalArticles'>[]
+}
+
+const { articles } = Astro.props
+---
+
+<section class="flex h-[1376.667px] flex-col gap-16 px-4 py-20 md:h-[1040px] md:px-8">
+  <h2 class="m-0 w-full font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[72px] md:leading-[1.05]">
+    A little more
+    <br />
+    food for thought.
+  </h2>
+  <div class="grid h-[1056.667px] w-full grid-cols-1 gap-8 md:h-[664px] md:grid-cols-2">
+    {articles.map((article) => (
+      <ArticleCard article={article} variant="related" />
+    ))}
+  </div>
+</section>

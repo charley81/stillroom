@@ -1,0 +1,22 @@
+---
+import { getCollection } from 'astro:content'
+import ProjectCard from '../content/ProjectCard.astro'
+
+const projects = (await getCollection('workProjects')).sort(
+  (a, b) => a.data.order - b.data.order,
+)
+---
+
+<section
+  class="flex h-[2937px] w-full flex-col gap-8 overflow-hidden px-4 py-16 md:h-[2384px] md:px-8 md:py-32"
+  aria-label="Work Projects"
+>
+  <p class="m-0 font-body text-base leading-[16.2px] font-black text-dark-grey uppercase">
+    Our work
+  </p>
+  <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
+    {projects.map((project) => (
+      <ProjectCard project={project} />
+    ))}
+  </div>
+</section>

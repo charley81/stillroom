@@ -1,49 +1,110 @@
-<footer class="site-footer">
-  <div class="footer-grid">
-    <section class="newsletter" aria-labelledby="newsletter-title">
-      <p class="eyebrow">A note from Stillroom</p>
-      <h2 id="newsletter-title">Good things, every so often.</h2>
-      <p>Ideas on hospitality, culture, and design.</p>
-      <form class="newsletter-form" data-inactive-form novalidate>
+<footer class="min-h-[1118px] px-4 pt-16 pb-8 md:min-h-[530px] md:px-8">
+  <div class="mx-auto grid max-w-none grid-cols-1 gap-[72px] md:grid-cols-2 md:gap-16">
+    <section aria-labelledby="newsletter-title">
+      <p class="m-0 font-body text-base leading-[16.2px] font-black text-dark-grey uppercase">
+        A note from Stillroom
+      </p>
+      <h2
+        id="newsletter-title"
+        class="my-4 font-display text-[36px] leading-[1.05] font-normal text-dark uppercase"
+      >
+        Good things, every so often.
+      </h2>
+      <p class="m-0 text-base leading-[27px] text-dark-grey">
+        Ideas on hospitality, culture, and design.
+      </p>
+      <form
+        class="mt-8 flex w-full max-w-[40rem] flex-col items-start gap-4"
+        data-inactive-form
+        novalidate
+      >
         <label class="sr-only" for="newsletter-email">
           Your email address
         </label>
         <input
+          class="min-h-16 w-full rounded-md border border-light-grey bg-transparent p-4 leading-[24.3px] text-dark-grey caret-primary placeholder:text-dark-grey"
           id="newsletter-email"
           name="email"
           type="email"
           placeholder="Your email address"
           required
         />
-        <button type="submit">
+        <button
+          class="cursor-pointer border-0 bg-transparent p-0 text-left font-bold leading-[24.3px] text-primary"
+          type="submit"
+        >
           Subscribe <span aria-hidden="true">→</span>
         </button>
-        <p class="form-status" aria-live="polite"></p>
+        <p
+          class="m-0 w-full text-[0.8rem] text-primary empty:hidden"
+          data-form-status
+          aria-live="polite"
+        ></p>
       </form>
     </section>
 
-    <nav class="footer-links" aria-label="Footer navigation">
-      <div>
-        <h3>Contact Us</h3>
-        <a href="/contact">Contact</a>
-        <span>Email</span>
-        <span>Instagram</span>
-        <span>LinkedIn</span>
+    <nav
+      class="grid grid-cols-1 gap-16 text-left md:grid-cols-2 md:gap-8 md:text-right"
+      aria-label="Footer navigation"
+    >
+      <div class="flex flex-col gap-4 md:gap-[0.65rem]">
+        <h3 class="m-0 font-body text-base leading-[24.3px] font-bold text-dark normal-case">
+          Contact Us
+        </h3>
+        <a
+          class="text-base leading-[27px] text-dark-grey hover:text-primary"
+          href="/contact"
+        >
+          Contact
+        </a>
+        <span class="text-base leading-[27px] text-dark-grey">Email</span>
+        <span class="text-base leading-[27px] text-dark-grey">Instagram</span>
+        <span class="text-base leading-[27px] text-dark-grey">LinkedIn</span>
       </div>
-      <div>
-        <h3>Company</h3>
-        <a href="/">Home</a>
-        <a href="/about">About</a>
-        <a href="/work">Work</a>
-        <a href="/services">Services</a>
-        <a href="/journal">Journal</a>
+      <div class="flex flex-col gap-4 md:gap-[0.65rem]">
+        <h3 class="m-0 font-body text-base leading-[24.3px] font-bold text-dark normal-case">
+          Company
+        </h3>
+        <a
+          class="text-base leading-[27px] text-dark-grey hover:text-primary"
+          href="/"
+        >
+          Home
+        </a>
+        <a
+          class="text-base leading-[27px] text-dark-grey hover:text-primary"
+          href="/about"
+        >
+          About
+        </a>
+        <a
+          class="text-base leading-[27px] text-dark-grey hover:text-primary"
+          href="/work"
+        >
+          Work
+        </a>
+        <a
+          class="text-base leading-[27px] text-dark-grey hover:text-primary"
+          href="/services"
+        >
+          Services
+        </a>
+        <a
+          class="text-base leading-[27px] text-dark-grey hover:text-primary"
+          href="/journal"
+        >
+          Journal
+        </a>
       </div>
     </nav>
   </div>
-  <a class="wordmark footer-wordmark" href="/">
-    stillroom<span>®</span>
+  <a
+    class="my-16 block max-w-none font-display text-[36px] leading-[1.05] font-normal text-dark lowercase md:mx-auto md:mt-16 md:mb-12"
+    href="/"
+  >
+    stillroom<span class="text-primary">®</span>
   </a>
-  <div class="footer-meta">
+  <div class="mx-auto flex max-w-none flex-col gap-4 text-base leading-[24.3px] font-bold text-muted md:flex-row md:gap-32">
     <span>© Stillroom 2026</span>
     <span>Independent by nature.</span>
   </div>
@@ -55,7 +116,7 @@
     .forEach((form) => {
       form.addEventListener('submit', (event) => {
         event.preventDefault()
-        const status = form.querySelector<HTMLElement>('.form-status')
+        const status = form.querySelector<HTMLElement>('[data-form-status]')
         if (!form.reportValidity()) return
         if (status)
           status.textContent =

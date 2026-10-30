@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content'
 import ArticleCard from '../../components/content/ArticleCard.astro'
+import FeaturedArticle from '../../components/journal/FeaturedArticle.astro'
 import Layout from '../../layouts/Layout.astro'
 
 const articles = (await getCollection('journalArticles')).sort(
@@ -14,50 +15,41 @@ const latest = articles.filter((article) => !article.data.featured)
   title="Journal — Stillroom"
   description="Ideas and observations about hospitality, culture and design."
 >
-  <section class="journal-intro">
-    <div class="section-inner">
-      <p class="eyebrow">Journal / Notes from Stillroom</p>
+  <section class="flex h-[362px] flex-col gap-8 overflow-hidden px-4 pt-4 pb-16 md:h-[658px] md:px-8 md:pt-32 md:pb-20">
+    <div class="w-full max-w-none p-0">
+      <p class="m-0 font-body text-base leading-[16.2px] font-black text-dark-grey uppercase">
+        Journal / Notes from Stillroom
+      </p>
     </div>
-    <div class="journal-intro__grid">
-      <h1>
+    <div class="grid h-auto w-full max-w-none grid-cols-1 gap-8 md:h-[393px] md:grid-cols-2 md:gap-[clamp(32px,8.889vw,128px)]">
+      <h1 class="m-0 font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[clamp(72px,8.889vw,128px)] md:leading-[1.05]">
         Food for
         <br />
         thought.
       </h1>
-      <div>
-        <div class="notebook-art">
-          <img src="/images/387-3818.webp" alt="" />
+      <div class="flex h-auto flex-col gap-8 pb-4 md:h-[393px]">
+        <div class="hidden h-[264px] min-h-0 place-items-center md:grid">
+          <img
+            class="h-[264px] w-full object-contain"
+            src="/images/387-3818.webp"
+            alt=""
+          />
         </div>
-        <p class="lede">
-          Ideas, observations, and the things we keep coming back to.
+        <p class="m-0 w-full text-base leading-[27px] text-dark-grey md:ml-8 md:w-[min(420px,calc(100%_-_32px))]">
+          Ideas, observations, and the things we keep coming back to. On
+          hospitality, culture, and design — and what happens when they meet.
         </p>
       </div>
     </div>
   </section>
 
-  <article class="featured-article">
-    <a href={`/journal/${featured.id}`}>
-      <img src={featured.data.image} alt="The Good Table before opening" />
-    </a>
-    <div class="featured-article__copy">
-      <p class="eyebrow">
-        Featured / {featured.data.category} / {featured.data.readTime}
-      </p>
-      <h2>
-        <a href={`/journal/${featured.id}`}>{featured.data.title}</a>
-      </h2>
-      <p>{featured.data.excerpt}</p>
-      <a class="red" href={`/journal/${featured.id}`}>
-        21 Oct 2026 &nbsp; / &nbsp; Read the story →
-      </a>
-    </div>
-  </article>
+  <FeaturedArticle article={featured} />
 
-  <section class="latest-articles">
-    <div class="section-inner section-pad" style="padding-bottom:0">
-      <h2 class="display-medium">Fresh from the notebook.</h2>
-    </div>
-    <div class="article-list">
+  <section class="flex h-[3582px] flex-col gap-16 overflow-hidden px-4 py-16 md:h-[2516px] md:px-8 md:py-32">
+    <h2 class="m-0 font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[72px] md:leading-[1.05]">
+      Fresh from the notebook.
+    </h2>
+    <div class="flex w-full flex-col gap-8 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-16">
       {latest.map((article) => (
         <ArticleCard article={article} />
       ))}

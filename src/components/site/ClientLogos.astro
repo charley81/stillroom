@@ -1,0 +1,82 @@
+---
+interface Props {
+  variant?: 'strip' | 'proof'
+}
+
+const { variant = 'strip' } = Astro.props
+
+const clients = [
+  {
+    name: 'Orlo',
+    tagline: 'A quieter kind of stay',
+    symbol: '/figma-assets/orlo-house.svg',
+    containerClass: 'h-[92px]',
+    imageClass: 'h-11 w-11',
+    nameClass:
+      'h-[38px] font-orlo text-[25px] leading-none font-normal uppercase',
+  },
+  {
+    name: 'Juniper',
+    tagline: 'Café & aperitivo',
+    symbol: '/figma-assets/juniper.svg',
+    containerClass: 'h-[89px]',
+    imageClass: 'h-[38px] w-11',
+    nameClass: 'h-[41px] font-juniper text-[34px] leading-none font-semibold',
+  },
+  {
+    name: 'Fieldwork',
+    tagline: 'Rooted in the everyday',
+    symbol: '/figma-assets/fieldwork.svg',
+    containerClass: 'h-[82px]',
+    imageClass: 'h-11 w-11',
+    nameClass:
+      'h-7 font-geometric text-[22px] leading-none font-bold tracking-[1.4px] uppercase',
+  },
+  {
+    name: 'The Table',
+    tagline: 'Pull up a chair',
+    symbol: '/figma-assets/long-table.svg',
+    containerClass: 'h-[81px]',
+    imageClass: 'h-11 w-11',
+    nameClass:
+      'h-[27px] font-long-table text-[22px] leading-none font-normal italic',
+  },
+  {
+    name: 'Morrow',
+    tagline: 'Good things ahead',
+    symbol: '/figma-assets/morrow.svg',
+    containerClass: 'h-[95px]',
+    imageClass: 'h-11 w-11',
+    nameClass: 'h-[41px] font-geometric text-[32px] leading-none font-bold',
+  },
+]
+
+const desktopHeight = variant === 'proof' ? 'md:h-[289px]' : 'md:h-[114px]'
+---
+
+<div
+  class="grid w-full grid-cols-1 gap-5 md:min-h-[114px] md:grid-cols-5"
+  aria-label="Concept hospitality brands"
+>
+  {clients.map((client) => (
+    <div
+      class:list={[
+        'flex min-h-0 flex-col items-center justify-start overflow-hidden text-dark md:justify-center',
+        desktopHeight,
+        client.containerClass,
+      ]}
+    >
+      <img
+        class:list={['object-contain', client.imageClass]}
+        src={client.symbol}
+        alt=""
+      />
+      <strong class:list={['block text-dark normal-case', client.nameClass]}>
+        {client.name}
+      </strong>
+      <span class="font-body text-[8px] leading-none font-medium tracking-[2px] text-dark uppercase">
+        {client.tagline}
+      </span>
+    </div>
+  ))}
+</div>

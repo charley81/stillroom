@@ -1,0 +1,34 @@
+---
+const services = [
+  ['Brand strategy', 'Find your voice and your point of view.'],
+  ['Visual identity', 'Make every detail feel like you.'],
+  ['Digital experiences', 'Create a first impression that lasts.'],
+  ['Campaign & content', 'Tell one story, across every touchpoint.'],
+]
+---
+
+<section class="relative isolate flex h-[1685px] flex-col gap-8 overflow-hidden bg-primary bg-[length:1440px_1002px] bg-left-top bg-no-repeat px-4 py-32 text-light after:absolute after:inset-0 after:-z-10 after:bg-dark after:opacity-[0.64] after:content-[''] md:h-[953px] md:px-8">
+  <p class="m-0 font-body text-base leading-[16.2px] font-black text-light uppercase">
+    What we do
+  </p>
+  <div class="flex w-full flex-col gap-8">
+    {services.map(([title, description], index) => (
+      <a
+        class="flex h-auto min-h-0 flex-col items-center gap-8 border-0 py-8 text-center font-display text-5xl leading-12 font-normal text-light uppercase hover:text-light-grey md:grid md:h-[136px] md:grid-cols-[90px_1fr_auto] md:border-b md:border-dark-grey md:text-left md:text-[72px] md:leading-[50.4px] md:last:border-b-0"
+        href="/services"
+      >
+        <img
+          class="size-24 object-contain md:size-[72px]"
+          src={`/figma-assets/number-${index + 1}.png`}
+          alt=""
+          width="112"
+          height="112"
+        />
+        <span>{title}</span>
+        <small class="font-body text-base leading-[24.3px] font-bold text-light normal-case">
+          {description}
+        </small>
+      </a>
+    ))}
+  </div>
+</section>

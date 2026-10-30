@@ -1,173 +1,45 @@
 ---
-import Layout from '../layouts/Layout.astro'
+import ClientProof from '../components/about/ClientProof.astro'
+import FounderStory from '../components/about/FounderStory.astro'
+import TeamOverview from '../components/about/TeamOverview.astro'
+import WorkingPrinciples from '../components/about/WorkingPrinciples.astro'
+import ClientLogoFonts from '../components/site/ClientLogoFonts.astro'
 import ProjectInvitation from '../components/site/ProjectInvitation.astro'
+import Layout from '../layouts/Layout.astro'
 ---
 
 <Layout
   title="About — Stillroom"
   description="Stillroom is a small independent creative studio with plenty of soul."
 >
-  <section class="about-philosophy">
-    <div class="section-inner">
-      <p class="eyebrow">About Stillroom</p>
-    </div>
-    <h1>
+  <ClientLogoFonts slot="head" />
+
+  <section class="flex h-[260px] flex-col gap-16 overflow-hidden px-4 pt-4 pb-16 md:h-[1320px] md:px-8 md:pt-20 md:pb-16">
+    <p class="m-0 font-body text-base leading-5 font-normal text-dark-grey uppercase">
+      About Stillroom
+    </p>
+    <h1 class="m-0 w-full font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[128px] md:leading-[1.05]">
       Small team.
       <br />
       Plenty of soul.
     </h1>
-    <img src="/images/387-3526.webp" alt="Stillroom table collage" />
+    <img
+      class="hidden h-[760px] w-full max-w-none object-cover md:block"
+      src="/images/387-3526.webp"
+      alt="Stillroom table collage"
+    />
   </section>
 
-  <section class="founder-story">
-    <img src="/images/387-3529.webp" alt="Stillroom studio collage" />
-    <div>
-      <p class="eyebrow">Our story</p>
-      <h2>
-        It starts
-        <br />
-        with a feeling.
-      </h2>
-      <p>
-        Stillroom began with a simple belief: the places we remember are the
-        ones that make us feel something. A warm welcome, a familiar ritual, a
-        detail that feels considered.
-      </p>
-      <p>
-        We bring strategy, identity and digital together to help hospitality
-        brands express that feeling clearly and carry it through every part of
-        the experience.
-      </p>
-      <a class="red" href="/contact">
-        Start a conversation →
-      </a>
-    </div>
-  </section>
+  <FounderStory />
 
-  <section class="team-section">
-    <div class="section-inner team-heading">
-      <div>
-        <p class="eyebrow">The people behind the work</p>
-        <h2 class="display-medium">Good company.</h2>
-      </div>
-      <p class="team-intro">
-        A three-person team with a shared love of hospitality, close
-        collaboration and work that feels as thoughtful as the places it
-        represents.
-      </p>
-    </div>
-    <div class="team-grid">
-      <article class="team-card">
-        <div
-          class="team-card__portrait"
-          style="background-image:url('/images/387-3542.webp')"
-        ></div>
-        <h3>Alex Morgan</h3>
-        <p class="role">Founder / Creative direction</p>
-        <p>
-          Alex brings a love of hospitality and a clear creative point of view
-          to the studio, guiding every project from first conversation to final
-          detail.
-        </p>
-      </article>
-      <article class="team-card">
-        <div
-          class="team-card__portrait"
-          style="background-image:url('/images/387-3543.webp')"
-        ></div>
-        <h3>Maya Chen</h3>
-        <p class="role">Strategy / Design</p>
-        <p>
-          Maya connects the story to the system, finding what makes a place
-          distinctive and shaping identities with warmth, clarity and character.
-        </p>
-      </article>
-      <article class="team-card">
-        <div
-          class="team-card__portrait"
-          style="background-image:url('/images/387-3544.webp')"
-        ></div>
-        <h3>Sam Rivera</h3>
-        <p class="role">Digital / Collaboration</p>
-        <p>
-          Sam brings brands to life online, pairing thoughtful design with
-          intuitive digital experiences that make every interaction feel
-          considered.
-        </p>
-      </article>
-    </div>
-  </section>
+  <TeamOverview />
 
-  <section class="principles arch-pattern">
-    <div class="section-inner">
-      <p class="eyebrow">What we value</p>
-      <h2 class="display-medium">
-        Good work.
-        <br />
-        Good chemistry.
-      </h2>
-    </div>
-    <div class="principle-grid">
-      <article>
-        <p class="eyebrow">01</p>
-        <h3>Character over convention.</h3>
-        <p>
-          Every brand should feel like the place and people behind it, not a
-          copy of the world around it.
-        </p>
-      </article>
-      <article>
-        <p class="eyebrow">02</p>
-        <h3>Design is better together.</h3>
-        <p>
-          We work closely, share ideas early and make the strongest decisions as
-          one team.
-        </p>
-      </article>
-      <article>
-        <p class="eyebrow">03</p>
-        <h3>Care in every detail.</h3>
-        <p>
-          From first thought to final handover, the small things carry the
-          feeling.
-        </p>
-      </article>
-      <article>
-        <p class="eyebrow">04</p>
-        <h3>Useful, not just beautiful.</h3>
-        <p>
-          Every identity and digital experience should work hard in the real
-          world.
-        </p>
-      </article>
-    </div>
-  </section>
+  <WorkingPrinciples />
 
-  <section class="proof">
-    <p class="eyebrow">Selected proof</p>
-    <h2 class="display-medium">
-      Made for people
-      <br />
-      who care.
-    </h2>
-    <p class="lede" style="margin-inline:auto">
-      Restaurants, hotels, cafés and food brands with character, ambition and a
-      point of view.
-    </p>
-    <a class="red proof-link" href="/work">
-      Explore our work →
-    </a>
-    <p class="eyebrow proof-clients-label">
-      A few good connections / Sample clients
-    </p>
-    <div class="proof-logos">
-      <strong>Orlo House</strong>
-      <strong>Juniper</strong>
-      <strong>Fieldwork</strong>
-      <strong>The Long Table</strong>
-      <strong>Morrow</strong>
-    </div>
-  </section>
+  <ClientProof />
 
-  <ProjectInvitation class="about-invitation" />
+  <ProjectInvitation
+    eyebrow="Good people. Good projects. Let’s meet."
+    variant="about"
+  />
 </Layout>

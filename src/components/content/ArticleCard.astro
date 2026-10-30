@@ -3,9 +3,10 @@ import type { CollectionEntry } from 'astro:content'
 
 interface Props {
   article: CollectionEntry<'journalArticles'>
+  variant?: 'listing' | 'related'
 }
 
-const { article } = Astro.props
+const { article, variant = 'listing' } = Astro.props
 const href = article.data.detailAvailable ? `/journal/${article.id}` : undefined
 const date = article.data.date
   .toLocaleDateString('en-GB', {
@@ -15,33 +16,53 @@ const date = article.data.date
     timeZone: 'UTC',
   })
   .toUpperCase()
+const cardHeight =
+  variant === 'related' ? 'h-[512.333px] md:h-[664px]' : 'h-auto md:h-[664px]'
+const imageClasses =
+  'h-[217.333px] w-full object-cover transition-transform duration-200 md:h-[448px]'
 ---
 
-<article class="article-card">
+<article class:list={['flex flex-col gap-4 overflow-hidden', cardHeight]}>
   {href ? (
     <a
-      class="article-card__image"
+      class="group mb-1 block overflow-hidden"
       href={href}
       aria-label={`Read ${article.data.title}`}
     >
-      <img src={article.data.image} alt="" loading="lazy" />
+      <img
+        class:list={[imageClasses, 'group-hover:scale-[1.015]']}
+        src={article.data.image}
+        alt=""
+      />
     </a>
   ) : (
-    <div class="article-card__image">
-      <img src={article.data.image} alt="" loading="lazy" />
+    <div class="mb-1 block overflow-hidden">
+      <img class={imageClasses} src={article.data.image} alt="" />
     </div>
   )}
-  <p class="eyebrow">
+  <p class="m-0 font-body text-base leading-5 font-normal text-dark uppercase">
     {article.data.category} / {article.data.readTime}
   </p>
-  <h2>{href ? <a href={href}>{article.data.title}</a> : article.data.title}</h2>
-  <p>{article.data.excerpt}</p>
-  <div class="article-card__meta">
+  <h2 class="m-0 font-display text-[36px] leading-[1.05] font-normal text-dark uppercase">
+    {href ? (
+      <a class="hover:text-primary" href={href}>
+        {article.data.title}
+      </a>
+    ) : (
+      article.data.title
+    )}
+  </h2>
+  <p class="m-0 text-base leading-[27px] text-dark-grey">
+    {article.data.excerpt}
+  </p>
+  <div class="m-0 flex flex-col gap-8 text-base leading-5 text-dark md:flex-row md:justify-between md:gap-4">
     <time datetime={article.data.date.toISOString()}>{date}</time>
     {href ? (
-      <a href={href}>Read the story →</a>
+      <a class="font-bold text-primary hover:text-dark" href={href}>
+        Read the story →
+      </a>
     ) : (
-      <span class="red">Read the story →</span>
+      <span class="text-primary">Read the story →</span>
     )}
   </div>
 </article>

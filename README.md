@@ -38,7 +38,8 @@ Each entry supplies its listing card. Entries with `detailAvailable: true` also 
 - `src/components/site/`: shared site modules such as the header, footer, buttons, and project invitation
 - `src/components/content/`: Work Project and Journal Article cards
 - `src/layouts/Layout.astro`: document shell and shared site chrome
-- `src/styles/global.css`: design tokens, shared layout rules, and responsive styling
+- `src/styles/global.css`: Tailwind import, theme tokens, and minimal global accessibility styles
+- Component and page styling uses Tailwind utility classes directly in `.astro` files
 - `public/images/`: optimized WebP exports from Figma
 
 The newsletter and project inquiry forms validate in the browser. Submission is intentionally inactive until external services or API endpoints are provided.

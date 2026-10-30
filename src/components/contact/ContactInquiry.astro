@@ -1,0 +1,195 @@
+---
+import Button from '../site/Button.astro'
+
+const fieldClass = 'grid gap-4'
+const controlClass =
+  'min-h-16 w-full rounded-md border border-light-grey bg-transparent p-4 text-dark-grey caret-primary placeholder:text-dark-grey'
+---
+
+<section class="grid h-[2487.5px] w-full grid-cols-1 gap-16 overflow-hidden px-4 pt-4 pb-16 md:h-[1511px] md:grid-cols-[448px_800px] md:px-16 md:py-32">
+  <div class="flex flex-col gap-8">
+    <p class="m-0 font-body text-base leading-5 font-normal text-dark-grey uppercase">
+      Your next chapter
+    </p>
+    <h1 class="m-0 font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[72px] md:leading-[1.05]">
+      Pull up
+      <br />a chair.
+    </h1>
+    <p class="m-0 w-full text-base leading-[27px] text-dark-grey md:w-[416px]">
+      Every good collaboration starts with a conversation. A few details will
+      help us get to know you.
+    </p>
+    <img
+      class="h-[327.5px] w-full object-cover md:h-[560px] md:w-[448px]"
+      src="/images/382-3276.webp"
+      alt="Stillroom invitation stationery"
+    />
+    <p class="m-0 font-body text-base leading-5 font-normal text-primary uppercase">
+      A little thinking. A lot of possibility.
+    </p>
+  </div>
+  <form
+    class="flex w-full flex-col gap-10 md:w-[800px]"
+    data-contact-form
+    novalidate
+  >
+    <h2 class="m-0 font-display text-[36px] leading-[1.05] font-normal text-dark uppercase">
+      Tell us about your project
+    </h2>
+    <p class="m-0 text-base leading-[27px] text-dark-grey">
+      * Required fields. A rough idea is a perfectly good start.
+    </p>
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-x-8 md:gap-y-10">
+      <div class={fieldClass}>
+        <label class="leading-[24.3px] font-bold text-dark" for="name">
+          Name *
+        </label>
+        <input
+          class={controlClass}
+          id="name"
+          name="name"
+          placeholder="Your name"
+          required
+        />
+      </div>
+      <div class={fieldClass}>
+        <label class="leading-[24.3px] font-bold text-dark" for="email">
+          Email *
+        </label>
+        <input
+          class={controlClass}
+          id="email"
+          name="email"
+          type="email"
+          placeholder="you@yourbusiness.com"
+          required
+        />
+      </div>
+      <div class:list={[fieldClass, 'md:col-span-2']}>
+        <label class="leading-[24.3px] font-bold text-dark" for="business">
+          Business or brand *
+        </label>
+        <input
+          class={controlClass}
+          id="business"
+          name="business"
+          placeholder="What’s the name of your business?"
+          required
+        />
+      </div>
+      <fieldset class="grid gap-4 border-0 p-0 md:col-span-2">
+        <legend class="leading-[24.3px] font-bold text-dark">
+          Services needed *
+        </legend>
+        <p class="m-0 leading-[27px] text-dark-grey">Select all that apply.</p>
+        <div class="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-x-8 md:gap-y-4">
+          <label class="flex min-h-16 items-center gap-3 rounded-md border border-light-grey p-4 text-dark">
+            <input
+              class="accent-primary"
+              type="checkbox"
+              name="services"
+              value="Brand strategy"
+            />
+            Brand strategy
+          </label>
+          <label class="flex min-h-16 items-center gap-3 rounded-md border border-light-grey p-4 text-dark">
+            <input
+              class="accent-primary"
+              type="checkbox"
+              name="services"
+              value="Visual identity"
+            />
+            Visual identity
+          </label>
+          <label class="flex min-h-16 items-center gap-3 rounded-md border border-light-grey p-4 text-dark">
+            <input
+              class="accent-primary"
+              type="checkbox"
+              name="services"
+              value="Digital design and development"
+            />
+            Digital design & development
+          </label>
+          <label class="flex min-h-16 items-center gap-3 rounded-md border border-light-grey p-4 text-dark">
+            <input
+              class="accent-primary"
+              type="checkbox"
+              name="services"
+              value="Campaign and content direction"
+            />
+            Campaign & content direction
+          </label>
+        </div>
+      </fieldset>
+      <div class={fieldClass}>
+        <label class="leading-[24.3px] font-bold text-dark" for="budget">
+          Approximate budget range
+        </label>
+        <select class={controlClass} id="budget" name="budget">
+          <option value="">Select a range</option>
+          <option>£10k–£25k</option>
+          <option>£25k–£50k</option>
+          <option>£50k+</option>
+        </select>
+      </div>
+      <div class={fieldClass}>
+        <label class="leading-[24.3px] font-bold text-dark" for="timing">
+          Target timing
+        </label>
+        <input
+          class={controlClass}
+          id="timing"
+          name="timing"
+          placeholder="When would you like to launch?"
+        />
+      </div>
+      <div class:list={[fieldClass, 'md:col-span-2']}>
+        <label class="leading-[24.3px] font-bold text-dark" for="description">
+          Project description *
+        </label>
+        <textarea
+          class:list={[
+            controlClass,
+            'h-[88px] min-h-[88px] resize-y md:h-44 md:min-h-44',
+          ]}
+          id="description"
+          name="description"
+          placeholder="Tell us about your idea, where you are now, and where you’d like to go."
+          required
+        ></textarea>
+      </div>
+    </div>
+    <Button type="submit" variant="solid" class="!rounded-md">
+      Send inquiry
+    </Button>
+    <p class="m-0 w-full text-base leading-[27px] text-dark-grey md:w-[640px]">
+      By sending this form, you agree that we may use these details to respond
+      to your inquiry.
+    </p>
+    <p
+      class="m-0 w-full text-[0.8rem] text-primary empty:hidden"
+      data-form-status
+      aria-live="polite"
+    ></p>
+  </form>
+</section>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form]')
+  form?.addEventListener('submit', (event) => {
+    event.preventDefault()
+    const selectedServices = form.querySelectorAll<HTMLInputElement>(
+      'input[name="services"]:checked',
+    )
+    const status = form.querySelector<HTMLElement>('[data-form-status]')
+    if (!form.reportValidity()) return
+    if (selectedServices.length === 0) {
+      if (status) status.textContent = 'Select at least one service.'
+      form.querySelector<HTMLInputElement>('input[name="services"]')?.focus()
+      return
+    }
+    if (status)
+      status.textContent =
+        'This inquiry is ready to connect to your form service.'
+  })
+</script>

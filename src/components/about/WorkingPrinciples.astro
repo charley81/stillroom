@@ -1,0 +1,45 @@
+---
+const principles = [
+  {
+    number: '01',
+    title: ['Character', 'over convention.'],
+    copy: 'Every place has something that makes it different. We find it, sharpen it, and make sure it comes through in everything.',
+  },
+  {
+    number: '02',
+    title: ['Closer is', 'better.'],
+    copy: 'You work directly with the people doing the work. Open conversations, shared curiosity and a genuine seat at the table.',
+  },
+  {
+    number: '03',
+    title: ['Care in', 'every detail.'],
+    copy: 'From the first idea to the final touchpoint, we make things that feel considered, connected and unmistakably yours.',
+  },
+]
+---
+
+<section class="relative isolate flex h-[1341px] flex-col gap-8 overflow-hidden bg-primary bg-[url('/figma-assets/arch-pattern.svg')] bg-[length:1440px_1002px] bg-left-top bg-no-repeat px-4 py-16 text-light after:absolute after:inset-0 after:-z-10 after:bg-dark after:opacity-[0.64] after:content-[''] md:h-[1104px] md:gap-16 md:px-8 md:py-32">
+  <p class="m-0 font-body text-base leading-5 font-normal text-light uppercase">
+    What we believe
+  </p>
+  <h2 class="m-0 font-display text-5xl leading-12 font-normal text-light uppercase md:text-[72px] md:leading-[1.05]">
+    Good work.
+    <br />
+    Good chemistry.
+  </h2>
+  <div class="flex w-full flex-col gap-8 md:gap-16">
+    {principles.map((principle) => (
+      <article class="grid h-auto min-h-0 grid-cols-1 gap-8 bg-transparent py-8 text-light md:h-[140px] md:grid-cols-[144px_464px_704px]">
+        <p class="m-0 font-display text-[36px] leading-[1.05] font-normal uppercase">
+          {principle.number}
+        </p>
+        <h3 class="m-0 font-display text-[36px] leading-[1.05] font-normal uppercase">
+          {principle.title[0]}
+          <br />
+          {principle.title[1]}
+        </h3>
+        <p class="m-0 text-base leading-[27px]">{principle.copy}</p>
+      </article>
+    ))}
+  </div>
+</section>

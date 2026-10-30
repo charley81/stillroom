@@ -1,0 +1,49 @@
+---
+import type { CollectionEntry } from 'astro:content'
+
+interface Props {
+  article: CollectionEntry<'journalArticles'>
+}
+
+const { article } = Astro.props
+const displayDate = article.data.date
+  .toLocaleDateString('en-GB', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
+  })
+  .toUpperCase()
+---
+
+<section class="flex h-[619px] flex-col overflow-hidden px-4 pt-4 pb-20 md:h-[694px] md:px-8 md:py-20">
+  <a
+    class="mb-16 leading-[24.3px] font-bold text-primary hover:text-dark"
+    href="/journal"
+  >
+    ← Back to Journal
+  </a>
+  <p class="m-0 mb-8 font-body text-base leading-5 font-normal text-dark uppercase">
+    {article.data.category} / {article.data.readTime}
+  </p>
+  <h1 class="m-0 mb-16 w-full font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[128px] md:leading-[1.05]">
+    {article.data.title}
+  </h1>
+  <div class="grid w-full grid-cols-1 gap-8 md:grid-cols-[640px_640px] md:gap-16">
+    <div>
+      <strong class="leading-[24.3px]">
+        BY {article.data.author.toUpperCase()}
+      </strong>
+      <br />
+      <time
+        class="leading-5 text-dark-grey"
+        datetime={article.data.date.toISOString()}
+      >
+        {displayDate}
+      </time>
+    </div>
+    <p class="m-0 w-full text-base leading-[27px] text-dark-grey md:w-[640px]">
+      {article.data.excerpt}
+    </p>
+  </div>
+</section>

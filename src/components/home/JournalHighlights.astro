@@ -1,0 +1,63 @@
+---
+const journal = [
+  {
+    image: '/images/368-8464.webp',
+    title: 'What makes a place stay with us?',
+    href: '/journal/what-makes-a-place-stay-with-us',
+  },
+  {
+    image: '/images/368-8468.webp',
+    title: 'The quiet power of a good menu.',
+    href: '/journal',
+  },
+  {
+    image: '/images/368-8472.webp',
+    title: 'From screen to table.',
+    href: '/journal',
+  },
+]
+---
+
+<section class="flex h-[1496.276px] flex-col gap-8 overflow-hidden px-4 py-16 md:h-[872px] md:px-8 md:py-32">
+  <p class="m-0 font-body text-base leading-[16.2px] font-black text-dark-grey uppercase">
+    <span class="hidden md:inline">05 / Notes from Stillroom</span>
+    <span class="inline md:hidden">Notes from Stillroom</span>
+  </p>
+  <div class="flex w-full flex-col items-start justify-between gap-8 md:flex-row md:items-center">
+    <h2 class="m-0 font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[72px] md:leading-[71.4px]">
+      Food for thought.
+    </h2>
+    <a
+      class="text-base leading-[20.25px] font-black text-primary hover:text-dark"
+      href="/journal"
+    >
+      Read the Journal →
+    </a>
+  </div>
+  <div class="grid h-[1186.276px] w-full grid-cols-1 gap-8 md:h-[463px] md:grid-cols-3">
+    {journal.map((article, index) => (
+      <article
+        class:list={[
+          'flex h-auto min-h-[350.092px] flex-col gap-4 bg-light px-4 py-8 md:h-[463px] md:min-h-0',
+          index < 2 && 'min-h-[386.092px]',
+        ]}
+      >
+        <a href={article.href}>
+          <img
+            class="h-[203.092px] w-full object-cover md:h-[280px]"
+            src={article.image}
+            alt=""
+          />
+        </a>
+        <p class="m-0 text-base leading-[14.85px] text-primary uppercase">
+          Culture / 5 min read
+        </p>
+        <h3 class="m-0 font-display text-[36px] leading-[35.84px] font-normal text-dark uppercase">
+          <a class="hover:text-primary" href={article.href}>
+            {article.title}
+          </a>
+        </h3>
+      </article>
+    ))}
+  </div>
+</section>

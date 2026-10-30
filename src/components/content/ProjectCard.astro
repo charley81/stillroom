@@ -7,34 +7,59 @@ interface Props {
 
 const { project } = Astro.props
 const href = project.data.detailAvailable ? `/work/${project.id}` : undefined
+const imageClasses =
+  'h-[244.5px] w-full object-cover transition-transform duration-200 md:h-[504px]'
 ---
 
-<article class="project-card">
+<article class="h-auto overflow-hidden md:h-[669px]">
   {href ? (
     <a
-      class="project-card__image"
+      class="group mb-4 block h-[244.5px] overflow-hidden md:h-[504px]"
       href={href}
       aria-label={`View ${project.data.title}`}
     >
-      <img src={project.data.cardImage} alt="" loading="lazy" />
+      <img
+        class:list={[imageClasses, 'group-hover:scale-[1.015]']}
+        src={project.data.cardImage}
+        alt=""
+        loading="lazy"
+      />
     </a>
   ) : (
-    <div class="project-card__image">
-      <img src={project.data.cardImage} alt="" loading="lazy" />
+    <div class="mb-4 block h-[244.5px] overflow-hidden md:h-[504px]">
+      <img
+        class={imageClasses}
+        src={project.data.cardImage}
+        alt=""
+        loading="lazy"
+      />
     </div>
   )}
-  <h2>
+  <h2 class="m-0 mb-4 font-display text-[36px] leading-[1.05] font-normal text-dark uppercase md:h-[38px]">
     {href ? (
-      <a href={href}>
-        {project.data.title} <span aria-hidden="true">→</span>
+      <a class="hover:text-primary" href={href}>
+        {project.data.title}{' '}
+        <span class="text-primary" aria-hidden="true">
+          →
+        </span>
       </a>
     ) : (
       <span>
-        {project.data.title} <span aria-hidden="true">→</span>
+        {project.data.title}{' '}
+        <span class="text-primary" aria-hidden="true">
+          →
+        </span>
       </span>
     )}
   </h2>
-  <p class="eyebrow">{project.data.sector} | View project</p>
-  <p>{project.data.summary}</p>
-  <p class="muted">{project.data.services.join(' / ')}</p>
+  <p class="m-0 mb-2 font-body text-base leading-[24.3px] font-bold text-dark-grey uppercase">
+    <span>{project.data.sector} | </span>
+    <span class="text-primary">View project</span>
+  </p>
+  <p class="m-0 mb-2 text-base leading-[27px] text-dark">
+    {project.data.summary}
+  </p>
+  <p class="m-0 text-base leading-[27px] text-dark-grey">
+    {project.data.services.join(' / ')}
+  </p>
 </article>

@@ -1,21 +1,24 @@
 ---
-import Layout from '../layouts/Layout.astro'
 import Button from '../components/site/Button.astro'
+import Layout from '../layouts/Layout.astro'
 ---
 
 <Layout title="Page Not Found — Stillroom">
-  <section class="not-found">
+  <section class="flex h-[540px] flex-col items-center justify-start gap-8 overflow-hidden px-4 pt-4 pb-20 text-center md:h-[826px] md:px-16 md:py-20">
     <img
+      class="h-[131px] w-[358px] max-w-none object-contain md:h-[400px] md:w-[800px]"
       src="/images/387-3481.webp"
       alt="404 in red letterpress ribbon lettering"
     />
-    <h1>This table isn’t here.</h1>
-    <p class="lede">
+    <h1 class="m-0 font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[72px] md:leading-[1.05]">
+      This table isn’t here.
+    </h1>
+    <p class="m-0 w-full text-base leading-[27px] text-dark-grey md:w-[800px]">
       The page you’re looking for has moved, or never made it to the menu.
       <br />
       Let’s find you somewhere good to go.
     </p>
-    <Button href="/" variant="solid" class="recovery-button">
+    <Button href="/" variant="solid">
       Back to Home
     </Button>
   </section>

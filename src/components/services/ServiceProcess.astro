@@ -1,0 +1,50 @@
+---
+const phases = [
+  {
+    number: '01',
+    title: 'Discover',
+    description: 'Get close to your people, your place and your ambitions.',
+  },
+  {
+    number: '02',
+    title: 'Define',
+    description: 'Find the direction that feels distinctly yours.',
+  },
+  {
+    number: '03',
+    title: 'Create',
+    description: 'Bring the idea to life across identity and experience.',
+  },
+  {
+    number: '04',
+    title: 'Launch',
+    description:
+      'Open with confidence, a clear toolkit and a considered handover.',
+  },
+]
+---
+
+<section class="flex h-[846px] flex-col overflow-hidden px-4 py-16 md:h-[637px] md:px-8 md:py-32">
+  <div class="flex w-full max-w-none flex-col gap-8 p-0">
+    <p class="m-0 font-body text-base leading-[16.2px] font-black text-dark-grey uppercase">
+      How the work connects
+    </p>
+    <h2 class="m-0 font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[72px] md:leading-[1.05]">
+      The whole is
+      <br />
+      better together.
+    </h2>
+  </div>
+  <div class="mt-16 grid w-full max-w-none grid-cols-1 gap-8 md:grid-cols-4">
+    {phases.map((phase) => (
+      <div class="flex flex-col gap-4">
+        <h3 class="m-0 font-display text-[36px] leading-[1.05] font-normal text-dark uppercase">
+          <span class="text-primary">{phase.number}</span> {phase.title}
+        </h3>
+        <p class="m-0 w-full text-base leading-[27px] text-dark-grey md:w-72">
+          {phase.description}
+        </p>
+      </div>
+    ))}
+  </div>
+</section>

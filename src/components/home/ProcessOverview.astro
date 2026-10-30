@@ -1,0 +1,70 @@
+---
+const phases = [
+  [
+    'Discover',
+    'Get close to your people,',
+    'your place and what',
+    'makes it worth knowing.',
+  ],
+  [
+    'Define',
+    'Find the idea, the voice',
+    'and the direction that',
+    'feel distinctly yours.',
+  ],
+  [
+    'Create',
+    'Bring the brand to life,',
+    'from the menu in hand',
+    'to the screen at home.',
+  ],
+  [
+    'Launch',
+    'Open with confidence.',
+    'A clear toolkit and',
+    'a considered handover.',
+  ],
+]
+---
+
+<section class="flex h-[1603px] flex-col gap-8 overflow-hidden px-4 py-16 md:h-[724px] md:px-8 md:py-32">
+  <p class="m-0 font-body text-base leading-[16.2px] font-black text-dark-grey uppercase">
+    <span class="hidden md:inline">How we work</span>
+    <span class="inline md:hidden">How we work</span>
+  </p>
+  <div class="flex w-full flex-col items-start justify-between gap-8 md:flex-row md:items-center">
+    <h2 class="m-0 font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[72px] md:leading-[71.4px]">
+      Good chemistry.
+    </h2>
+    <a
+      class="text-base leading-[21.6px] font-black text-primary hover:text-dark"
+      href="/services"
+    >
+      Our process →
+    </a>
+  </div>
+  <div class="grid h-[1292px] w-full grid-cols-1 gap-8 md:h-[315px] md:grid-cols-[296px_repeat(3,minmax(0,328px))]">
+    {phases.map(([title, ...lines], index) => (
+      <article class="flex h-[299px] min-h-0 flex-col items-center gap-8 rounded-md border border-light-grey p-4 text-center md:h-auto">
+        <img
+          class="size-24 object-contain md:size-28"
+          src={`/figma-assets/number-${index + 1}.png`}
+          alt=""
+          width="112"
+          height="112"
+        />
+        <h3 class="m-0 font-display text-[36px] leading-[35.2px] font-normal text-dark uppercase">
+          {title}
+        </h3>
+        <p class="m-0 text-base leading-[22.95px] text-dark-grey">
+          {lines.map((line) => (
+            <>
+              {line}
+              <br />
+            </>
+          ))}
+        </p>
+      </article>
+    ))}
+  </div>
+</section>

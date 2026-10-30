@@ -12,15 +12,27 @@ const {
   type = 'button',
   class: className = '',
 } = Astro.props
-const classes = `button button--${variant} ${className}`
+
+const baseClasses =
+  'inline-flex h-14 min-h-14 w-full cursor-pointer items-center justify-center gap-[0.45rem] rounded-full border-2 p-0 text-base leading-none font-bold transition-colors duration-200 md:w-[210px]'
+const variantClasses = {
+  outline:
+    'border-primary bg-light text-dark hover:bg-primary hover:text-light',
+  solid: 'border-primary bg-primary text-light hover:border-dark hover:bg-dark',
+  light:
+    'border-primary bg-transparent text-light hover:bg-primary hover:text-light',
+}
 ---
 
 {href ? (
-  <a class={classes} href={href}>
+  <a class:list={[baseClasses, variantClasses[variant], className]} href={href}>
     <slot /> <span aria-hidden="true">→</span>
   </a>
 ) : (
-  <button class={classes} type={type}>
+  <button
+    class:list={[baseClasses, variantClasses[variant], className]}
+    type={type}
+  >
     <slot /> <span aria-hidden="true">→</span>
   </button>
 )}

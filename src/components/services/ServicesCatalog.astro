@@ -1,0 +1,98 @@
+---
+const services = [
+  {
+    image: '/figma-assets/service-brand.jpg',
+    number: '/figma-assets/number-1.png',
+    title: ['Brand', 'strategy'],
+    description:
+      'Find the idea worth building around. We get close to your people, your place and the things that make your business worth knowing.',
+    deliverables: [
+      'Discovery & research',
+      'Positioning & audience',
+      'Brand purpose & personality',
+      'Messaging & tone of voice',
+      'Brand architecture',
+    ],
+  },
+  {
+    image: '/figma-assets/service-identity.jpg',
+    number: '/figma-assets/number-2.png',
+    title: ['Visual', 'identity'],
+    description:
+      'A character all your own. Distinctive identities with the range to move from a matchbox to a front door, and everywhere in between.',
+    deliverables: [
+      'Creative & art direction',
+      'Logo & identity system',
+      'Colour & typography',
+      'Menus, signage & packaging',
+      'Guidelines & brand toolkit',
+    ],
+  },
+  {
+    image: '/figma-assets/service-digital.jpg',
+    number: '/figma-assets/number-3.png',
+    title: ['Digital design', '& development'],
+    description:
+      'An experience before the experience. Websites that express your character and make the next step feel effortless.',
+    deliverables: [
+      'Digital strategy & user experience',
+      'Website design',
+      'Responsive development',
+      'Booking & enquiry journeys',
+      'CMS setup & handover',
+    ],
+  },
+  {
+    image: '/figma-assets/service-campaign.jpg',
+    number: '/figma-assets/number-4.png',
+    title: ['Campaign &', 'content direction'],
+    description:
+      'Give your story a life beyond the launch. Ideas, images and words that bring the brand into the world with confidence.',
+    deliverables: [
+      'Campaign & launch concepts',
+      'Photography & film direction',
+      'Copy & editorial direction',
+      'Social & campaign assets',
+      'Ongoing creative direction',
+    ],
+  },
+]
+---
+
+<section class="flex h-[3440.238px] flex-col gap-8 overflow-hidden px-4 py-16 md:h-[2187px] md:px-8 md:py-32">
+  <p class="m-0 font-body text-base leading-[24.3px] font-bold text-dark-grey uppercase">
+    Our services
+  </p>
+  <div class="grid max-w-none grid-cols-1 gap-8 p-0 md:grid-cols-2">
+    {services.map((service) => (
+      <article class="flex h-auto min-h-0 flex-col gap-8 overflow-hidden md:h-[921px]">
+        <img
+          class="h-[201.81px] w-full shrink-0 object-cover md:h-72"
+          src={service.image}
+          alt=""
+        />
+        <img
+          class="size-24 shrink-0 object-contain md:size-28"
+          src={service.number}
+          alt=""
+        />
+        <h2 class="m-0 font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[72px] md:leading-[1.05]">
+          {service.title[0]}
+          <br />
+          {service.title[1]}
+        </h2>
+        <p class="m-0 w-full text-base leading-[27px] text-dark md:w-[calc(100%_-_64px)]">
+          {service.description}
+        </p>
+        <h3 class="m-0 w-full font-body text-base leading-5 font-normal text-primary uppercase md:w-[calc(100%_-_64px)]">
+          What we shape
+        </h3>
+        <ul class="m-0 w-full list-none p-0 text-base leading-[27px] text-dark-grey md:w-[calc(100%_-_64px)]">
+          {service.deliverables.map((deliverable) => (
+            <li>{deliverable}</li>
+          ))}
+        </ul>
+      </article>
+    ))}
+  </div>
+</section>

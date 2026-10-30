@@ -1,34 +1,32 @@
 ---
-import { getCollection } from 'astro:content'
-import ProjectCard from '../../components/content/ProjectCard.astro'
 import ProjectInvitation from '../../components/site/ProjectInvitation.astro'
+import ProjectsListing from '../../components/work/ProjectsListing.astro'
 import Layout from '../../layouts/Layout.astro'
-
-const projects = (await getCollection('workProjects')).sort(
-  (a, b) => a.data.order - b.data.order,
-)
 ---
 
 <Layout
   title="Work — Stillroom"
   description="Selected hospitality branding and digital work by Stillroom."
 >
-  <section class="page-intro">
-    <div class="section-inner">
-      <p class="eyebrow">Our work / Independent hospitality</p>
+  <section class="flex h-[517.262px] flex-col gap-8 overflow-hidden px-4 pt-4 pb-16 md:h-[833px] md:px-8 md:py-32">
+    <div class="w-full max-w-none p-0">
+      <p class="m-0 font-body text-base leading-[16.2px] font-black text-dark-grey uppercase">
+        Our work / Independent hospitality
+      </p>
     </div>
-    <div class="page-intro__split">
-      <h1>Places with personality.</h1>
-      <img src="/images/381-1857.webp" alt="Abstract red Stillroom artwork" />
+    <div class="grid h-auto w-full max-w-none grid-cols-1 gap-8 md:h-[520px] md:grid-cols-2">
+      <h1 class="m-0 font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[128px] md:leading-[1.05]">
+        Places with personality.
+      </h1>
+      <img
+        class="h-[252.262px] w-full object-contain md:h-[520px] md:w-[672px]"
+        src="/images/381-1857.webp"
+        alt="Abstract red Stillroom artwork"
+      />
     </div>
   </section>
-  <div class="section-inner">
-    <p class="eyebrow">Our work</p>
-  </div>
-  <section class="project-list" aria-label="Work Projects">
-    {projects.map((project) => (
-      <ProjectCard project={project} />
-    ))}
-  </section>
-  <ProjectInvitation class="work-invitation" />
+
+  <ProjectsListing />
+
+  <ProjectInvitation variant="work" />
 </Layout>
