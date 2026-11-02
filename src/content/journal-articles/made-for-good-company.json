@@ -5,7 +5,89 @@
   "date": "2026-09-09",
   "excerpt": "A wine bar identity built around the simple joy of gathering.",
   "image": "/images/387-3977.webp",
+  "imageAlt": "The Long Table wine bar menu, glasses, and printed materials",
+  "heroImage": {
+    "src": "/images/detail-placeholder.svg",
+    "alt": "Placeholder for the hero photograph of friends gathering at a wine bar"
+  },
   "order": 7,
   "featured": false,
-  "detailAvailable": false
+  "detailAvailable": true,
+  "author": "Stillroom",
+  "authorBio": "An independent creative studio for hospitality, food, and the places that bring people together.",
+  "body": [
+    {
+      "type": "section",
+      "label": "01 / The shared table",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "The idea behind The Long Table was never only wine. It was the particular kind of evening that happens around it: one glass becoming another, someone moving their chair to make room, and a conversation continuing longer than planned."
+        },
+        {
+          "type": "paragraph",
+          "text": "That gave us a useful centre for the identity. Rather than leaning on the language of expertise, rarity, or rules, the brand could begin with gathering. The wine still mattered deeply, but knowledge would be offered as an invitation rather than a test."
+        },
+        {
+          "type": "heading",
+          "text": "Let the name hold the idea."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Long Table describes a physical object and a social promise. It suggests generosity, shared space, and the possibility that there is always room for another person. That image helped align choices across the identity, voice, menus, and room."
+        },
+        {
+          "type": "paragraph",
+          "text": "We used editorial typography and warm, tactile materials to give the bar confidence without stiffness. The system can speak clearly about a grower or region, then loosen into the conversational notes and changing recommendations that make the place feel alive."
+        }
+      ]
+    },
+    {
+      "type": "image",
+      "image": {
+        "src": "/images/387-3977.webp",
+        "alt": "Wine, menus, and printed materials arranged for The Long Table",
+        "caption": "A social idea gave every part of the identity the same generous direction."
+      }
+    },
+    {
+      "type": "pullQuote",
+      "label": "The idea in one line",
+      "quote": "Good wine becomes more memorable when the brand makes room for the people drinking it."
+    },
+    {
+      "type": "section",
+      "label": "02 / An invitation, not an instruction",
+      "content": [
+        {
+          "type": "heading",
+          "text": "Make curiosity comfortable."
+        },
+        {
+          "type": "paragraph",
+          "text": "Wine language can create distance quickly. The menu needed to respect knowledgeable guests while helping someone less certain begin with what they already enjoy. Clear groupings and a direct tone make questions feel welcome."
+        },
+        {
+          "type": "paragraph",
+          "text": "That principle extends beyond the menu. Signage, events, social posts, and staff recommendations all work best when they share the same posture: informed, open, and interested in the guest rather than in proving a point."
+        },
+        {
+          "type": "heading",
+          "text": "Build the brand around the reason to return."
+        },
+        {
+          "type": "paragraph",
+          "text": "People may first visit for a bottle or recommendation, but they return for the atmosphere around it. The identity supports that atmosphere by making the bar recognisable and giving its generosity a consistent voice."
+        },
+        {
+          "type": "paragraph",
+          "text": "The result is a brand made for company: confident enough to have a point of view, relaxed enough to share it, and always ready to pull up another chair."
+        }
+      ]
+    }
+  ],
+  "relatedArticles": [
+    "a-little-more-personality-please",
+    "the-quiet-power-of-a-good-menu"
+  ]
 }

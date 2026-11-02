@@ -4,6 +4,58 @@
   "summary": "One welcoming identity, from the morning coffee to the last aperitivo.",
   "services": ["Naming", "Identity", "Packaging"],
   "cardImage": "/images/381-1882.webp",
+  "cardAlt": "Juniper takeaway cup and café setting",
   "order": 3,
-  "detailAvailable": false
+  "detailAvailable": true,
+  "tagline": "Bright mornings. Long evenings. One easy rhythm.",
+  "introduction": "A café and aperitivo bar designed to move naturally through the day, with an identity that feels just as right at eight in the morning as eight at night.",
+  "heroArtwork": {
+    "src": "/images/detail-placeholder.svg",
+    "alt": "Placeholder for Juniper botanical hero artwork"
+  },
+  "heroImage": {
+    "src": "/images/detail-placeholder.svg",
+    "alt": "Placeholder for Juniper café and aperitivo photography"
+  },
+  "challenge": {
+    "heading": "Two moods. One place people remember.",
+    "copy": "The concept moved from coffee and pastries into aperitivo and small plates, but the early identity made those moments feel like separate businesses. Juniper needed a name and voice broad enough to hold the whole day together."
+  },
+  "contribution": {
+    "heading": "A flexible identity with a botanical spark.",
+    "copy": "We created the Juniper name, a characterful wordmark, and a botanical system that shifts in energy across cups, menus, packaging, and evening communications while remaining unmistakably part of the same place."
+  },
+  "galleryLabel": "From first coffee to final glass",
+  "gallery": [
+    {
+      "type": "image",
+      "image": {
+        "src": "/images/detail-placeholder.svg",
+        "alt": "Placeholder for Juniper packaging and menu photography"
+      }
+    },
+    {
+      "type": "pair",
+      "brandPanel": {
+        "title": "Juniper",
+        "statement": "Coffee early. Aperitivo late. Welcome always.",
+        "label": "Café and aperitivo"
+      },
+      "image": {
+        "src": "/images/detail-placeholder.svg",
+        "alt": "Placeholder for Juniper cup and aperitivo details"
+      }
+    },
+    {
+      "type": "image",
+      "image": {
+        "src": "/images/detail-placeholder.svg",
+        "alt": "Placeholder for Juniper street and interior photography"
+      }
+    }
+  ],
+  "outcome": {
+    "heading": "One identity that keeps pace with the day.",
+    "copy": "Juniper now feels coherent from the first takeaway cup to the last round at the bar, giving the team a flexible brand that can change mood without losing its character."
+  }
 }

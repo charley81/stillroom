@@ -5,7 +5,89 @@
   "date": "2026-10-07",
   "excerpt": "Why the neighborhood café is so much more than a coffee stop.",
   "image": "/images/387-3939.webp",
+  "imageAlt": "A Juniper coffee cup, espresso, and croissant on a café counter",
+  "heroImage": {
+    "src": "/images/detail-placeholder.svg",
+    "alt": "Placeholder for the hero photograph of a neighbourhood café ritual"
+  },
   "order": 3,
   "featured": false,
-  "detailAvailable": false
+  "detailAvailable": true,
+  "author": "Stillroom",
+  "authorBio": "An independent creative studio for hospitality, food, and the places that bring people together.",
+  "body": [
+    {
+      "type": "section",
+      "label": "01 / The place between places",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "The neighbourhood café sits in a useful space between home and everything else. It can be a beginning, a pause, a meeting point, or simply the place where someone knows how you take your coffee. Its value is built from repetition, but repetition alone does not create ritual."
+        },
+        {
+          "type": "paragraph",
+          "text": "A ritual needs recognition. The same door, the familiar sound of cups, a place to put your bag, a small exchange that marks the transition into the day. These details create a dependable rhythm while leaving enough room for each visit to feel alive."
+        },
+        {
+          "type": "heading",
+          "text": "Familiarity is designed over time."
+        },
+        {
+          "type": "paragraph",
+          "text": "Branding cannot manufacture belonging on its own, but it can support the conditions in which belonging grows. A clear sign helps the place become a landmark. A cup carried down the street turns a private routine into a visible part of the neighbourhood."
+        },
+        {
+          "type": "paragraph",
+          "text": "The strongest café identities understand that consistency should feel reassuring rather than rigid. They provide recognisable cues while allowing the daily life of the place — the handwritten note, the changing pastry, the conversation at the counter — to remain the main event."
+        }
+      ]
+    },
+    {
+      "type": "image",
+      "image": {
+        "src": "/images/387-3939.webp",
+        "alt": "A green Juniper cup with coffee and a croissant in warm morning light",
+        "caption": "An everyday object can become part of how a neighbourhood recognises itself."
+      }
+    },
+    {
+      "type": "pullQuote",
+      "label": "The everyday measure",
+      "quote": "A ritual becomes meaningful when a place gives the familiar just enough character to feel like its own."
+    },
+    {
+      "type": "section",
+      "label": "02 / Small moments, held together",
+      "content": [
+        {
+          "type": "heading",
+          "text": "Design for the repeat visit."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hospitality brands often focus on the first impression, but cafés are built on the hundredth. The system needs enough depth to reward familiarity: seasonal messages, useful packaging, menus that can change, and a voice that stays recognisable without repeating the same line forever."
+        },
+        {
+          "type": "paragraph",
+          "text": "Service is part of that system. The tone of a sign means little if the experience at the counter contradicts it. The most coherent places give the team simple principles they can interpret naturally rather than scripts they must perform."
+        },
+        {
+          "type": "heading",
+          "text": "Make room for ordinary pleasure."
+        },
+        {
+          "type": "paragraph",
+          "text": "Not every café needs to become a destination. There is value in being useful, local, and quietly dependable. A good identity can make those qualities visible without turning the everyday into a spectacle."
+        },
+        {
+          "type": "paragraph",
+          "text": "The result is a place people fold into their lives. Not because every visit is extraordinary, but because the experience is considered enough to make an ordinary morning feel a little more like theirs."
+        }
+      ]
+    }
+  ],
+  "relatedArticles": [
+    "what-makes-a-place-stay-with-us",
+    "a-welcome-begins-before-the-door"
+  ]
 }

@@ -1,0 +1,21 @@
+---
+import type { CollectionEntry } from 'astro:content'
+
+interface Props {
+  project: CollectionEntry<'workProjects'>
+}
+
+const { project } = Astro.props
+---
+
+<section class="flex flex-col gap-8 overflow-hidden px-4 py-16 md:min-h-[667px] md:px-8 md:py-32">
+  <p class="m-0 font-body text-base leading-[16.2px] font-black text-dark-grey uppercase">
+    The outcome
+  </p>
+  <h2 class="m-0 w-full max-w-[1184px] font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[128px] md:leading-[1.05]">
+    {project.data.outcome.heading}
+  </h2>
+  <p class="m-0 w-full text-base leading-[27px] text-dark-grey md:max-w-[784px]">
+    {project.data.outcome.copy}
+  </p>
+</section>

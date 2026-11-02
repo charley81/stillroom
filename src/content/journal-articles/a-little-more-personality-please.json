@@ -5,7 +5,89 @@
   "date": "2026-09-16",
   "excerpt": "How a bakery can make an everyday ritual feel like its own.",
   "image": "/images/387-3968.webp",
+  "imageAlt": "Bright Morrow bakery packaging with bread and coffee",
+  "heroImage": {
+    "src": "/images/detail-placeholder.svg",
+    "alt": "Placeholder for the hero photograph of an expressive bakery identity"
+  },
   "order": 6,
   "featured": false,
-  "detailAvailable": false
+  "detailAvailable": true,
+  "author": "Stillroom",
+  "authorBio": "An independent creative studio for hospitality, food, and the places that bring people together.",
+  "body": [
+    {
+      "type": "section",
+      "label": "01 / Beyond good bread",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "Quality is essential, but it is not always distinctive. A bakery can source excellent flour, laminate careful pastry, and pour very good coffee while still looking and sounding like every other carefully made place nearby. Product earns trust; personality gives people a reason to remember where they found it."
+        },
+        {
+          "type": "paragraph",
+          "text": "Personality does not require a loud logo or a stream of jokes. It begins with a point of view. Is the bakery precise or abundant? Nostalgic or optimistic? A morning destination or an all-day neighbour? The answer should shape more than the visual surface."
+        },
+        {
+          "type": "heading",
+          "text": "Find the character in the routine."
+        },
+        {
+          "type": "paragraph",
+          "text": "Bakery visits are full of repeated gestures: the bag folded at the top, the cabinet label, the queue before work, the loaf carried home. Each one is an opportunity to reinforce a particular feeling without slowing the experience down."
+        },
+        {
+          "type": "paragraph",
+          "text": "A useful identity pays attention to those moments. It creates a system for prices that change, products that sell out, and messages that need to be written quickly. Personality becomes strongest when it can survive a busy Saturday, not only a perfect launch photograph."
+        }
+      ]
+    },
+    {
+      "type": "image",
+      "image": {
+        "src": "/images/387-3968.webp",
+        "alt": "Red and cream Morrow bread packaging beside coffee and pastries",
+        "caption": "Everyday packaging can carry a bakery’s character far beyond the counter."
+      }
+    },
+    {
+      "type": "pullQuote",
+      "label": "A small request",
+      "quote": "Do the useful things clearly, then give people one detail they could only have found here."
+    },
+    {
+      "type": "section",
+      "label": "02 / A system with a human voice",
+      "content": [
+        {
+          "type": "heading",
+          "text": "Consistency without sameness."
+        },
+        {
+          "type": "paragraph",
+          "text": "The identity needs recognisable anchors — type, colour, composition, and tone — but a bakery also benefits from spontaneity. Daily specials, seasonal ingredients, and the natural variation of handmade food should be allowed to bring new energy into the system."
+        },
+        {
+          "type": "paragraph",
+          "text": "The verbal identity matters here. A direct, generous voice can make practical information feel considered. Names and descriptions should help people choose, while small moments of wit or warmth can reward the regular who reads a little closer."
+        },
+        {
+          "type": "heading",
+          "text": "Make the ordinary recognisable."
+        },
+        {
+          "type": "paragraph",
+          "text": "Most bakery interactions are brief. That makes clarity important, but it also makes distinctive cues powerful. A bag, cup, or sign seen repeatedly becomes part of the street and part of someone’s routine."
+        },
+        {
+          "type": "paragraph",
+          "text": "A little more personality is not decoration added after the serious work. It is the thread that helps good products, useful service, and everyday objects feel like they belong to one place — and nowhere else."
+        }
+      ]
+    }
+  ],
+  "relatedArticles": [
+    "good-brands-have-good-ingredients",
+    "made-for-good-company"
+  ]
 }

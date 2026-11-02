@@ -4,6 +4,58 @@
   "summary": "Bringing farm-grown goodness to an everyday shelf.",
   "services": ["Strategy", "Identity", "Packaging"],
   "cardImage": "/images/381-1891.webp",
+  "cardAlt": "Fieldwork food packaging and produce",
   "order": 4,
-  "detailAvailable": false
+  "detailAvailable": true,
+  "tagline": "Good ingredients. Grown close. Made for every day.",
+  "introduction": "A modern provisions brand connecting carefully grown ingredients with the familiar pleasure of a well-stocked kitchen.",
+  "heroArtwork": {
+    "src": "/images/detail-placeholder.svg",
+    "alt": "Placeholder for Fieldwork produce hero artwork"
+  },
+  "heroImage": {
+    "src": "/images/detail-placeholder.svg",
+    "alt": "Placeholder for Fieldwork produce and packaging photography"
+  },
+  "challenge": {
+    "heading": "Farm-led quality that felt too far away.",
+    "copy": "Fieldwork had strong supplier relationships and genuinely good products, but its presentation leaned worthy rather than useful. The brand needed to make provenance feel immediate, appetising, and part of everyday cooking."
+  },
+  "contribution": {
+    "heading": "A practical brand with dirt under its nails.",
+    "copy": "We clarified the promise, built an identity from field marks and confident type, and designed a packaging system that makes ingredients easy to navigate while keeping the growers and their work close to the story."
+  },
+  "galleryLabel": "From the field to the kitchen shelf",
+  "gallery": [
+    {
+      "type": "image",
+      "image": {
+        "src": "/images/detail-placeholder.svg",
+        "alt": "Placeholder for Fieldwork packaging range photography"
+      }
+    },
+    {
+      "type": "pair",
+      "brandPanel": {
+        "title": "Fieldwork",
+        "statement": "Grown with care. Chosen well. Ready for the table.",
+        "label": "Food and provisions"
+      },
+      "image": {
+        "src": "/images/detail-placeholder.svg",
+        "alt": "Placeholder for Fieldwork labels and produce details"
+      }
+    },
+    {
+      "type": "image",
+      "image": {
+        "src": "/images/detail-placeholder.svg",
+        "alt": "Placeholder for Fieldwork market display photography"
+      }
+    }
+  ],
+  "outcome": {
+    "heading": "A shelf presence rooted in real ingredients.",
+    "copy": "Fieldwork now makes its values visible without overexplaining them: a useful, recognisable system that helps good produce stand out and gives the range room to grow."
+  }
 }

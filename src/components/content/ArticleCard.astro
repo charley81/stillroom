@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets'
 import type { CollectionEntry } from 'astro:content'
 
 interface Props {
@@ -17,7 +18,9 @@ const date = article.data.date
   })
   .toUpperCase()
 const cardHeight =
-  variant === 'related' ? 'h-[512.333px] md:h-[664px]' : 'h-auto md:h-[664px]'
+  variant === 'related'
+    ? 'min-h-[512.333px] md:min-h-[664px]'
+    : 'h-auto md:min-h-[664px]'
 const imageClasses =
   'h-[217.333px] w-full object-cover transition-transform duration-200 md:h-[448px]'
 ---
@@ -29,15 +32,23 @@ const imageClasses =
       href={href}
       aria-label={`Read ${article.data.title}`}
     >
-      <img
+      <Image
         class:list={[imageClasses, 'group-hover:scale-[1.015]']}
         src={article.data.image}
-        alt=""
+        alt={article.data.imageAlt}
+        width={672}
+        height={448}
       />
     </a>
   ) : (
     <div class="mb-1 block overflow-hidden">
-      <img class={imageClasses} src={article.data.image} alt="" />
+      <Image
+        class={imageClasses}
+        src={article.data.image}
+        alt={article.data.imageAlt}
+        width={672}
+        height={448}
+      />
     </div>
   )}
   <p class="m-0 font-body text-base leading-5 font-normal text-dark uppercase">

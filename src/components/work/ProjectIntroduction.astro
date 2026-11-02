@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets'
 import type { CollectionEntry } from 'astro:content'
 
 interface Props {
@@ -8,31 +9,33 @@ interface Props {
 const { project } = Astro.props
 ---
 
-<section class="flex h-[705.563px] flex-col gap-10 overflow-hidden px-4 pt-4 pb-16 md:h-[775px] md:px-8 md:py-32">
-  <div class="w-full max-w-none p-0">
-    <a
-      class="m-0 leading-[24.3px] font-bold text-primary hover:text-dark"
-      href="/work"
-    >
-      ← Back to Work
-    </a>
-  </div>
-  <div class="grid h-auto w-full max-w-none grid-cols-1 gap-10 md:h-[454px] md:grid-cols-2">
+<section class="flex flex-col gap-10 overflow-hidden px-4 pt-4 pb-16 md:min-h-[775px] md:px-8 md:py-32">
+  <a
+    class="leading-[24.3px] font-bold text-primary hover:text-dark"
+    href="/work"
+  >
+    ← Back to Work
+  </a>
+  <div class="grid w-full grid-cols-1 gap-10 md:min-h-[454px] md:grid-cols-2">
     <div class="flex flex-col justify-center gap-10">
       <h1 class="m-0 font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[128px] md:leading-[1.05]">
         {project.data.title}
       </h1>
-      <h2 class="m-0 font-display text-[36px] leading-[1.05] font-normal text-dark uppercase">
-        {project.data.tagline}
-      </h2>
-      <p class="m-0 w-full text-base leading-[27px] text-dark-grey md:w-[672px]">
-        {project.data.introduction}
-      </p>
+      <div class="flex flex-col gap-4">
+        <h2 class="m-0 font-display text-[36px] leading-[1.05] font-normal text-dark uppercase">
+          {project.data.tagline}
+        </h2>
+        <p class="m-0 w-full text-base leading-[27px] text-dark-grey md:max-w-[672px]">
+          {project.data.introduction}
+        </p>
+      </div>
     </div>
-    <img
+    <Image
       class="h-[221.563px] w-full object-contain md:h-[454px]"
-      src="/images/381-2490.webp"
-      alt="Tomato vine illustration for The Good Table"
+      src={project.data.heroArtwork.src}
+      alt={project.data.heroArtwork.alt}
+      width={668}
+      height={454}
     />
   </div>
 </section>

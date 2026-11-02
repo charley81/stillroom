@@ -5,7 +5,89 @@
   "date": "2026-09-23",
   "excerpt": "Finding a food brand’s character in the things it’s made of.",
   "image": "/images/387-3958.webp",
+  "imageAlt": "Fieldwork provisions packaging surrounded by fresh ingredients",
+  "heroImage": {
+    "src": "/images/detail-placeholder.svg",
+    "alt": "Placeholder for the hero photograph of ingredients and food packaging"
+  },
   "order": 5,
   "featured": false,
-  "detailAvailable": false
+  "detailAvailable": true,
+  "author": "Stillroom",
+  "authorBio": "An independent creative studio for hospitality, food, and the places that bring people together.",
+  "body": [
+    {
+      "type": "section",
+      "label": "01 / Start with what is true",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "Food brands are surrounded by ready-made language: crafted, natural, premium, honest. The words are familiar because the ambitions behind them are often genuine. But when everyone reaches for the same description, the result says very little about the product in front of us."
+        },
+        {
+          "type": "paragraph",
+          "text": "A more useful place to begin is with the ingredients, decisions, and people that make the product specific. Where does it come from? Why is it made this way? What does the founder notice that someone else might overlook? Character is usually hiding in those practical details."
+        },
+        {
+          "type": "heading",
+          "text": "Strategy is a process of choosing."
+        },
+        {
+          "type": "paragraph",
+          "text": "A brand cannot lead with every good thing at once. The work is to identify which truth has the most energy and relevance, then allow other qualities to support it. A clear central idea makes naming, packaging, photography, and messaging easier to judge."
+        },
+        {
+          "type": "paragraph",
+          "text": "This does not mean flattening a complex business into a slogan. It means deciding what should be understood first. Like a good dish, the brand can have depth without asking every ingredient to compete for attention."
+        }
+      ]
+    },
+    {
+      "type": "image",
+      "image": {
+        "src": "/images/387-3958.webp",
+        "alt": "Colourful Fieldwork packages arranged with produce and pantry ingredients",
+        "caption": "Distinctive packaging starts with a distinctive point of view about the product."
+      }
+    },
+    {
+      "type": "pullQuote",
+      "label": "From the studio table",
+      "quote": "The most useful brand idea is not invented around the product. It reveals what was already worth noticing."
+    },
+    {
+      "type": "section",
+      "label": "02 / Make the ingredients visible",
+      "content": [
+        {
+          "type": "heading",
+          "text": "Build a system with an appetite."
+        },
+        {
+          "type": "paragraph",
+          "text": "Once the idea is clear, the identity should make it tangible. Type can feel precise or abundant. Colour can signal freshness, warmth, or restraint. Photography can bring us close to texture and process instead of relying on generic scenes of perfection."
+        },
+        {
+          "type": "paragraph",
+          "text": "Packaging has the additional job of making a range understandable. The system needs enough consistency to be recognised and enough variation to help each product speak. Hierarchy, naming, colour, and information all have to work at shelf distance and in the hand."
+        },
+        {
+          "type": "heading",
+          "text": "Leave room for the range to grow."
+        },
+        {
+          "type": "paragraph",
+          "text": "A strong system anticipates new flavours, formats, and occasions without designing every future answer in advance. Clear principles are more valuable than a rigid collection of finished templates."
+        },
+        {
+          "type": "paragraph",
+          "text": "Good brands, like good recipes, become recognisable through the relationship between their parts. When each choice comes from the same underlying idea, the result feels coherent, memorable, and unmistakably its own."
+        }
+      ]
+    }
+  ],
+  "relatedArticles": [
+    "the-quiet-power-of-a-good-menu",
+    "a-little-more-personality-please"
+  ]
 }

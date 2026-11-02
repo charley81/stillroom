@@ -4,6 +4,58 @@
   "summary": "Making a slower kind of stay feel distinctive from the first hello.",
   "services": ["Positioning", "Identity", "Website"],
   "cardImage": "/images/381-1872.webp",
+  "cardAlt": "Orlo House stationery and guest materials",
   "order": 2,
-  "detailAvailable": false
+  "detailAvailable": true,
+  "tagline": "A slower kind of stay. A lasting first impression.",
+  "introduction": "A thoughtful identity for a small hotel shaped by unhurried mornings, local character, and the feeling of being genuinely looked after.",
+  "heroArtwork": {
+    "src": "/images/detail-placeholder.svg",
+    "alt": "Placeholder for Orlo House hero artwork"
+  },
+  "heroImage": {
+    "src": "/images/detail-placeholder.svg",
+    "alt": "Placeholder for Orlo House hotel photography"
+  },
+  "challenge": {
+    "heading": "A beautiful stay without a clear story.",
+    "copy": "Orlo House had a strong sense of place and a warm approach to hosting, but its identity felt quieter than the experience itself. The hotel needed a distinctive story that could connect the rooms, the neighbourhood, and every guest touchpoint."
+  },
+  "contribution": {
+    "heading": "An identity made for taking your time.",
+    "copy": "We positioned Orlo House around the pleasure of a slower stay, then created a refined identity with soft typography, useful guest rituals, and a digital experience that makes planning feel as calm as arriving."
+  },
+  "galleryLabel": "A slower stay, considered in every detail",
+  "gallery": [
+    {
+      "type": "image",
+      "image": {
+        "src": "/images/detail-placeholder.svg",
+        "alt": "Placeholder for Orlo House guest stationery photography"
+      }
+    },
+    {
+      "type": "pair",
+      "brandPanel": {
+        "title": "Orlo House",
+        "statement": "Stay slowly. Wake well. Feel at home.",
+        "label": "Boutique hotel"
+      },
+      "image": {
+        "src": "/images/detail-placeholder.svg",
+        "alt": "Placeholder for Orlo House room and welcome details"
+      }
+    },
+    {
+      "type": "image",
+      "image": {
+        "src": "/images/detail-placeholder.svg",
+        "alt": "Placeholder for Orlo House exterior photography"
+      }
+    }
+  ],
+  "outcome": {
+    "heading": "A stay guests can feel before they arrive.",
+    "copy": "Orlo House now has a clear, recognisable identity that carries its unhurried point of view from discovery and booking to the room key, breakfast table, and final goodbye."
+  }
 }

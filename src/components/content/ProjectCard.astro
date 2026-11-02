@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets'
 import type { CollectionEntry } from 'astro:content'
 
 interface Props {
@@ -11,31 +12,35 @@ const imageClasses =
   'h-[244.5px] w-full object-cover transition-transform duration-200 md:h-[504px]'
 ---
 
-<article class="h-auto overflow-hidden md:h-[669px]">
+<article class="h-auto overflow-hidden md:min-h-[669px]">
   {href ? (
     <a
       class="group mb-4 block h-[244.5px] overflow-hidden md:h-[504px]"
       href={href}
       aria-label={`View ${project.data.title}`}
     >
-      <img
+      <Image
         class:list={[imageClasses, 'group-hover:scale-[1.015]']}
         src={project.data.cardImage}
-        alt=""
+        alt={project.data.cardAlt}
+        width={672}
+        height={504}
         loading="lazy"
       />
     </a>
   ) : (
     <div class="mb-4 block h-[244.5px] overflow-hidden md:h-[504px]">
-      <img
+      <Image
         class={imageClasses}
         src={project.data.cardImage}
-        alt=""
+        alt={project.data.cardAlt}
+        width={672}
+        height={504}
         loading="lazy"
       />
     </div>
   )}
-  <h2 class="m-0 mb-4 font-display text-[36px] leading-[1.05] font-normal text-dark uppercase md:h-[38px]">
+  <h2 class="m-0 mb-4 font-display text-[36px] leading-[1.05] font-normal text-dark uppercase md:min-h-[38px]">
     {href ? (
       <a class="hover:text-primary" href={href}>
         {project.data.title}{' '}

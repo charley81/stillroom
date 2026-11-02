@@ -1,0 +1,52 @@
+---
+import { Image } from 'astro:assets'
+import type { CollectionEntry } from 'astro:content'
+
+interface Props {
+  project: CollectionEntry<'workProjects'>
+}
+
+const { project } = Astro.props
+---
+
+<section class="px-4 md:px-8">
+  <div class="grid w-full gap-8">
+    <p class="m-0 font-body text-base leading-[16.2px] font-black text-dark-grey uppercase">
+      {project.data.galleryLabel}
+    </p>
+    {project.data.gallery.map((block) =>
+      block.type === 'image' ? (
+        <Image
+          class="h-[203.75px] w-full object-cover md:h-[860px]"
+          src={block.image.src}
+          alt={block.image.alt}
+          width={1376}
+          height={860}
+        />
+      ) : (
+        <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
+          <div class="flex min-h-[451px] flex-col justify-center gap-8 bg-primary p-16 text-light md:min-h-[760px]">
+            <div class="flex flex-col gap-8">
+              <h2 class="m-0 font-display text-5xl leading-12 font-normal uppercase md:text-[128px] md:leading-[1.05]">
+                {block.brandPanel.title}
+              </h2>
+              <h3 class="m-0 font-display text-[36px] leading-[1.05] font-normal uppercase">
+                {block.brandPanel.statement}
+              </h3>
+            </div>
+            <p class="m-0 font-display text-base leading-normal font-normal uppercase">
+              {block.brandPanel.label}
+            </p>
+          </div>
+          <Image
+            class="h-[368.69px] w-full object-cover md:h-[760px]"
+            src={block.image.src}
+            alt={block.image.alt}
+            width={672}
+            height={760}
+          />
+        </div>
+      ),
+    )}
+  </div>
+</section>
