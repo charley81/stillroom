@@ -1,3 +1,7 @@
+---
+import { Image } from 'astro:assets'
+---
+
 <section class="flex h-[927.81px] flex-col gap-8 overflow-hidden px-4 py-16 md:h-[913px] md:px-8 md:py-32">
   <div class="flex w-full max-w-none flex-col gap-8 p-0">
     <p class="m-0 font-body text-base leading-[16.2px] font-black text-dark-grey uppercase">
@@ -28,10 +32,12 @@
         Explore our hospitality concepts&nbsp; ↗
       </a>
     </div>
-    <img
+    <Image
       class="h-[201.81px] w-full rounded-md object-cover md:h-[416px] md:w-[672px]"
       src="/images/375-1425.webp"
       alt="Hospitality objects and brand materials"
+      width={672}
+      height={416}
     />
   </div>
 </section>

@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets'
+
 const phases = [
   [
     'Discover',
@@ -43,15 +45,15 @@ const phases = [
       Our process →
     </a>
   </div>
-  <div class="grid h-[1292px] w-full grid-cols-1 gap-8 md:h-[315px] md:grid-cols-[296px_repeat(3,minmax(0,328px))]">
+  <div class="grid h-[1292px] w-full grid-cols-1 gap-8 md:h-[315px] md:grid-cols-4">
     {phases.map(([title, ...lines], index) => (
       <article class="flex h-[299px] min-h-0 flex-col items-center gap-8 rounded-md border border-light-grey p-4 text-center md:h-auto">
-        <img
+        <Image
           class="size-24 object-contain md:size-28"
           src={`/figma-assets/number-${index + 1}.png`}
           alt=""
-          width="112"
-          height="112"
+          width={112}
+          height={112}
         />
         <h3 class="m-0 font-display text-[36px] leading-[35.2px] font-normal text-dark uppercase">
           {title}

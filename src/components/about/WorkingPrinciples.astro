@@ -18,7 +18,7 @@ const principles = [
 ]
 ---
 
-<section class="relative isolate flex h-[1341px] flex-col gap-8 overflow-hidden bg-primary bg-[url('/figma-assets/arch-pattern.svg')] bg-[length:1440px_1002px] bg-left-top bg-no-repeat px-4 py-16 text-light after:absolute after:inset-0 after:-z-10 after:bg-dark after:opacity-[0.64] after:content-[''] md:h-[1104px] md:gap-16 md:px-8 md:py-32">
+<section class="relative isolate flex h-[1341px] flex-col gap-8 overflow-hidden bg-primary px-4 py-16 text-light after:absolute after:inset-0 after:-z-10 after:bg-dark after:opacity-[0.64] after:content-[''] md:h-[1104px] md:gap-16 md:px-8 md:py-32">
   <p class="m-0 font-body text-base leading-5 font-normal text-light uppercase">
     What we believe
   </p>
@@ -30,7 +30,7 @@ const principles = [
   <div class="flex w-full flex-col gap-8 md:gap-16">
     {principles.map((principle) => (
       <article class="grid h-auto min-h-0 grid-cols-1 gap-8 bg-transparent py-8 text-light md:h-[140px] md:grid-cols-[144px_464px_704px]">
-        <p class="m-0 font-display text-[36px] leading-[1.05] font-normal uppercase">
+        <p class="m-0 font-display text-[36px] leading-[1.05] font-normal uppercase self-center">
           {principle.number}
         </p>
         <h3 class="m-0 font-display text-[36px] leading-[1.05] font-normal uppercase">
@@ -38,7 +38,7 @@ const principles = [
           <br />
           {principle.title[1]}
         </h3>
-        <p class="m-0 text-base leading-[27px]">{principle.copy}</p>
+        <p class="m-0 text-base leading-[27px] self-center">{principle.copy}</p>
       </article>
     ))}
   </div>

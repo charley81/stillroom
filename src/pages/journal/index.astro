@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets'
 import { getCollection } from 'astro:content'
 import ArticleCard from '../../components/content/ArticleCard.astro'
 import FeaturedArticle from '../../components/journal/FeaturedArticle.astro'
@@ -27,18 +28,23 @@ const latest = articles.filter((article) => !article.data.featured)
         <br />
         thought.
       </h1>
-      <div class="flex h-auto flex-col gap-8 pb-4 md:h-[393px]">
-        <div class="hidden h-[264px] min-h-0 place-items-center md:grid">
-          <img
-            class="h-[264px] w-full object-contain"
-            src="/images/387-3818.webp"
-            alt=""
-          />
+      <div class="flex h-auto flex-col pb-4 md:h-[393px]">
+        <div class="mx-auto flex w-full max-w-[624px] flex-col gap-8">
+          <div class="hidden min-h-0 md:block">
+            <Image
+              class="h-auto w-full"
+              src="/images/387-3818.webp"
+              alt=""
+              width={550}
+              height={219}
+              loading="eager"
+            />
+          </div>
+          <p class="m-0 w-full text-base leading-[27px] text-dark-grey md:w-[min(420px,calc(100%_-_32px))]">
+            Ideas, observations, and the things we keep coming back to. On
+            hospitality, culture, and design — and what happens when they meet.
+          </p>
         </div>
-        <p class="m-0 w-full text-base leading-[27px] text-dark-grey md:ml-8 md:w-[min(420px,calc(100%_-_32px))]">
-          Ideas, observations, and the things we keep coming back to. On
-          hospitality, culture, and design — and what happens when they meet.
-        </p>
       </div>
     </div>
   </section>

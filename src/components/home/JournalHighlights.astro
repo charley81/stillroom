@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets'
+
 const journal = [
   {
     image: '/images/368-8464.webp',
@@ -43,10 +45,12 @@ const journal = [
         ]}
       >
         <a href={article.href}>
-          <img
+          <Image
             class="h-[203.092px] w-full object-cover md:h-[280px]"
             src={article.image}
             alt=""
+            width={406}
+            height={280}
           />
         </a>
         <p class="m-0 text-base leading-[14.85px] text-primary uppercase">

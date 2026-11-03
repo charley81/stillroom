@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets'
 import Button from '../site/Button.astro'
 
 const fieldClass = 'grid gap-4'
@@ -19,10 +20,12 @@ const controlClass =
       Every good collaboration starts with a conversation. A few details will
       help us get to know you.
     </p>
-    <img
+    <Image
       class="h-[327.5px] w-full object-cover md:h-[560px] md:w-[448px]"
       src="/images/382-3276.webp"
       alt="Stillroom invitation stationery"
+      width={448}
+      height={560}
     />
     <p class="m-0 font-body text-base leading-5 font-normal text-primary uppercase">
       A little thinking. A lot of possibility.

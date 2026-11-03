@@ -1,3 +1,7 @@
+---
+import { Image } from 'astro:assets'
+---
+
 <section class="flex h-[1027.069px] flex-col gap-8 overflow-hidden px-4 py-16 md:h-[955px] md:px-8 md:py-32">
   <p class="m-0 font-body text-base leading-[16.2px] font-black text-dark-grey uppercase">
     <span class="hidden md:inline">Selected concepts</span>
@@ -17,10 +21,12 @@
   <div class="grid w-full grid-cols-1 gap-8 md:grid-cols-2">
     <article class="w-full">
       <a href="/work/the-good-table">
-        <img
+        <Image
           class="h-[225.535px] w-full object-cover md:h-[440px]"
           src="/images/368-8191.webp"
           alt="The Good Table brand collage"
+          width={636}
+          height={440}
         />
       </a>
       <h3 class="my-8 mb-4 font-display text-[36px] leading-[35.2px] font-normal text-dark uppercase">
@@ -33,10 +39,12 @@
       </p>
     </article>
     <article class="w-full">
-      <img
+      <Image
         class="h-[225.535px] w-full object-cover md:h-[440px]"
         src="/images/368-8198.webp"
         alt="Orlo House brand collage"
+        width={636}
+        height={440}
       />
       <h3 class="my-8 mb-4 font-display text-[36px] leading-[35.2px] font-normal text-dark uppercase">
         Orlo House <span class="ml-4 text-primary">→</span>

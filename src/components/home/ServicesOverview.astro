@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets'
+
 const services = [
   ['Brand strategy', 'Find your voice and your point of view.'],
   ['Visual identity', 'Make every detail feel like you.'],
@@ -17,12 +19,12 @@ const services = [
         class="flex h-auto min-h-0 flex-col items-center gap-8 border-0 py-8 text-center font-display text-5xl leading-12 font-normal text-light uppercase hover:text-light-grey md:grid md:h-[136px] md:grid-cols-[90px_1fr_auto] md:border-b md:border-dark-grey md:text-left md:text-[72px] md:leading-[50.4px] md:last:border-b-0"
         href="/services"
       >
-        <img
+        <Image
           class="size-24 object-contain md:size-[72px]"
           src={`/figma-assets/number-${index + 1}.png`}
           alt=""
-          width="112"
-          height="112"
+          width={112}
+          height={112}
         />
         <span>{title}</span>
         <small class="font-body text-base leading-[24.3px] font-bold text-light normal-case">

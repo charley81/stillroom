@@ -1,5 +1,5 @@
 ---
-import ClientProof from '../components/about/ClientProof.astro'
+import { Image } from 'astro:assets'
 import FounderStory from '../components/about/FounderStory.astro'
 import TeamOverview from '../components/about/TeamOverview.astro'
 import WorkingPrinciples from '../components/about/WorkingPrinciples.astro'
@@ -13,7 +13,6 @@ import Layout from '../layouts/Layout.astro'
   description="Stillroom is a small independent creative studio with plenty of soul."
 >
   <ClientLogoFonts slot="head" />
-
   <section class="flex h-[260px] flex-col gap-16 overflow-hidden px-4 pt-4 pb-16 md:h-[1320px] md:px-8 md:pt-20 md:pb-16">
     <p class="m-0 font-body text-base leading-5 font-normal text-dark-grey uppercase">
       About Stillroom
@@ -23,21 +22,19 @@ import Layout from '../layouts/Layout.astro'
       <br />
       Plenty of soul.
     </h1>
-    <img
+    <Image
       class="hidden h-[760px] w-full max-w-none object-cover md:block"
       src="/images/387-3526.webp"
       alt="Stillroom table collage"
+      width={1024}
+      height={566}
+      loading="eager"
+      fetchpriority="high"
     />
   </section>
-
   <FounderStory />
-
   <TeamOverview />
-
   <WorkingPrinciples />
-
-  <ClientProof />
-
   <ProjectInvitation
     eyebrow="Good people. Good projects. Let’s meet."
     variant="about"
