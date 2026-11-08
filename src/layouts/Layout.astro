@@ -2,6 +2,7 @@
 import { Font } from 'astro:assets'
 import Footer from '../components/site/Footer.astro'
 import Header from '../components/site/Header.astro'
+import { getSiteSettings } from '../sanity/content'
 import '../styles/global.css'
 
 interface Props {
@@ -10,9 +11,10 @@ interface Props {
   showFooter?: boolean
 }
 
+const settings = await getSiteSettings()
 const {
-  title = 'Stillroom — Brand & Digital for Hospitality',
-  description = 'An independent creative studio for hospitality, food, and the places that bring people together.',
+  title = settings.defaultSeoTitle,
+  description = settings.defaultSeoDescription,
   showFooter = true,
 } = Astro.props
 
@@ -25,6 +27,10 @@ const pathname = Astro.url.pathname.replace(/\/+$/, '') || '/'
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={settings.defaultSocialImage.url} />
+    <meta property="og:site_name" content={settings.studioName} />
     <meta name="theme-color" content="#fff7eb" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
@@ -40,13 +46,13 @@ const pathname = Astro.url.pathname.replace(/\/+$/, '') || '/'
     <slot name="head" />
   </head>
   <body class="m-0 bg-light font-body text-base leading-[1.55] text-dark">
-    <Header />
+    <Header settings={settings} pathname={pathname} />
     <main
       id="main-content"
       class:list={{ 'overflow-hidden': pathname !== '/' }}
     >
       <slot />
     </main>
-    {showFooter && <Footer />}
+    {showFooter && <Footer settings={settings} />}
   </body>
 </html>

@@ -1,17 +1,33 @@
+---
+import type { SiteSettings } from '../../sanity/content'
+import { splitRegisteredMark } from './wordmark'
+
+interface Props {
+  settings: SiteSettings
+  currentYear?: number
+}
+
+const { settings, currentYear = new Date().getFullYear() } = Astro.props
+const socialLinks = settings.socialLinks ?? []
+const { text: wordmark, hasRegisteredMark } = splitRegisteredMark(
+  settings.registeredMarkText,
+)
+---
+
 <footer class="min-h-[1118px] px-4 pt-16 pb-8 md:min-h-[530px] md:px-8">
   <div class="mx-auto grid max-w-none grid-cols-1 gap-[72px] md:grid-cols-2 md:gap-16">
     <section aria-labelledby="newsletter-title">
       <p class="m-0 font-body text-base leading-[16.2px] font-black text-dark-grey uppercase">
-        A note from Stillroom
+        A note from {settings.studioName}
       </p>
       <h2
         id="newsletter-title"
         class="my-4 font-display text-[36px] leading-[1.05] font-normal text-dark uppercase"
       >
-        Good things, every so often.
+        {settings.newsletterHeading}
       </h2>
       <p class="m-0 text-base leading-[27px] text-dark-grey">
-        Ideas on hospitality, culture, and design.
+        {settings.newsletterDescription}
       </p>
       <form
         class="mt-8 flex w-full max-w-[40rem] flex-col items-start gap-4"
@@ -55,11 +71,25 @@
           class="text-base leading-[27px] text-dark-grey hover:text-primary"
           href="/contact"
         >
-          Contact
+          {settings.contactLabel}
         </a>
-        <span class="text-base leading-[27px] text-dark-grey">Email</span>
-        <span class="text-base leading-[27px] text-dark-grey">Instagram</span>
-        <span class="text-base leading-[27px] text-dark-grey">LinkedIn</span>
+        <a
+          class="text-base leading-[27px] text-dark-grey hover:text-primary"
+          href={`mailto:${settings.emailAddress}`}
+          aria-label={`Email ${settings.emailAddress}`}
+        >
+          Email
+        </a>
+        {socialLinks.map((link) => (
+          <a
+            class="text-base leading-[27px] text-dark-grey hover:text-primary"
+            href={link.url}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {link.platform}
+          </a>
+        ))}
       </div>
       <div class="flex flex-col gap-4 md:gap-[0.65rem]">
         <h3 class="m-0 font-body text-base leading-[24.3px] font-bold text-dark normal-case">
@@ -69,31 +99,31 @@
           class="text-base leading-[27px] text-dark-grey hover:text-primary"
           href="/"
         >
-          Home
+          {settings.homeLabel}
         </a>
         <a
           class="text-base leading-[27px] text-dark-grey hover:text-primary"
           href="/about"
         >
-          About
+          {settings.aboutLabel}
         </a>
         <a
           class="text-base leading-[27px] text-dark-grey hover:text-primary"
           href="/work"
         >
-          Work
+          {settings.workLabel}
         </a>
         <a
           class="text-base leading-[27px] text-dark-grey hover:text-primary"
           href="/services"
         >
-          Services
+          {settings.servicesLabel}
         </a>
         <a
           class="text-base leading-[27px] text-dark-grey hover:text-primary"
           href="/journal"
         >
-          Journal
+          {settings.journalLabel}
         </a>
       </div>
     </nav>
@@ -102,11 +132,14 @@
     class="my-16 block max-w-none font-display text-[36px] leading-[1.05] font-normal text-dark lowercase md:mx-auto md:mt-16 md:mb-12"
     href="/"
   >
-    stillroom<span class="text-primary">®</span>
+    {wordmark}
+    {hasRegisteredMark && <span class="text-primary">®</span>}
   </a>
   <div class="mx-auto flex max-w-none flex-col gap-4 text-base leading-[24.3px] font-bold text-muted md:flex-row md:gap-32">
-    <span>© Stillroom 2026</span>
-    <span>Independent by nature.</span>
+    <span>
+      © {settings.studioName} {currentYear}
+    </span>
+    <span>{settings.footerTagline}</span>
   </div>
 </footer>
 

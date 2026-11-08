@@ -1,29 +1,20 @@
 ---
 import { Image } from 'astro:assets'
-import { getCollection, type CollectionEntry } from 'astro:content'
+import { getCollection } from 'astro:content'
 import ArticleBody from '../../components/journal/ArticleBody.astro'
 import ArticleIntroduction from '../../components/journal/ArticleIntroduction.astro'
 import RelatedArticles from '../../components/journal/RelatedArticles.astro'
 import Layout from '../../layouts/Layout.astro'
 
-export async function getStaticPaths() {
-  const articles = await getCollection(
-    'journalArticles',
-    ({ data }) => data.detailAvailable,
-  )
-
-  return articles.map((article) => ({
-    params: { slug: article.id },
-    props: { article },
-  }))
-}
-
-interface Props {
-  article: CollectionEntry<'journalArticles'>
-}
-
-const { article } = Astro.props
 const allArticles = await getCollection('journalArticles')
+const article = allArticles.find(
+  (entry) => entry.id === Astro.params.slug && entry.data.detailAvailable,
+)
+
+if (!article) {
+  return Astro.rewrite('/404')
+}
+
 const related = article.data.relatedArticles.flatMap((articleId) => {
   const relatedArticle = allArticles.find((entry) => entry.id === articleId)
   return relatedArticle ? [relatedArticle] : []

@@ -8,26 +8,20 @@ import ProjectNarrative from '../../components/work/ProjectNarrative.astro'
 import ProjectOutcome from '../../components/work/ProjectOutcome.astro'
 import Layout from '../../layouts/Layout.astro'
 
-export async function getStaticPaths() {
-  const projects = (
-    await getCollection('workProjects', ({ data }) => data.detailAvailable)
-  ).sort((a, b) => a.data.order - b.data.order)
+const projects = (
+  await getCollection('workProjects', ({ data }) => data.detailAvailable)
+).sort((a, b) => a.data.order - b.data.order)
+const projectIndex = projects.findIndex(
+  (entry) => entry.id === Astro.params.slug,
+)
 
-  return projects.map((project, index) => ({
-    params: { slug: project.id },
-    props: {
-      project,
-      nextProject: projects[(index + 1) % projects.length],
-    },
-  }))
+if (projectIndex === -1) {
+  return Astro.rewrite('/404')
 }
 
-interface Props {
-  project: CollectionEntry<'workProjects'>
-  nextProject: CollectionEntry<'workProjects'>
-}
-
-const { project, nextProject } = Astro.props
+const project: CollectionEntry<'workProjects'> = projects[projectIndex]
+const nextProject: CollectionEntry<'workProjects'> =
+  projects[(projectIndex + 1) % projects.length]
 ---
 
 <Layout
