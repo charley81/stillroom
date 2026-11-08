@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets'
+
 const team = [
   {
     name: 'Alex Morgan',
@@ -34,10 +36,12 @@ const team = [
   <div class="grid w-full grid-cols-1 gap-8 md:grid-cols-3">
     {team.map((person) => (
       <article class="flex flex-col gap-4 overflow-hidden py-8 md:gap-8">
-        <img
+        <Image
           class="h-[358.078px] w-full rounded-md object-cover object-top md:h-[480px]"
           src={person.portrait}
           alt=""
+          width={1122}
+          height={1402}
         />
         <h3 class="m-0 font-display text-[36px] leading-[1.05] font-normal text-dark uppercase">
           {person.name}

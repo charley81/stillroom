@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets'
 import ProjectInvitation from '../../components/site/ProjectInvitation.astro'
 import ProjectsListing from '../../components/work/ProjectsListing.astro'
 import Layout from '../../layouts/Layout.astro'
@@ -14,19 +15,21 @@ import Layout from '../../layouts/Layout.astro'
         Our work / Independent hospitality
       </p>
     </div>
-    <div class="grid h-auto w-full max-w-none grid-cols-1 gap-8 md:h-[520px] md:grid-cols-2">
+    <div class="grid h-auto w-full max-w-none grid-cols-1 gap-8 md:h-[520px] md:grid-cols-2 items-center">
       <h1 class="m-0 font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[128px] md:leading-[1.05]">
         Places with personality.
       </h1>
-      <img
+      <Image
         class="h-[252.262px] w-full object-contain md:h-[520px] md:w-[672px]"
         src="/images/381-1857.webp"
         alt="Abstract red Stillroom artwork"
+        width={672}
+        height={520}
+        loading="eager"
+        fetchpriority="high"
       />
     </div>
   </section>
-
   <ProjectsListing />
-
   <ProjectInvitation variant="work" />
 </Layout>

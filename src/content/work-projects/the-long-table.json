@@ -4,6 +4,58 @@
   "summary": "Turning a love of good wine into an invitation for everyone.",
   "services": ["Positioning", "Identity", "Menus"],
   "cardImage": "/images/381-1901.webp",
+  "cardAlt": "The Long Table wine list and table setting",
   "order": 5,
-  "detailAvailable": false
+  "detailAvailable": true,
+  "tagline": "Good bottles. Open minds. Room for one more.",
+  "introduction": "A neighbourhood wine bar that makes thoughtful drinking feel generous, sociable, and free from the usual rules.",
+  "heroArtwork": {
+    "src": "/images/projects/the-long-table/hero-artwork.webp",
+    "alt": "Burgundy engraved wine glasses with a curling grapevine."
+  },
+  "heroImage": {
+    "src": "/images/projects/the-long-table/hero.webp",
+    "alt": "The Long Table wine bottle, cream menu and burgundy matchbox on rose linen."
+  },
+  "challenge": {
+    "heading": "Serious wine without the serious atmosphere.",
+    "copy": "The founders knew exactly how they wanted the room to feel: informed but never intimidating, lively but never rushed. They needed a brand that could signal expertise while keeping the invitation wide open."
+  },
+  "contribution": {
+    "heading": "A wine identity built around gathering.",
+    "copy": "We positioned the bar around the shared table, using an expressive editorial identity, conversational menus, and a warm visual rhythm that makes discovery feel social rather than instructional."
+  },
+  "galleryLabel": "Pouring personality into every touchpoint",
+  "gallery": [
+    {
+      "type": "image",
+      "image": {
+        "src": "/images/projects/the-long-table/gallery-02-printed-identity.webp",
+        "alt": "The Long Table cream wine list, burgundy matchbox and printed coasters."
+      }
+    },
+    {
+      "type": "pair",
+      "brandPanel": {
+        "title": "The Long Table",
+        "statement": "Bring a bottle. Bring a story. Stay a while.",
+        "label": "Neighbourhood wine bar"
+      },
+      "image": {
+        "src": "/images/projects/the-long-table/gallery-03-detail.webp",
+        "alt": "The Long Table burgundy matchbox and cream wine menu beside a wine glass."
+      }
+    },
+    {
+      "type": "image",
+      "image": {
+        "src": "/images/projects/the-long-table/gallery-01-wine-bar.webp",
+        "alt": "The Long Table wine bar with a communal timber table and candlelit seating."
+      }
+    }
+  ],
+  "outcome": {
+    "heading": "A wine bar that speaks like a good host.",
+    "copy": "The Long Table now has a confident voice and a flexible identity that helps guests feel curious rather than cautious, turning every menu, sign, and invitation into a reason to pull up a chair."
+  }
 }

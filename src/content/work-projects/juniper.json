@@ -4,6 +4,58 @@
   "summary": "One welcoming identity, from the morning coffee to the last aperitivo.",
   "services": ["Naming", "Identity", "Packaging"],
   "cardImage": "/images/381-1882.webp",
+  "cardAlt": "Juniper takeaway cup and café setting",
   "order": 3,
-  "detailAvailable": false
+  "detailAvailable": true,
+  "tagline": "Bright mornings. Long evenings. One easy rhythm.",
+  "introduction": "A café and aperitivo bar designed to move naturally through the day, with an identity that feels just as right at eight in the morning as eight at night.",
+  "heroArtwork": {
+    "src": "/images/projects/juniper/hero-artwork.webp",
+    "alt": "Forest green engraved juniper branches and berries."
+  },
+  "heroImage": {
+    "src": "/images/projects/juniper/hero.webp",
+    "alt": "Juniper forest green coffee cup and menu beside coffee and an orange aperitivo."
+  },
+  "challenge": {
+    "heading": "Two moods. One place people remember.",
+    "copy": "The concept moved from coffee and pastries into aperitivo and small plates, but the early identity made those moments feel like separate businesses. Juniper needed a name and voice broad enough to hold the whole day together."
+  },
+  "contribution": {
+    "heading": "A flexible identity with a botanical spark.",
+    "copy": "We created the Juniper name, a characterful wordmark, and a botanical system that shifts in energy across cups, menus, packaging, and evening communications while remaining unmistakably part of the same place."
+  },
+  "galleryLabel": "From first coffee to final glass",
+  "gallery": [
+    {
+      "type": "image",
+      "image": {
+        "src": "/images/projects/juniper/gallery-02-packaging.webp",
+        "alt": "Juniper green coffee packaging, cream coasters and aperitivo menu."
+      }
+    },
+    {
+      "type": "pair",
+      "brandPanel": {
+        "title": "Juniper",
+        "statement": "Coffee early. Aperitivo late. Welcome always.",
+        "label": "Café and aperitivo"
+      },
+      "image": {
+        "src": "/images/projects/juniper/gallery-03-detail.webp",
+        "alt": "Juniper branded coffee cup and aperitivo glass on a sage table."
+      }
+    },
+    {
+      "type": "image",
+      "image": {
+        "src": "/images/projects/juniper/gallery-01-cafe.webp",
+        "alt": "Juniper café interior with a green tiled counter and woven bistro chairs."
+      }
+    }
+  ],
+  "outcome": {
+    "heading": "One identity that keeps pace with the day.",
+    "copy": "Juniper now feels coherent from the first takeaway cup to the last round at the bar, giving the team a flexible brand that can change mood without losing its character."
+  }
 }

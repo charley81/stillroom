@@ -5,8 +5,101 @@
   "date": "2026-10-21",
   "excerpt": "It’s rarely just the food. A few thoughts on the details that turn a room into somewhere we belong.",
   "image": "/images/387-3829.webp",
+  "imageAlt": "A warmly lit table at The Good Table before opening",
+  "heroImage": {
+    "src": "/images/articles/what-makes-a-place-stay-with-us.webp",
+    "alt": "The Good Table dining room set for service in warm afternoon light."
+  },
   "order": 1,
   "featured": true,
   "detailAvailable": true,
-  "author": "Stillroom"
+  "author": "Stillroom",
+  "authorBio": "An independent creative studio for hospitality, food, and the places that bring people together.",
+  "body": [
+    {
+      "type": "section",
+      "label": "01 / The feeling of a place",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "Some places stay with you long after you’ve left. Not because they were the grandest, or the newest, or the hardest table to get. You remember them because of how they made you feel."
+        },
+        {
+          "type": "paragraph",
+          "text": "A chair pulled out before you asked. A menu that felt good in your hands. The particular warmth of a room as the evening settled in. Small things, perhaps. But together, they become the reason you want to return."
+        },
+        {
+          "type": "heading",
+          "text": "More than what’s on the plate."
+        },
+        {
+          "type": "paragraph",
+          "text": "We talk a lot about food when we talk about restaurants. And rightly so. But a meal never arrives on its own. It arrives in a setting, with a voice, carried by people who shape the experience as much as the kitchen does."
+        },
+        {
+          "type": "paragraph",
+          "text": "Before the first course, a place has already told you something about itself. The sign outside. The words on the website. The way you’re greeted. Each detail sets an expectation; the best places find a way to keep that promise, quietly and consistently."
+        },
+        {
+          "type": "heading",
+          "text": "The details do the talking."
+        },
+        {
+          "type": "paragraph",
+          "text": "A good menu doesn’t just list dishes. It gives you a sense of the people behind them. A room’s materials, its music, even the space between the tables all add to the story. These things don’t need to match perfectly. They need to feel like they come from the same place."
+        }
+      ]
+    },
+    {
+      "type": "image",
+      "image": {
+        "src": "/images/projects/the-good-table/gallery-01-stationery.webp",
+        "alt": "The Good Table printed menus and stationery in warm natural light.",
+        "caption": "The small details of a place often carry the strongest memories."
+      }
+    },
+    {
+      "type": "pullQuote",
+      "label": "A note to come back to",
+      "quote": "The places we love don’t just feed us. They make us feel we belong."
+    },
+    {
+      "type": "section",
+      "label": "02 / A reason to return",
+      "content": [
+        {
+          "type": "heading",
+          "text": "Familiar, without standing still."
+        },
+        {
+          "type": "paragraph",
+          "text": "There’s a particular pleasure in returning to a place you know. The familiar table. The person who remembers your order. The sense that, for a little while, you’re part of its rhythm."
+        },
+        {
+          "type": "paragraph",
+          "text": "That familiarity isn’t the same as sameness. A place can change its menu, refresh its rooms, or grow into something new while keeping hold of its character. What matters is knowing what sits at the heart of it — and giving that room to evolve."
+        },
+        {
+          "type": "paragraph",
+          "text": "For us, that’s the work of hospitality branding: finding what makes a place itself, then helping it show up in every part of the experience. From the first impression to the last little detail."
+        },
+        {
+          "type": "heading",
+          "text": "Make something worth returning to."
+        },
+        {
+          "type": "paragraph",
+          "text": "The most memorable places aren’t trying to be everything to everyone. They have a point of view. They know who they are, who they’re there for, and what they want to put into the world."
+        },
+        {
+          "type": "paragraph",
+          "text": "Start there. With the people, the purpose, and the feeling you want someone to take away. Then let the details follow. Because a place stays with us when it gives us something to carry — and a reason to come back."
+        }
+      ]
+    }
+  ],
+  "relatedArticles": [
+    "the-quiet-power-of-a-good-menu",
+    "the-everyday-ritual-reconsidered"
+  ]
 }

@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets'
+
 const services = [
   {
     image: '/figma-assets/service-brand.jpg',
@@ -66,15 +68,19 @@ const services = [
   <div class="grid max-w-none grid-cols-1 gap-8 p-0 md:grid-cols-2">
     {services.map((service) => (
       <article class="flex h-auto min-h-0 flex-col gap-8 overflow-hidden md:h-[921px]">
-        <img
+        <Image
           class="h-[201.81px] w-full shrink-0 object-cover md:h-72"
           src={service.image}
           alt=""
+          width={600}
+          height={600}
         />
-        <img
+        <Image
           class="size-24 shrink-0 object-contain md:size-28"
           src={service.number}
           alt=""
+          width={1254}
+          height={1254}
         />
         <h2 class="m-0 font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[72px] md:leading-[1.05]">
           {service.title[0]}

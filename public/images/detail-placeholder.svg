@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-labelledby="title description">
+  <title id="title">Stillroom image placeholder</title>
+  <desc id="description">A warm cream placeholder with a red frame and the words image to come.</desc>
+  <rect width="1600" height="1000" fill="#fff7eb"/>
+  <rect x="48" y="48" width="1504" height="904" fill="none" stroke="#bb3020" stroke-width="8"/>
+  <path d="M48 48l1504 904M1552 48L48 952" stroke="#bb3020" stroke-width="4" opacity=".24"/>
+  <circle cx="800" cy="500" r="150" fill="#bb3020"/>
+  <text x="800" y="485" fill="#fff7eb" font-family="Arial, Helvetica, sans-serif" font-size="46" font-weight="700" text-anchor="middle">STILLROOM</text>
+  <text x="800" y="545" fill="#fff7eb" font-family="Arial, Helvetica, sans-serif" font-size="30" text-anchor="middle">IMAGE TO COME</text>
+</svg>

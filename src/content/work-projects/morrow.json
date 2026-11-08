@@ -4,6 +4,58 @@
   "summary": "A bright new ritual for a better kind of everyday.",
   "services": ["Strategy", "Identity", "Digital"],
   "cardImage": "/images/381-1910.webp",
+  "cardAlt": "Morrow bakery packaging and coffee",
   "order": 6,
-  "detailAvailable": false
+  "detailAvailable": true,
+  "tagline": "Fresh starts. Good bread. A brighter everyday.",
+  "introduction": "A bakery and coffee concept built around the optimistic pull of tomorrow and the small rituals that make today feel better.",
+  "heroArtwork": {
+    "src": "/images/projects/morrow/hero-artwork.webp",
+    "alt": "Orange croissant, rising sun and flower illustration."
+  },
+  "heroImage": {
+    "src": "/images/projects/morrow/hero.webp",
+    "alt": "Morrow orange bakery packaging, takeaway coffee cup and almond croissant."
+  },
+  "challenge": {
+    "heading": "A familiar category asking for a fresh reason to visit.",
+    "copy": "Morrow was entering a busy bakery and coffee market with a strong product but no clear point of difference. The brand needed to make everyday quality feel optimistic, contemporary, and worth building into a routine."
+  },
+  "contribution": {
+    "heading": "An identity with tomorrow in its step.",
+    "copy": "We shaped a simple strategic idea around fresh starts, then created a bright identity, direct verbal style, and digital system that moves easily from bread bags and cups to daily menus and seasonal announcements."
+  },
+  "galleryLabel": "A bright identity for the everyday ritual",
+  "gallery": [
+    {
+      "type": "image",
+      "image": {
+        "src": "/images/projects/morrow/gallery-02-packaging.webp",
+        "alt": "Morrow orange pastry box, takeaway cup, yellow loyalty card and almond croissant."
+      }
+    },
+    {
+      "type": "pair",
+      "brandPanel": {
+        "title": "Morrow",
+        "statement": "Baked today. Made for what comes next.",
+        "label": "Bakery and coffee"
+      },
+      "image": {
+        "src": "/images/projects/morrow/gallery-03-detail.webp",
+        "alt": "Morrow orange coffee cup, yellow loyalty card and gingham pastry paper."
+      }
+    },
+    {
+      "type": "image",
+      "image": {
+        "src": "/images/projects/morrow/gallery-01-bakery.webp",
+        "alt": "Morrow bakery counter with orange packaging and freshly baked pastries."
+      }
+    }
+  ],
+  "outcome": {
+    "heading": "A daily ritual with a point of view.",
+    "copy": "Morrow now feels recognisable, useful, and full of forward energy, giving the team a brand that can support the daily rhythm of the shop and the next stage of its growth."
+  }
 }

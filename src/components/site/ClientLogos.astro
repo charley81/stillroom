@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets'
+
 interface Props {
   variant?: 'strip' | 'proof'
 }
@@ -10,6 +12,8 @@ const clients = [
     name: 'Orlo',
     tagline: 'A quieter kind of stay',
     symbol: '/figma-assets/orlo-house.svg',
+    symbolWidth: 44,
+    symbolHeight: 44,
     containerClass: 'h-[92px]',
     imageClass: 'h-11 w-11',
     nameClass:
@@ -19,6 +23,8 @@ const clients = [
     name: 'Juniper',
     tagline: 'Café & aperitivo',
     symbol: '/figma-assets/juniper.svg',
+    symbolWidth: 44,
+    symbolHeight: 38,
     containerClass: 'h-[89px]',
     imageClass: 'h-[38px] w-11',
     nameClass: 'h-[41px] font-juniper text-[34px] leading-none font-semibold',
@@ -27,6 +33,8 @@ const clients = [
     name: 'Fieldwork',
     tagline: 'Rooted in the everyday',
     symbol: '/figma-assets/fieldwork.svg',
+    symbolWidth: 44,
+    symbolHeight: 44,
     containerClass: 'h-[82px]',
     imageClass: 'h-11 w-11',
     nameClass:
@@ -36,6 +44,8 @@ const clients = [
     name: 'The Table',
     tagline: 'Pull up a chair',
     symbol: '/figma-assets/long-table.svg',
+    symbolWidth: 44,
+    symbolHeight: 44,
     containerClass: 'h-[81px]',
     imageClass: 'h-11 w-11',
     nameClass:
@@ -45,6 +55,8 @@ const clients = [
     name: 'Morrow',
     tagline: 'Good things ahead',
     symbol: '/figma-assets/morrow.svg',
+    symbolWidth: 44,
+    symbolHeight: 44,
     containerClass: 'h-[95px]',
     imageClass: 'h-11 w-11',
     nameClass: 'h-[41px] font-geometric text-[32px] leading-none font-bold',
@@ -66,10 +78,12 @@ const desktopHeight = variant === 'proof' ? 'md:h-[289px]' : 'md:h-[114px]'
         client.containerClass,
       ]}
     >
-      <img
+      <Image
         class:list={['object-contain', client.imageClass]}
         src={client.symbol}
         alt=""
+        width={client.symbolWidth}
+        height={client.symbolHeight}
       />
       <strong class:list={['block text-dark normal-case', client.nameClass]}>
         {client.name}

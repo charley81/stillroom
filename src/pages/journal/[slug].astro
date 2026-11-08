@@ -1,7 +1,8 @@
 ---
+import { Image } from 'astro:assets'
 import { getCollection, type CollectionEntry } from 'astro:content'
+import ArticleBody from '../../components/journal/ArticleBody.astro'
 import ArticleIntroduction from '../../components/journal/ArticleIntroduction.astro'
-import WhatMakesAPlaceBody from '../../components/journal/WhatMakesAPlaceBody.astro'
 import RelatedArticles from '../../components/journal/RelatedArticles.astro'
 import Layout from '../../layouts/Layout.astro'
 
@@ -10,6 +11,7 @@ export async function getStaticPaths() {
     'journalArticles',
     ({ data }) => data.detailAvailable,
   )
+
   return articles.map((article) => ({
     params: { slug: article.id },
     props: { article },
@@ -19,13 +21,13 @@ export async function getStaticPaths() {
 interface Props {
   article: CollectionEntry<'journalArticles'>
 }
+
 const { article } = Astro.props
-const allArticles = (await getCollection('journalArticles')).sort(
-  (a, b) => a.data.order - b.data.order,
-)
-const related = allArticles
-  .filter((entry) => entry.id !== article.id)
-  .slice(0, 2)
+const allArticles = await getCollection('journalArticles')
+const related = article.data.relatedArticles.flatMap((articleId) => {
+  const relatedArticle = allArticles.find((entry) => entry.id === articleId)
+  return relatedArticle ? [relatedArticle] : []
+})
 ---
 
 <Layout
@@ -34,15 +36,21 @@ const related = allArticles
 >
   <ArticleIntroduction article={article} />
 
-  <div class="h-[189.535px] px-4 md:h-[800px] md:px-8">
-    <img
+  <figure class="m-0 flex flex-col gap-4 px-4 md:px-8">
+    <Image
       class="h-[189.535px] w-full object-cover md:h-[800px]"
-      src="/images/387-4032.webp"
-      alt="The Good Table before opening"
+      src={article.data.heroImage.src}
+      alt={article.data.heroImage.alt}
+      width={1376}
+      height={800}
     />
-  </div>
+    {article.data.heroImage.caption && (
+      <figcaption class="max-w-[720px] text-sm leading-6 text-dark-grey md:ml-[352px]">
+        {article.data.heroImage.caption}
+      </figcaption>
+    )}
+  </figure>
 
-  <WhatMakesAPlaceBody />
-
+  <ArticleBody article={article} />
   <RelatedArticles articles={related} />
 </Layout>

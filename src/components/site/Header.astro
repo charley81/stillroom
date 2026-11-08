@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets'
 import Button from './Button.astro'
 
 const pathname = Astro.url.pathname
@@ -48,12 +49,12 @@ const isActive = (href: string) =>
     data-menu-open
   >
     <span class="sr-only">Open menu</span>
-    <img
+    <Image
       class="size-6"
       src="/figma-assets/menu.svg"
       alt=""
-      width="24"
-      height="24"
+      width={24}
+      height={24}
     />
   </button>
 </header>

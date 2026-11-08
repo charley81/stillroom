@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets'
 import type { CollectionEntry } from 'astro:content'
 
 interface Props {
@@ -6,14 +7,24 @@ interface Props {
 }
 
 const { article } = Astro.props
+const date = article.data.date
+  .toLocaleDateString('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    timeZone: 'UTC',
+  })
+  .toUpperCase()
 ---
 
 <article class="mx-4 grid h-[723.447px] w-[calc(100%_-_32px)] grid-cols-1 overflow-hidden md:mx-8 md:h-[640px] md:w-[calc(100%_-_64px)] md:grid-cols-[minmax(0,752fr)_minmax(0,624fr)]">
   <a class="h-[277.447px] w-full md:h-[640px]" href={`/journal/${article.id}`}>
-    <img
+    <Image
       class="h-[277.447px] w-full object-cover md:h-[640px]"
       src={article.data.image}
-      alt="The Good Table before opening"
+      alt={article.data.imageAlt}
+      width={752}
+      height={640}
     />
   </a>
   <div class="m-0 flex h-[446px] w-full flex-col justify-center gap-4 bg-primary px-4 py-16 text-light md:my-[44.5px] md:h-[551px] md:gap-[clamp(16px,2.223vw,32px)] md:p-[clamp(32px,4.445vw,64px)]">
@@ -32,7 +43,7 @@ const { article } = Astro.props
       class="m-0 leading-[24.3px] font-bold text-light hover:text-dark"
       href={`/journal/${article.id}`}
     >
-      21 Oct 2026 &nbsp; / &nbsp; Read the story →
+      {date} &nbsp; / &nbsp; Read the story →
     </a>
   </div>
 </article>

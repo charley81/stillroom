@@ -5,7 +5,89 @@
   "date": "2026-10-14",
   "excerpt": "A small piece of paper. A big part of how a place feels.",
   "image": "/images/387-3930.webp",
+  "imageAlt": "A tactile restaurant menu on a table with cutlery and olives",
+  "heroImage": {
+    "src": "/images/articles/the-quiet-power-of-a-good-menu.webp",
+    "alt": "The Good Table printed menu with burgundy lettering on a walnut dining table."
+  },
   "order": 2,
   "featured": false,
-  "detailAvailable": false
+  "detailAvailable": true,
+  "author": "Stillroom",
+  "authorBio": "An independent creative studio for hospitality, food, and the places that bring people together.",
+  "body": [
+    {
+      "type": "section",
+      "label": "01 / Before the first order",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "A menu is often the first object a guest is invited to hold. Before the food arrives, it sets the pace: quick or lingering, familiar or surprising, formal or easy-going. Its size, weight, language, and order all begin telling the story of the place."
+        },
+        {
+          "type": "paragraph",
+          "text": "That makes the menu more than a list. It is a small piece of hospitality design, moving directly between the kitchen’s intent and the guest’s experience. When it feels considered, choosing becomes part of the pleasure rather than a test to pass."
+        },
+        {
+          "type": "heading",
+          "text": "Clarity is a kind of welcome."
+        },
+        {
+          "type": "paragraph",
+          "text": "The best menus make confidence feel effortless. They guide the eye, give unfamiliar ingredients enough context, and leave room for a server to add the human detail. Clear hierarchy does not make a menu less expressive; it gives the personality somewhere useful to live."
+        },
+        {
+          "type": "paragraph",
+          "text": "A playful heading, a generous margin, or an unexpectedly direct description can say a great deal. But each choice should help the guest understand where they are and how to begin. Decoration without direction only adds noise to a moment that should feel full of possibility."
+        }
+      ]
+    },
+    {
+      "type": "image",
+      "image": {
+        "src": "/images/387-3930.webp",
+        "alt": "A cream and burgundy menu beside a fork, napkin, olives, and water glass",
+        "caption": "Material, language, and hierarchy turn a list into part of the experience."
+      }
+    },
+    {
+      "type": "pullQuote",
+      "label": "A useful principle",
+      "quote": "A good menu helps people choose while making them curious about what comes next."
+    },
+    {
+      "type": "section",
+      "label": "02 / An object that earns its place",
+      "content": [
+        {
+          "type": "heading",
+          "text": "Designed for the rhythm of service."
+        },
+        {
+          "type": "paragraph",
+          "text": "Menus live hard-working lives. They are folded, wiped, updated, carried through crowded rooms, and read in every kind of light. The format has to respect that reality. Paper, binding, finishes, and production choices should support the team as much as they support the brand."
+        },
+        {
+          "type": "paragraph",
+          "text": "The digital version matters too. A menu viewed before a visit should carry the same voice without becoming an unreadable photograph or a frustrating download. The content can change shape while the character remains consistent."
+        },
+        {
+          "type": "heading",
+          "text": "Let the menu belong to the room."
+        },
+        {
+          "type": "paragraph",
+          "text": "A memorable menu rarely asks to be admired on its own. It belongs with the plate, the table, the lighting, and the conversation around it. Its power is quiet because it supports the experience instead of interrupting it."
+        },
+        {
+          "type": "paragraph",
+          "text": "Get that balance right and the menu becomes one of the most useful expressions of the brand: practical, distinctive, and present at the exact moment a guest decides what kind of evening they are about to have."
+        }
+      ]
+    }
+  ],
+  "relatedArticles": [
+    "what-makes-a-place-stay-with-us",
+    "good-brands-have-good-ingredients"
+  ]
 }

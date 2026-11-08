@@ -4,8 +4,58 @@
   "summary": "Giving a neighbourhood restaurant a generous new voice.",
   "services": ["Brand strategy", "Identity", "Art direction"],
   "cardImage": "/images/381-1863.webp",
+  "cardAlt": "The Good Table menu and table setting",
   "order": 1,
   "detailAvailable": true,
   "tagline": "A generous new voice. Always a seat at the table.",
-  "introduction": "A neighbourhood restaurant with good food, good company, and a brand that makes everyone feel like a regular."
+  "introduction": "A neighbourhood restaurant with good food, good company, and a brand that makes everyone feel like a regular.",
+  "heroArtwork": {
+    "src": "/images/381-2490.webp",
+    "alt": "Tomato vine illustration created for The Good Table"
+  },
+  "heroImage": {
+    "src": "/images/381-2491.webp",
+    "alt": "A welcoming table set for lunch at The Good Table"
+  },
+  "challenge": {
+    "heading": "A local favourite. Ready for its next chapter.",
+    "copy": "The Good Table had all the ingredients of a neighbourhood institution: seasonal food, familiar faces, and a generous welcome. Its identity needed to express that warmth with the same care as the kitchen."
+  },
+  "contribution": {
+    "heading": "Good food. Good company. One distinctive voice.",
+    "copy": "We built the brand around a simple invitation: there’s always a seat. A confident serif wordmark, hand-drawn produce, and a warm, tactile palette bring that idea to life across menus, matchboxes, and every little touch at the table."
+  },
+  "galleryLabel": "The identity, in good company",
+  "gallery": [
+    {
+      "type": "image",
+      "image": {
+        "src": "/images/381-2505.webp",
+        "alt": "The Good Table printed identity suite"
+      }
+    },
+    {
+      "type": "pair",
+      "brandPanel": {
+        "title": "The Good Table",
+        "statement": "Good food. Good company. Always a seat.",
+        "label": "Neighbourhood restaurant"
+      },
+      "image": {
+        "src": "/images/381-2511.webp",
+        "alt": "The Good Table menu and matchbox"
+      }
+    },
+    {
+      "type": "image",
+      "image": {
+        "src": "/images/381-2601.webp",
+        "alt": "The Good Table restaurant exterior"
+      }
+    }
+  ],
+  "outcome": {
+    "heading": "A brand that feels like a warm welcome.",
+    "copy": "A cohesive identity that carries the restaurant’s generous spirit from the first impression to the last little detail. Recognisable on the street. Memorable at the table."
+  }
 }

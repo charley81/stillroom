@@ -16,20 +16,22 @@ const displayDate = article.data.date
   .toUpperCase()
 ---
 
-<section class="flex h-[619px] flex-col overflow-hidden px-4 pt-4 pb-20 md:h-[694px] md:px-8 md:py-20">
+<section class="flex flex-col gap-16 overflow-hidden px-4 pt-4 pb-20 md:min-h-[694px] md:px-8 md:py-20">
   <a
-    class="mb-16 leading-[24.3px] font-bold text-primary hover:text-dark"
+    class="leading-[24.3px] font-bold text-primary hover:text-dark"
     href="/journal"
   >
     ← Back to Journal
   </a>
-  <p class="m-0 mb-8 font-body text-base leading-5 font-normal text-dark uppercase">
-    {article.data.category} / {article.data.readTime}
-  </p>
-  <h1 class="m-0 mb-16 w-full font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[128px] md:leading-[1.05]">
-    {article.data.title}
-  </h1>
-  <div class="grid w-full grid-cols-1 gap-8 md:grid-cols-[640px_640px] md:gap-16">
+  <div class="flex flex-col gap-8 text-dark">
+    <p class="m-0 font-body text-base leading-5 font-normal uppercase">
+      {article.data.category} / {article.data.readTime}
+    </p>
+    <h1 class="m-0 w-full font-display text-5xl leading-12 font-normal uppercase md:text-[128px] md:leading-[1.05]">
+      {article.data.title}
+    </h1>
+  </div>
+  <div class="grid w-full grid-cols-1 gap-8 md:grid-cols-2 md:gap-16">
     <div>
       <strong class="leading-[24.3px]">
         BY {article.data.author.toUpperCase()}
@@ -42,7 +44,7 @@ const displayDate = article.data.date
         {displayDate}
       </time>
     </div>
-    <p class="m-0 w-full text-base leading-[27px] text-dark-grey md:w-[640px]">
+    <p class="m-0 w-full text-base leading-[27px] text-dark-grey md:max-w-[640px]">
       {article.data.excerpt}
     </p>
   </div>

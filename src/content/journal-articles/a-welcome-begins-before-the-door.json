@@ -5,7 +5,89 @@
   "date": "2026-09-30",
   "excerpt": "What a hotel’s identity can tell you before you ever check in.",
   "image": "/images/387-3949.webp",
+  "imageAlt": "Orlo House stationery arranged on a hotel bed",
+  "heroImage": {
+    "src": "/images/articles/a-welcome-begins-before-the-door.webp",
+    "alt": "Orlo House cream hotel stationery, terracotta envelope and brass room key."
+  },
   "order": 4,
   "featured": false,
-  "detailAvailable": false
+  "detailAvailable": true,
+  "author": "Stillroom",
+  "authorBio": "An independent creative studio for hospitality, food, and the places that bring people together.",
+  "body": [
+    {
+      "type": "section",
+      "label": "01 / Before arrival",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "A hotel begins welcoming a guest long before anyone opens the door. It begins in a search result, a recommendation, a photograph saved for later, or the first sentence on a booking page. By the time someone arrives, the place has already made a series of promises."
+        },
+        {
+          "type": "paragraph",
+          "text": "Those early moments matter because travel comes with uncertainty. Guests want to know what kind of stay they are choosing, what the place values, and whether they will feel comfortable there. A clear identity replaces some of that uncertainty with anticipation."
+        },
+        {
+          "type": "heading",
+          "text": "Set an expectation you can keep."
+        },
+        {
+          "type": "paragraph",
+          "text": "The strongest hotel brands do not try to make every property sound secluded, soulful, and unforgettable. They find the details that are actually true: the pace of the neighbourhood, the way breakfast works, the view at a certain hour, or the particular generosity of the hosts."
+        },
+        {
+          "type": "paragraph",
+          "text": "That specificity gives design direction. Photography can show how the stay feels rather than only cataloguing rooms. Copy can answer practical questions in the same voice that introduces the story. Booking becomes part of the hospitality rather than an administrative interruption."
+        }
+      ]
+    },
+    {
+      "type": "image",
+      "image": {
+        "src": "/images/387-3949.webp",
+        "alt": "Printed Orlo House guest materials in soft natural light",
+        "caption": "The promise of a stay is carried by practical details as much as grand gestures."
+      }
+    },
+    {
+      "type": "pullQuote",
+      "label": "Before check-in",
+      "quote": "A hotel identity should make the unknown feel inviting without explaining away the pleasure of discovery."
+    },
+    {
+      "type": "section",
+      "label": "02 / The welcome made real",
+      "content": [
+        {
+          "type": "heading",
+          "text": "Carry the story into the stay."
+        },
+        {
+          "type": "paragraph",
+          "text": "Arrival is where the identity meets reality. The sign, the welcome note, the room key, and the way information is offered all confirm or contradict what came before. Coherence is not about putting a logo on everything; it is about maintaining the same level of thought."
+        },
+        {
+          "type": "paragraph",
+          "text": "Useful moments deserve as much attention as photogenic ones. Wi-Fi instructions, breakfast times, local recommendations, and checkout messages can all reduce friction while expressing character. Clear information is one of the most generous things a hotel can provide."
+        },
+        {
+          "type": "heading",
+          "text": "Leave guests with something to carry."
+        },
+        {
+          "type": "paragraph",
+          "text": "The final impression may be a receipt, a follow-up email, or a small object packed into a bag. These moments can feel transactional, or they can close the story with the same care that opened it."
+        },
+        {
+          "type": "paragraph",
+          "text": "When the identity is grounded in the real experience, it helps every stage of the stay feel connected. The welcome begins before the door because the brand has already shown the guest what kind of attention they can expect on the other side."
+        }
+      ]
+    }
+  ],
+  "relatedArticles": [
+    "what-makes-a-place-stay-with-us",
+    "the-everyday-ritual-reconsidered"
+  ]
 }

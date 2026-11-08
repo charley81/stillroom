@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets'
 import Button from '../site/Button.astro'
 ---
 
@@ -17,9 +18,13 @@ import Button from '../site/Button.astro'
     </Button>
     <Button href="/work">View Our Work</Button>
   </div>
-  <img
+  <Image
     class="hidden h-[460px] w-full max-w-[1312px] object-cover md:block"
     src="/figma-assets/hospitality-hero.png"
     alt="Hospitality objects arranged as a Stillroom collage"
+    width={2116}
+    height={743}
+    loading="eager"
+    fetchpriority="high"
   />
 </section>

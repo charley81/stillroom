@@ -1,25 +1,33 @@
 ---
+import { Image } from 'astro:assets'
 import { getCollection, type CollectionEntry } from 'astro:content'
-import GoodTableIdentityGallery from '../../components/work/GoodTableIdentityGallery.astro'
-import GoodTableNarrative from '../../components/work/GoodTableNarrative.astro'
+import NextProject from '../../components/work/NextProject.astro'
+import ProjectGallery from '../../components/work/ProjectGallery.astro'
 import ProjectIntroduction from '../../components/work/ProjectIntroduction.astro'
+import ProjectNarrative from '../../components/work/ProjectNarrative.astro'
+import ProjectOutcome from '../../components/work/ProjectOutcome.astro'
 import Layout from '../../layouts/Layout.astro'
 
 export async function getStaticPaths() {
-  const projects = await getCollection(
-    'workProjects',
-    ({ data }) => data.detailAvailable,
-  )
-  return projects.map((project) => ({
+  const projects = (
+    await getCollection('workProjects', ({ data }) => data.detailAvailable)
+  ).sort((a, b) => a.data.order - b.data.order)
+
+  return projects.map((project, index) => ({
     params: { slug: project.id },
-    props: { project },
+    props: {
+      project,
+      nextProject: projects[(index + 1) % projects.length],
+    },
   }))
 }
 
 interface Props {
   project: CollectionEntry<'workProjects'>
+  nextProject: CollectionEntry<'workProjects'>
 }
-const { project } = Astro.props
+
+const { project, nextProject } = Astro.props
 ---
 
 <Layout
@@ -28,49 +36,16 @@ const { project } = Astro.props
 >
   <ProjectIntroduction project={project} />
 
-  <img
+  <Image
     class="h-[243.75px] w-full object-cover md:h-[900px]"
-    src="/images/381-2491.webp"
-    alt="A welcoming table at The Good Table restaurant"
+    src={project.data.heroImage.src}
+    alt={project.data.heroImage.alt}
+    width={1440}
+    height={900}
   />
 
-  <GoodTableNarrative />
-
-  <GoodTableIdentityGallery />
-
-  <section class="flex h-[517px] flex-col gap-8 overflow-hidden px-4 py-16 md:h-[667px] md:px-8 md:py-32">
-    <div class="w-full max-w-none p-0">
-      <p class="m-0 font-body text-base leading-[16.2px] font-black text-dark-grey uppercase">
-        The outcome
-      </p>
-    </div>
-    <h2 class="m-0 w-full font-display text-5xl leading-12 font-normal text-dark uppercase md:w-[1184px] md:text-[128px] md:leading-[1.05]">
-      A brand that feels like a warm welcome.
-    </h2>
-    <p class="m-0 w-full text-base leading-[27px] text-dark-grey md:w-[784px]">
-      A cohesive identity that carries the restaurant’s generous spirit from the
-      first impression to the last little detail. Recognisable on the street.
-      Memorable at the table.
-    </p>
-  </section>
-
-  <section class="grid h-[654.327px] grid-cols-1 gap-0 bg-primary text-light md:h-[497px] md:grid-cols-[704px_1fr] md:gap-8">
-    <img
-      class="h-[275.327px] w-full object-cover md:h-[497px]"
-      src="/images/381-2696.webp"
-      alt="Orlo House brand materials"
-    />
-    <div class="flex h-[379px] flex-col justify-center gap-8 px-4 py-16 md:h-[497px] md:px-0 md:py-32">
-      <p class="m-0 font-body text-base leading-[16.2px] font-bold text-light uppercase">
-        Next project / 02
-      </p>
-      <h2 class="m-0 font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[72px] md:leading-[1.05]">
-        Orlo House →
-      </h2>
-      <h3 class="m-0 font-display text-[36px] leading-[1.05] font-normal text-light uppercase">
-        A slower kind of stay.
-        <br />A lasting first impression.
-      </h3>
-    </div>
-  </section>
+  <ProjectNarrative project={project} />
+  <ProjectGallery project={project} />
+  <ProjectOutcome project={project} />
+  <NextProject project={nextProject} />
 </Layout>
