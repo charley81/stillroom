@@ -10,12 +10,12 @@
   "tagline": "Good ingredients. Grown close. Made for every day.",
   "introduction": "A modern provisions brand connecting carefully grown ingredients with the familiar pleasure of a well-stocked kitchen.",
   "heroArtwork": {
-    "src": "/images/detail-placeholder.svg",
-    "alt": "Placeholder for Fieldwork produce hero artwork"
+    "src": "/images/projects/fieldwork/hero-artwork.webp",
+    "alt": "Cobalt blue produce engraving with an orange sun."
   },
   "heroImage": {
-    "src": "/images/detail-placeholder.svg",
-    "alt": "Placeholder for Fieldwork produce and packaging photography"
+    "src": "/images/projects/fieldwork/hero.webp",
+    "alt": "Fieldwork olive oil tin and kraft provisions bag with cobalt blue lettering."
   },
   "challenge": {
     "heading": "Farm-led quality that felt too far away.",
@@ -30,8 +30,8 @@
     {
       "type": "image",
       "image": {
-        "src": "/images/detail-placeholder.svg",
-        "alt": "Placeholder for Fieldwork packaging range photography"
+        "src": "/images/projects/fieldwork/gallery-02-print-details.webp",
+        "alt": "Fieldwork printed wrapping paper, olive oil tin and fresh produce on a cobalt table."
       }
     },
     {
@@ -42,15 +42,15 @@
         "label": "Food and provisions"
       },
       "image": {
-        "src": "/images/detail-placeholder.svg",
-        "alt": "Placeholder for Fieldwork labels and produce details"
+        "src": "/images/projects/fieldwork/gallery-03-detail.webp",
+        "alt": "Fieldwork olive oil label and fresh produce in cobalt and cream."
       }
     },
     {
       "type": "image",
       "image": {
-        "src": "/images/detail-placeholder.svg",
-        "alt": "Placeholder for Fieldwork market display photography"
+        "src": "/images/projects/fieldwork/gallery-01-provisions.webp",
+        "alt": "Fieldwork olive oil tins and kraft produce bags on a provisions shop shelf."
       }
     }
   ],

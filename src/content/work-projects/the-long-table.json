@@ -10,12 +10,12 @@
   "tagline": "Good bottles. Open minds. Room for one more.",
   "introduction": "A neighbourhood wine bar that makes thoughtful drinking feel generous, sociable, and free from the usual rules.",
   "heroArtwork": {
-    "src": "/images/detail-placeholder.svg",
-    "alt": "Placeholder for The Long Table hero artwork"
+    "src": "/images/projects/the-long-table/hero-artwork.webp",
+    "alt": "Burgundy engraved wine glasses with a curling grapevine."
   },
   "heroImage": {
-    "src": "/images/detail-placeholder.svg",
-    "alt": "Placeholder for The Long Table wine bar photography"
+    "src": "/images/projects/the-long-table/hero.webp",
+    "alt": "The Long Table wine bottle, cream menu and burgundy matchbox on rose linen."
   },
   "challenge": {
     "heading": "Serious wine without the serious atmosphere.",
@@ -30,8 +30,8 @@
     {
       "type": "image",
       "image": {
-        "src": "/images/detail-placeholder.svg",
-        "alt": "Placeholder for The Long Table menu and stationery photography"
+        "src": "/images/projects/the-long-table/gallery-02-printed-identity.webp",
+        "alt": "The Long Table cream wine list, burgundy matchbox and printed coasters."
       }
     },
     {
@@ -42,15 +42,15 @@
         "label": "Neighbourhood wine bar"
       },
       "image": {
-        "src": "/images/detail-placeholder.svg",
-        "alt": "Placeholder for The Long Table wine and menu details"
+        "src": "/images/projects/the-long-table/gallery-03-detail.webp",
+        "alt": "The Long Table burgundy matchbox and cream wine menu beside a wine glass."
       }
     },
     {
       "type": "image",
       "image": {
-        "src": "/images/detail-placeholder.svg",
-        "alt": "Placeholder for The Long Table evening interior photography"
+        "src": "/images/projects/the-long-table/gallery-01-wine-bar.webp",
+        "alt": "The Long Table wine bar with a communal timber table and candlelit seating."
       }
     }
   ],

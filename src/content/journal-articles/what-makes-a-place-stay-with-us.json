@@ -7,8 +7,8 @@
   "image": "/images/387-3829.webp",
   "imageAlt": "A warmly lit table at The Good Table before opening",
   "heroImage": {
-    "src": "/images/387-4032.webp",
-    "alt": "The dining room at The Good Table set before service"
+    "src": "/images/articles/what-makes-a-place-stay-with-us.webp",
+    "alt": "The Good Table dining room set for service in warm afternoon light."
   },
   "order": 1,
   "featured": true,
@@ -53,8 +53,8 @@
     {
       "type": "image",
       "image": {
-        "src": "/images/detail-placeholder.svg",
-        "alt": "Placeholder for an editorial photograph showing the sensory details of a memorable restaurant",
+        "src": "/images/projects/the-good-table/gallery-01-stationery.webp",
+        "alt": "The Good Table printed menus and stationery in warm natural light.",
         "caption": "The small details of a place often carry the strongest memories."
       }
     },

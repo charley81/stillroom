@@ -10,12 +10,12 @@
   "tagline": "A slower kind of stay. A lasting first impression.",
   "introduction": "A thoughtful identity for a small hotel shaped by unhurried mornings, local character, and the feeling of being genuinely looked after.",
   "heroArtwork": {
-    "src": "/images/detail-placeholder.svg",
-    "alt": "Placeholder for Orlo House hero artwork"
+    "src": "/images/projects/orlo-house/hero-artwork.webp",
+    "alt": "Terracotta sun and arched doorway illustration with an olive branch."
   },
   "heroImage": {
-    "src": "/images/detail-placeholder.svg",
-    "alt": "Placeholder for Orlo House hotel photography"
+    "src": "/images/projects/orlo-house/gallery-02-guest-room.webp",
+    "alt": "Orlo House guest directory and brass room key beside an ivory linen bed."
   },
   "challenge": {
     "heading": "A beautiful stay without a clear story.",
@@ -30,8 +30,8 @@
     {
       "type": "image",
       "image": {
-        "src": "/images/detail-placeholder.svg",
-        "alt": "Placeholder for Orlo House guest stationery photography"
+        "src": "/images/projects/orlo-house/hero.webp",
+        "alt": "Orlo House cream hotel stationery, terracotta envelope and brass room key."
       }
     },
     {
@@ -42,15 +42,15 @@
         "label": "Boutique hotel"
       },
       "image": {
-        "src": "/images/detail-placeholder.svg",
-        "alt": "Placeholder for Orlo House room and welcome details"
+        "src": "/images/projects/orlo-house/gallery-03-detail.webp",
+        "alt": "Orlo House brass room key, leather fob and embossed welcome card."
       }
     },
     {
       "type": "image",
       "image": {
-        "src": "/images/detail-placeholder.svg",
-        "alt": "Placeholder for Orlo House exterior photography"
+        "src": "/images/projects/orlo-house/gallery-01-arrival.webp",
+        "alt": "Orlo House limestone entrance with a sun emblem plaque and timber door."
       }
     }
   ],

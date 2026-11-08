@@ -7,8 +7,8 @@
   "image": "/images/387-3939.webp",
   "imageAlt": "A Juniper coffee cup, espresso, and croissant on a café counter",
   "heroImage": {
-    "src": "/images/detail-placeholder.svg",
-    "alt": "Placeholder for the hero photograph of a neighbourhood café ritual"
+    "src": "/images/articles/the-everyday-ritual-reconsidered.webp",
+    "alt": "Juniper coffee cup and pastry on a sunlit café counter."
   },
   "order": 3,
   "featured": false,

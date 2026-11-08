@@ -10,12 +10,12 @@
   "tagline": "Bright mornings. Long evenings. One easy rhythm.",
   "introduction": "A café and aperitivo bar designed to move naturally through the day, with an identity that feels just as right at eight in the morning as eight at night.",
   "heroArtwork": {
-    "src": "/images/detail-placeholder.svg",
-    "alt": "Placeholder for Juniper botanical hero artwork"
+    "src": "/images/projects/juniper/hero-artwork.webp",
+    "alt": "Forest green engraved juniper branches and berries."
   },
   "heroImage": {
-    "src": "/images/detail-placeholder.svg",
-    "alt": "Placeholder for Juniper café and aperitivo photography"
+    "src": "/images/projects/juniper/hero.webp",
+    "alt": "Juniper forest green coffee cup and menu beside coffee and an orange aperitivo."
   },
   "challenge": {
     "heading": "Two moods. One place people remember.",
@@ -30,8 +30,8 @@
     {
       "type": "image",
       "image": {
-        "src": "/images/detail-placeholder.svg",
-        "alt": "Placeholder for Juniper packaging and menu photography"
+        "src": "/images/projects/juniper/gallery-02-packaging.webp",
+        "alt": "Juniper green coffee packaging, cream coasters and aperitivo menu."
       }
     },
     {
@@ -42,15 +42,15 @@
         "label": "Café and aperitivo"
       },
       "image": {
-        "src": "/images/detail-placeholder.svg",
-        "alt": "Placeholder for Juniper cup and aperitivo details"
+        "src": "/images/projects/juniper/gallery-03-detail.webp",
+        "alt": "Juniper branded coffee cup and aperitivo glass on a sage table."
       }
     },
     {
       "type": "image",
       "image": {
-        "src": "/images/detail-placeholder.svg",
-        "alt": "Placeholder for Juniper street and interior photography"
+        "src": "/images/projects/juniper/gallery-01-cafe.webp",
+        "alt": "Juniper café interior with a green tiled counter and woven bistro chairs."
       }
     }
   ],

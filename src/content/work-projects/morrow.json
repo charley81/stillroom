@@ -10,12 +10,12 @@
   "tagline": "Fresh starts. Good bread. A brighter everyday.",
   "introduction": "A bakery and coffee concept built around the optimistic pull of tomorrow and the small rituals that make today feel better.",
   "heroArtwork": {
-    "src": "/images/detail-placeholder.svg",
-    "alt": "Placeholder for Morrow hero artwork"
+    "src": "/images/projects/morrow/hero-artwork.webp",
+    "alt": "Orange croissant, rising sun and flower illustration."
   },
   "heroImage": {
-    "src": "/images/detail-placeholder.svg",
-    "alt": "Placeholder for Morrow bakery and coffee photography"
+    "src": "/images/projects/morrow/hero.webp",
+    "alt": "Morrow orange bakery packaging, takeaway coffee cup and almond croissant."
   },
   "challenge": {
     "heading": "A familiar category asking for a fresh reason to visit.",
@@ -30,8 +30,8 @@
     {
       "type": "image",
       "image": {
-        "src": "/images/detail-placeholder.svg",
-        "alt": "Placeholder for Morrow bakery packaging photography"
+        "src": "/images/projects/morrow/gallery-02-packaging.webp",
+        "alt": "Morrow orange pastry box, takeaway cup, yellow loyalty card and almond croissant."
       }
     },
     {
@@ -42,15 +42,15 @@
         "label": "Bakery and coffee"
       },
       "image": {
-        "src": "/images/detail-placeholder.svg",
-        "alt": "Placeholder for Morrow bread bag and cup details"
+        "src": "/images/projects/morrow/gallery-03-detail.webp",
+        "alt": "Morrow orange coffee cup, yellow loyalty card and gingham pastry paper."
       }
     },
     {
       "type": "image",
       "image": {
-        "src": "/images/detail-placeholder.svg",
-        "alt": "Placeholder for Morrow storefront photography"
+        "src": "/images/projects/morrow/gallery-01-bakery.webp",
+        "alt": "Morrow bakery counter with orange packaging and freshly baked pastries."
       }
     }
   ],
