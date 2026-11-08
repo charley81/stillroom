@@ -2,74 +2,97 @@
 
 ## Purpose
 
-This document defines the content requirements for Stillroom’s first Sanity CMS implementation.
+This document defines the approved content model for the first Stillroom Sanity CMS implementation.
 
-The model is intentionally small and constrained:
+It is based on:
 
-- It covers only content represented by the final desktop and mobile designs.
-- It uses fixed page templates rather than a page builder.
-- It allows editors to change content and imagery without controlling layout or brand styling.
-- It leaves Sanity installation, Studio configuration, preview implementation, and schema code for a later session.
+1. the final desktop and mobile Figma designs
+2. the current website content
+3. the decisions from the Sanity implementation planning session
 
-## Core decisions
+The model uses fixed page templates. Editors can change approved content and images. Editors cannot change page layout, section order, routes, styling, or brand presentation.
+
+Implementation steps belong in [`sanity-implementation-plan.md`](./sanity-implementation-plan.md).
+
+## Core rules
 
 1. Fixed pages are singleton documents.
-2. Projects and journal articles are repeatable documents.
-3. Reusable records become documents only when they are referenced in multiple places.
-4. One-off section content remains embedded in its owning page.
-5. Editors cannot add, delete, or reorder page sections.
-6. Internal references are strong references.
-7. English is the only supported language.
-8. Sanity manages content, not visual design controls.
-9. Testimonials are not part of the final designs and are excluded entirely.
-10. The 404 page remains in code and does not have a CMS document.
+2. Work Projects, Journal Articles, Services, Authors, Journal Categories, and Client Logos are reusable documents.
+3. Sanity is the only runtime content source after cutover.
+4. Editors cannot add, remove, or reorder page sections.
+5. Structural labels and visible section numbers stay in Astro code.
+6. Internal link destinations stay in Astro code. Editors can change visible call-to-action labels only.
+7. Header and footer destinations and order stay in Astro code. Editors can change their visible labels.
+8. English is the only supported language.
+9. Sanity manages content, not visual design controls.
+10. All references are strong references.
+11. The 404 page remains in Astro code.
+12. Published Work Project and Journal Article slugs become read-only.
+13. Fixed item counts use hard validation when the final layout requires an exact count.
+14. Missing required content blocks publishing and production deployment.
 
 ---
 
-## Content type inventory
+# Content type inventory
 
-### Singleton documents
+## Singleton documents
 
-| Schema name    | Studio title  | Purpose                                                                          |
-| -------------- | ------------- | -------------------------------------------------------------------------------- |
-| `siteSettings` | Site Settings | Global navigation, contact, newsletter, footer, social, and default SEO content. |
-| `homePage`     | Home          | Content and curated references for the homepage.                                 |
-| `workPage`     | Work          | Work-page introduction, project order, and final CTA.                            |
-| `servicesPage` | Services      | Services introduction, sectors, process, and final CTA.                          |
-| `aboutPage`    | About         | Studio story, founder content, team, principles, and final CTA.                  |
-| `journalPage`  | Journal       | Journal introduction and featured article.                                       |
-| `contactPage`  | Contact       | Contact-page heading, introduction, and supporting image.                        |
+| Schema name    | Studio title  | Purpose                                                                                                                 |
+| -------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `siteSettings` | Site Settings | Global identity, navigation labels, contact details, newsletter content, footer content, social links, and default SEO. |
+| `homePage`     | Home          | Content and curated references for the Home page.                                                                       |
+| `workPage`     | Work          | Work page heading, artwork, Work Project order, and final call to action.                                               |
+| `servicesPage` | Services      | Services introduction, process, hospitality content, and final statement.                                               |
+| `aboutPage`    | About         | Studio introduction, founder story, team, principles, client proof, and final call to action.                           |
+| `journalPage`  | Journal       | Journal introduction, artwork, and featured Journal Article.                                                            |
+| `contactPage`  | Contact       | Contact introduction, supporting image, and supporting statement.                                                       |
 
-Singletons should be created once and removed from normal “new document” actions.
+Singletons use stable document IDs. They are hidden from generic create menus and cannot be duplicated or deleted through normal Studio actions.
 
-### Repeatable documents
+## Repeatable documents
 
-| Schema name       | Studio title     | Purpose                                                         |
-| ----------------- | ---------------- | --------------------------------------------------------------- |
-| `project`         | Project          | A portfolio project and its fixed case-study content.           |
-| `article`         | Article          | A journal article using the approved editorial blocks.          |
-| `service`         | Service          | Reusable service content shown on Home, Services, and projects. |
-| `author`          | Author           | Reusable article byline and author note.                        |
-| `journalCategory` | Journal Category | Controlled journal category labels.                             |
+| Schema name       | Studio title     | Purpose                                                                                |
+| ----------------- | ---------------- | -------------------------------------------------------------------------------------- |
+| `workProject`     | Work Project     | A portfolio entry that uses the fixed Work Project page template.                      |
+| `journalArticle`  | Journal Article  | An editorial entry published in the Stillroom Journal.                                 |
+| `service`         | Service          | Reusable Service content shown on Home, Services, Work Projects, and the Contact form. |
+| `author`          | Author           | Reusable Journal Article byline and author note.                                       |
+| `journalCategory` | Journal Category | Controlled Journal Article category labels.                                            |
+| `clientLogo`      | Client Logo      | A reusable client identity mark shown on Home and About.                               |
 
-### Reusable object types
+## Reusable object types
 
-| Schema name            | Purpose                                                                     |
-| ---------------------- | --------------------------------------------------------------------------- |
-| `editorialImage`       | Accessible image content with optional caption and mobile override.         |
-| `seoFields`            | Optional per-document SEO overrides.                                        |
-| `internalCta`          | CTA label and constrained internal destination.                             |
-| `socialLink`           | Platform label and external URL.                                            |
-| `navigationItem`       | Navigation label and constrained internal destination.                      |
-| `clientLogo`           | Client name and logo asset.                                                 |
-| `sectorSummary`        | Page-specific sector heading and summary tied to a controlled sector value. |
-| `processStep`          | One fixed process step.                                                     |
-| `teamProfile`          | Embedded About-page team member.                                            |
-| `articleSection`       | Margin label plus constrained editorial text.                               |
-| `articlePullQuote`     | Full-width article pull quote.                                              |
-| `articleBodyImage`     | Accessible full-width image placed within an article body.                  |
-| `projectGallerySingle` | One gallery image.                                                          |
-| `projectGalleryPair`   | Two gallery images displayed as a pair.                                     |
+| Schema name                    | Purpose                                                                             |
+| ------------------------------ | ----------------------------------------------------------------------------------- |
+| `editorialImage`               | Accessible image content with crop, hotspot, caption, and optional mobile override. |
+| `seoFields`                    | Optional per-document SEO overrides.                                                |
+| `socialLink`                   | Platform label and external URL.                                                    |
+| `processStep`                  | One fixed process step.                                                             |
+| `teamProfile`                  | One embedded About-page team member.                                                |
+| `narrativeSection`             | Editable heading and constrained rich text for a fixed narrative section.           |
+| `journalArticleSection`        | Margin label and constrained Journal Article text.                                  |
+| `journalArticlePullQuote`      | Full-width Journal Article pull quote.                                              |
+| `workProjectGalleryImage`      | One full-width Work Project gallery image.                                          |
+| `workProjectGalleryBrandPanel` | Editable brand-language panel beside one image.                                     |
+
+---
+
+# Fixed interface content
+
+The following stay in Astro code:
+
+- page routes
+- page section order
+- structural section labels, such as “The challenge,” “The outcome,” and “Our services”
+- visible section and process numbers
+- header and footer destination order
+- call-to-action destinations
+- button styles and variants
+- form structure, field order, validation, and submission behavior
+- responsive layout and image presentation
+- colors, typography, spacing, animation, icons, and decorative graphics
+
+Editors can change the visible labels for navigation and calls to action, but not their destinations.
 
 ---
 
@@ -77,115 +100,105 @@ Singletons should be created once and removed from normal “new document” act
 
 ## 1. `siteSettings`
 
-One global document for content genuinely reused across the site.
-
 ### Identity
 
-| Field                | Type   | Required | Notes                                                                                          |
-| -------------------- | ------ | -------- | ---------------------------------------------------------------------------------------------- |
-| `studioName`         | String | Yes      | Public studio name.                                                                            |
-| `registeredMarkText` | String | Yes      | The visible wordmark text, such as `stillroom®`. This is content, not a logo or style control. |
+| Field                | Type   | Required | Notes                                        |
+| -------------------- | ------ | -------- | -------------------------------------------- |
+| `studioName`         | String | Yes      | Public studio name.                          |
+| `registeredMarkText` | String | Yes      | Visible wordmark text, such as `stillroom®`. |
 
-### Header navigation
+### Fixed-route navigation labels
 
-| Field               | Type                      | Required | Notes                                                                            |
-| ------------------- | ------------------------- | -------- | -------------------------------------------------------------------------------- |
-| `primaryNavigation` | Array of `navigationItem` | Yes      | Ordered header navigation. Destinations are constrained to known internal pages. |
-| `primaryHeaderCta`  | `internalCta`             | Yes      | Expected to lead to Contact.                                                     |
+| Field            | Type   | Required |
+| ---------------- | ------ | -------- |
+| `homeLabel`      | String | Yes      |
+| `workLabel`      | String | Yes      |
+| `servicesLabel`  | String | Yes      |
+| `aboutLabel`     | String | Yes      |
+| `journalLabel`   | String | Yes      |
+| `contactLabel`   | String | Yes      |
+| `headerCtaLabel` | String | Yes      |
 
-Do not expose logo uploads, colors, fonts, spacing, icon, animation, or navigation-style controls.
+Astro owns the route destinations and order. Editors cannot add navigation items.
 
 ### Contact and social information
 
-| Field          | Type                  | Required | Notes                                     |
-| -------------- | --------------------- | -------- | ----------------------------------------- |
-| `emailAddress` | Email                 | Yes      | Canonical public email address.           |
-| `socialLinks`  | Array of `socialLink` | No       | Ordered list of external social profiles. |
+| Field          | Type                  | Required | Notes                           |
+| -------------- | --------------------- | -------- | ------------------------------- |
+| `emailAddress` | Email                 | Yes      | Canonical public email address. |
+| `socialLinks`  | Array of `socialLink` | No       | Ordered external profiles.      |
 
 ### Newsletter
 
-| Field                   | Type   | Required | Notes                                          |
-| ----------------------- | ------ | -------- | ---------------------------------------------- |
-| `newsletterEyebrow`     | String | No       | Small introductory label.                      |
-| `newsletterHeading`     | String | Yes      | Main newsletter heading.                       |
-| `newsletterDescription` | Text   | Yes      | Short explanation of what subscribers receive. |
+| Field                   | Type   | Required |
+| ----------------------- | ------ | -------- |
+| `newsletterHeading`     | String | Yes      |
+| `newsletterDescription` | Text   | Yes      |
 
-The email field label, placeholder, button label, submission validation, success message, error message, and integration behavior remain in code.
+The structural label, form label, placeholder, button label, validation, integration, and result messages remain in Astro code.
 
 ### Footer
 
-| Field              | Type                      | Required | Notes                          |
-| ------------------ | ------------------------- | -------- | ------------------------------ |
-| `footerNavigation` | Array of `navigationItem` | Yes      | Ordered internal footer links. |
-| `copyrightText`    | String                    | Yes      | Footer copyright copy.         |
+| Field           | Type   | Required | Notes                                 |
+| --------------- | ------ | -------- | ------------------------------------- |
+| `footerTagline` | String | Yes      | For example, `Independent by nature.` |
+
+Astro generates the copyright line from `studioName` and the current year.
 
 ### Default SEO
 
-| Field                   | Type             | Required | Notes                                                                                                                                            |
-| ----------------------- | ---------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `defaultSeoTitle`       | String           | Yes      | Site-wide fallback title.                                                                                                                        |
-| `defaultSeoDescription` | Text             | Yes      | Site-wide fallback description.                                                                                                                  |
-| `defaultSocialImage`    | `editorialImage` | Yes      | Global fallback sharing image. Alt text is still required for editorial use, though social metadata will use the asset rather than the alt text. |
+| Field                   | Type             | Required |
+| ----------------------- | ---------------- | -------- |
+| `defaultSeoTitle`       | String           | Yes      |
+| `defaultSeoDescription` | Text             | Yes      |
+| `defaultSocialImage`    | `editorialImage` | Yes      |
 
 ---
 
 ## 2. `homePage`
 
-The Home document contains named, fixed groups matching the final page sections. Editors may update the content but may not add, remove, or reorder sections.
+The Home document follows the final design order. Editors cannot reorder the sections.
 
 ### Hero
 
-| Field              | Type             | Required |
-| ------------------ | ---------------- | -------- |
-| `heroEyebrow`      | String           | No       |
-| `heroHeading`      | Text             | Yes      |
-| `heroIntroduction` | Text             | Yes      |
-| `heroImage`        | `editorialImage` | Yes      |
-| `heroPrimaryCta`   | `internalCta`    | Yes      |
-| `heroSecondaryCta` | `internalCta`    | Yes      |
+| Field                   | Type             | Required |
+| ----------------------- | ---------------- | -------- |
+| `heroHeading`           | Text             | Yes      |
+| `heroImage`             | `editorialImage` | Yes      |
+| `heroPrimaryCtaLabel`   | String           | Yes      |
+| `heroSecondaryCtaLabel` | String           | Yes      |
 
-### Client logos
+Destinations are fixed to Contact and Work. The final design does not contain a hero introduction paragraph.
 
-| Field                  | Type                  | Required | Notes                                                |
-| ---------------------- | --------------------- | -------- | ---------------------------------------------------- |
-| `clientSectionHeading` | String                | No       | Use only if the design shows a visible heading.      |
-| `clientLogos`          | Array of `clientLogo` | Yes      | Ordered embedded list. No client documents or links. |
+### Client Logos
 
-### Featured work
+| Field         | Type                                | Required | Validation                |
+| ------------- | ----------------------------------- | -------- | ------------------------- |
+| `clientLogos` | Array of references to `clientLogo` | Yes      | Exactly 5; no duplicates. |
 
-| Field                 | Type                             | Required | Notes                                                                      |
-| --------------------- | -------------------------------- | -------- | -------------------------------------------------------------------------- |
-| `featuredWorkEyebrow` | String                           | No       | Optional visible label.                                                    |
-| `featuredWorkHeading` | Text                             | Yes      | Section heading.                                                           |
-| `featuredProjects`    | Array of references to `project` | Yes      | Manually curated and ordered. Do not use a `featured` boolean on projects. |
-| `featuredWorkCta`     | `internalCta`                    | Yes      | Expected to lead to Work.                                                  |
+### Featured Work Projects
 
-Project-card title, summary, sector, and image come directly from each referenced project.
+| Field                  | Type                                 | Required | Validation                    |
+| ---------------------- | ------------------------------------ | -------- | ----------------------------- |
+| `featuredWorkHeading`  | Text                                 | Yes      | Warn for unusually long copy. |
+| `featuredWorkProjects` | Array of references to `workProject` | Yes      | Exactly 2; no duplicates.     |
+| `featuredWorkCtaLabel` | String                               | Yes      | Destination fixed to Work.    |
 
-### Services overview
+### Featured Services
 
-| Field                  | Type                             | Required |
-| ---------------------- | -------------------------------- | -------- |
-| `servicesHeading`      | Text                             | Yes      |
-| `servicesIntroduction` | Text                             | No       |
-| `featuredServices`     | Array of references to `service` | Yes      |
-| `servicesCta`          | `internalCta`                    | Yes      |
+| Field              | Type                             | Required | Validation                |
+| ------------------ | -------------------------------- | -------- | ------------------------- |
+| `featuredServices` | Array of references to `service` | Yes      | Exactly 4; no duplicates. |
 
-### Sectors
+The section label stays in Astro. Cards use each Service title and short summary.
 
-| Field             | Type                     | Required |
-| ----------------- | ------------------------ | -------- |
-| `sectorsHeading`  | Text                     | Yes      |
-| `sectorSummaries` | Array of `sectorSummary` | Yes      |
+### Sector statement
 
-### Process summary
+| Field          | Type             | Required | Validation                |
+| -------------- | ---------------- | -------- | ------------------------- |
+| `sectorLabels` | Array of strings | Yes      | Exactly 4; no duplicates. |
 
-| Field                 | Type                   | Required | Notes                                    |
-| --------------------- | ---------------------- | -------- | ---------------------------------------- |
-| `processHeading`      | Text                   | Yes      | Home-specific heading.                   |
-| `processIntroduction` | Text                   | No       | Home-specific short copy.                |
-| `processSteps`        | Array of `processStep` | Yes      | Fixed design expects four ordered steps. |
-| `processCta`          | `internalCta`          | Yes      | Expected to lead to Services.            |
+This is marketing copy, not a taxonomy.
 
 ### Studio introduction
 
@@ -194,26 +207,46 @@ Project-card title, summary, sector, and image come directly from each reference
 | `studioHeading`      | Text             | Yes      |
 | `studioIntroduction` | Text             | Yes      |
 | `studioImage`        | `editorialImage` | Yes      |
-| `studioCta`          | `internalCta`    | Yes      |
+| `studioCtaLabel`     | String           | Yes      |
+
+The destination is fixed to About.
+
+### Point of view
+
+| Field                | Type | Required |
+| -------------------- | ---- | -------- |
+| `pointOfViewHeading` | Text | Yes      |
+| `pointOfViewCopy`    | Text | Yes      |
+
+### Process
+
+| Field             | Type                   | Required | Validation                     |
+| ----------------- | ---------------------- | -------- | ------------------------------ |
+| `processHeading`  | Text                   | Yes      | Warn for unusually long copy.  |
+| `processSteps`    | Array of `processStep` | Yes      | Exactly 4.                     |
+| `processCtaLabel` | String                 | Yes      | Destination fixed to Services. |
+
+Visible step numbers come from array order.
 
 ### Journal preview
 
-| Field                 | Type                             | Required | Notes                         |
-| --------------------- | -------------------------------- | -------- | ----------------------------- |
-| `journalHeading`      | Text                             | Yes      | Section heading.              |
-| `journalIntroduction` | Text                             | No       | Optional short introduction.  |
-| `featuredArticles`    | Array of references to `article` | Yes      | Manually curated and ordered. |
-| `journalCta`          | `internalCta`                    | Yes      | Expected to lead to Journal.  |
+| Field                     | Type                                    | Required | Validation                    |
+| ------------------------- | --------------------------------------- | -------- | ----------------------------- |
+| `journalHeading`          | Text                                    | Yes      | Warn for unusually long copy. |
+| `featuredJournalArticles` | Array of references to `journalArticle` | Yes      | Exactly 3; no duplicates.     |
+| `journalCtaLabel`         | String                                  | Yes      | Destination fixed to Journal. |
 
-Article cards use each article’s title, standfirst, category, publication date, and hero image. There are no card-specific override fields.
+Cards use each Journal Article’s category, reading time, title, and hero image.
 
-### Final CTA
+### Final call to action
 
-| Field             | Type          | Required |
-| ----------------- | ------------- | -------- |
-| `finalCtaHeading` | Text          | Yes      |
-| `finalCtaCopy`    | Text          | No       |
-| `finalCta`        | `internalCta` | Yes      |
+| Field             | Type   | Required |
+| ----------------- | ------ | -------- |
+| `finalCtaEyebrow` | String | Yes      |
+| `finalCtaHeading` | Text   | Yes      |
+| `finalCtaLabel`   | String | Yes      |
+
+The destination is fixed to Contact.
 
 ### SEO
 
@@ -221,182 +254,285 @@ Article cards use each article’s title, standfirst, category, publication date
 | ----- | ----------- | -------- |
 | `seo` | `seoFields` | No       |
 
-There is no testimonial section.
-
 ---
 
 ## 3. `workPage`
 
-| Field             | Type                             | Required | Notes                                      |
-| ----------------- | -------------------------------- | -------- | ------------------------------------------ |
-| `heading`         | Text                             | Yes      | Main page heading.                         |
-| `introduction`    | Text                             | Yes      | Concise editorial introduction.            |
-| `projects`        | Array of references to `project` | Yes      | Canonical manually ordered portfolio list. |
-| `finalCtaHeading` | Text                             | Yes      | Inquiry heading.                           |
-| `finalCtaCopy`    | Text                             | No       | Optional supporting copy.                  |
-| `finalCta`        | `internalCta`                    | Yes      | Expected to lead to Contact.               |
-| `seo`             | `seoFields`                      | No       | Optional override.                         |
+| Field             | Type                                 | Required | Notes                                               |
+| ----------------- | ------------------------------------ | -------- | --------------------------------------------------- |
+| `heading`         | Text                                 | Yes      | Main page heading.                                  |
+| `heroArtwork`     | `editorialImage`                     | Yes      | Artwork beside the heading.                         |
+| `workProjects`    | Array of references to `workProject` | Yes      | Canonical ordered Work Project list; no duplicates. |
+| `finalCtaEyebrow` | String                               | Yes      | Final invitation copy.                              |
+| `finalCtaHeading` | Text                                 | Yes      | Final invitation heading.                           |
+| `finalCtaLabel`   | String                               | Yes      | Destination fixed to Contact.                       |
+| `seo`             | `seoFields`                          | No       | Optional SEO override.                              |
 
-### Relationship rule
+The final design does not contain a Work-page introduction paragraph.
 
-The frontend derives “next project” navigation from this ordered project array. Do not store `nextProject` references on individual projects.
-
-Do not add filters, search, pagination settings, category introductions, or card-level content overrides.
+The frontend derives next-Work-Project navigation from `workProjects`. A Work Project does not store its own next reference or numeric order field.
 
 ---
 
 ## 4. `servicesPage`
 
-| Field                 | Type                             | Required | Notes                                                   |
-| --------------------- | -------------------------------- | -------- | ------------------------------------------------------- |
-| `heading`             | Text                             | Yes      | Main page heading.                                      |
-| `introduction`        | Text                             | Yes      | Page introduction.                                      |
-| `services`            | Array of references to `service` | Yes      | Ordered canonical display list.                         |
-| `sectorsHeading`      | Text                             | Yes      | Sectors section heading.                                |
-| `sectorSummaries`     | Array of `sectorSummary`         | Yes      | Page-specific summaries using controlled sector values. |
-| `processHeading`      | Text                             | Yes      | Process section heading.                                |
-| `processIntroduction` | Text                             | No       | Optional short introduction.                            |
-| `processSteps`        | Array of `processStep`           | Yes      | Exactly four ordered steps.                             |
-| `finalCtaHeading`     | Text                             | Yes      | Final inquiry heading.                                  |
-| `finalCtaCopy`        | Text                             | No       | Optional supporting copy.                               |
-| `finalCta`            | `internalCta`                    | Yes      | Expected to lead to Contact.                            |
-| `seo`                 | `seoFields`                      | No       | Optional override.                                      |
+### Hero
 
-There is no testimonial or proof section on Services.
+| Field              | Type             | Required |
+| ------------------ | ---------------- | -------- |
+| `heroHeading`      | Text             | Yes      |
+| `heroIntroduction` | Text             | Yes      |
+| `heroImage`        | `editorialImage` | Yes      |
+| `heroCtaLabel`     | String           | Yes      |
+
+The destination is fixed to Contact.
+
+### Services
+
+| Field      | Type                             | Required | Validation                |
+| ---------- | -------------------------------- | -------- | ------------------------- |
+| `services` | Array of references to `service` | Yes      | Exactly 4; no duplicates. |
+
+### Process
+
+| Field            | Type                   | Required | Validation              |
+| ---------------- | ---------------------- | -------- | ----------------------- |
+| `processHeading` | Text                   | Yes      | Main process statement. |
+| `processSteps`   | Array of `processStep` | Yes      | Exactly 4.              |
+
+### Hospitality section
+
+| Field                     | Type             | Required |
+| ------------------------- | ---------------- | -------- |
+| `hospitalityHeading`      | Text             | Yes      |
+| `hospitalitySectorLabels` | Array of strings | Yes      |
+| `hospitalityPointOfView`  | Text             | Yes      |
+| `hospitalityImage`        | `editorialImage` | Yes      |
+| `hospitalityCtaLabel`     | String           | Yes      |
+
+The destination is fixed to Work. This is one combined content block, not separate sector summaries.
+
+### Final statement
+
+| Field                   | Type   | Required |
+| ----------------------- | ------ | -------- |
+| `finalStatementEyebrow` | String | Yes      |
+| `finalStatementHeading` | Text   | Yes      |
+
+The final Services design does not contain a button in this section.
+
+### SEO
+
+| Field | Type        | Required |
+| ----- | ----------- | -------- |
+| `seo` | `seoFields` | No       |
 
 ---
 
 ## 5. `aboutPage`
 
-### Introduction and philosophy
+### Introduction
 
-| Field               | Type             | Required |
-| ------------------- | ---------------- | -------- |
-| `heading`           | Text             | Yes      |
-| `introduction`      | Text             | Yes      |
-| `philosophyHeading` | Text             | Yes      |
-| `philosophyCopy`    | Text             | Yes      |
-| `philosophyImage`   | `editorialImage` | No       |
+| Field       | Type             | Required |
+| ----------- | ---------------- | -------- |
+| `heading`   | Text             | Yes      |
+| `heroImage` | `editorialImage` | Yes      |
 
 ### Founder story
 
-| Field            | Type             | Required |
-| ---------------- | ---------------- | -------- |
-| `founderHeading` | Text             | Yes      |
-| `founderName`    | String           | Yes      |
-| `founderRole`    | String           | No       |
-| `founderStory`   | Text             | Yes      |
-| `founderImage`   | `editorialImage` | Yes      |
+| Field            | Type                  | Required |
+| ---------------- | --------------------- | -------- |
+| `founderHeading` | Text                  | Yes      |
+| `founderStory`   | Constrained rich text | Yes      |
+| `founderName`    | String                | Yes      |
+| `founderRole`    | String                | Yes      |
+| `founderImage`   | `editorialImage`      | Yes      |
 
 ### Team
 
-| Field              | Type                   | Required |
-| ------------------ | ---------------------- | -------- |
-| `teamHeading`      | Text                   | Yes      |
-| `teamIntroduction` | Text                   | No       |
-| `teamMembers`      | Array of `teamProfile` | Yes      |
-
-Team profiles remain embedded because there are no individual team pages.
+| Field              | Type                   | Required | Validation                    |
+| ------------------ | ---------------------- | -------- | ----------------------------- |
+| `teamHeading`      | Text                   | Yes      | Warn for unusually long copy. |
+| `teamIntroduction` | Text                   | Yes      | Short introduction.           |
+| `teamMembers`      | Array of `teamProfile` | Yes      | Exactly 3.                    |
 
 ### Working principles
 
-| Field               | Type                                                  | Required |
-| ------------------- | ----------------------------------------------------- | -------- |
-| `principlesHeading` | Text                                                  | Yes      |
-| `principles`        | Array of objects containing `title` and `description` | Yes      |
+| Field               | Type                                            | Required | Validation                 |
+| ------------------- | ----------------------------------------------- | -------- | -------------------------- |
+| `principlesHeading` | Text                                            | Yes      | Main principles statement. |
+| `principles`        | Array of objects with `title` and `description` | Yes      | Exactly 3.                 |
 
-### Final CTA and SEO
+Visible principle numbers come from array order.
 
-| Field             | Type          | Required |
-| ----------------- | ------------- | -------- |
-| `finalCtaHeading` | Text          | Yes      |
-| `finalCtaCopy`    | Text          | No       |
-| `finalCta`        | `internalCta` | Yes      |
-| `seo`             | `seoFields`   | No       |
+### Client proof
 
-Do not add testimonials unless the final design changes.
+| Field                 | Type                                | Required | Validation                 |
+| --------------------- | ----------------------------------- | -------- | -------------------------- |
+| `clientProofHeading`  | Text                                | Yes      | Main proof heading.        |
+| `clientProofCopy`     | Text                                | Yes      | Supporting copy.           |
+| `clientLogos`         | Array of references to `clientLogo` | Yes      | Exactly 5; no duplicates.  |
+| `clientProofCtaLabel` | String                              | Yes      | Destination fixed to Work. |
+
+### Final call to action
+
+| Field             | Type   | Required |
+| ----------------- | ------ | -------- |
+| `finalCtaEyebrow` | String | Yes      |
+| `finalCtaHeading` | Text   | Yes      |
+| `finalCtaLabel`   | String | Yes      |
+
+The destination is fixed to Contact.
+
+### SEO
+
+| Field | Type        | Required |
+| ----- | ----------- | -------- |
+| `seo` | `seoFields` | No       |
 
 ---
 
 ## 6. `journalPage`
 
-| Field             | Type                   | Required | Notes                   |
-| ----------------- | ---------------------- | -------- | ----------------------- |
-| `heading`         | Text                   | Yes      | Journal index heading.  |
-| `introduction`    | Text                   | Yes      | Editorial introduction. |
-| `featuredArticle` | Reference to `article` | Yes      | Manually selected.      |
-| `seo`             | `seoFields`            | No       | Optional override.      |
+| Field                    | Type                          | Required | Notes                                 |
+| ------------------------ | ----------------------------- | -------- | ------------------------------------- |
+| `heading`                | Text                          | Yes      | Main Journal heading.                 |
+| `introduction`           | Text                          | Yes      | Editorial introduction.               |
+| `introductionArtwork`    | `editorialImage`              | Yes      | Notebook artwork in the introduction. |
+| `featuredJournalArticle` | Reference to `journalArticle` | Yes      | Manually selected.                    |
+| `seo`                    | `seoFields`                   | No       | Optional SEO override.                |
 
-### Listing behavior
+The remaining Journal Articles are automatic:
 
-- The remaining article grid is generated automatically.
-- Sort by `publicationDate` descending.
-- Exclude the featured article from the remaining list.
-- Card content comes from the article document.
-- Newsletter content comes from `siteSettings`.
-- Do not add search, filtering, pagination controls, category-page copy, or card overrides.
+- order by `publicationDate` descending
+- exclude the featured Journal Article
+- use the fixed latest-articles heading from Astro
+- use Journal Article content directly
+- do not add filtering, search, or pagination at launch
 
 ---
 
 ## 7. `contactPage`
 
-| Field             | Type             | Required | Notes                              |
-| ----------------- | ---------------- | -------- | ---------------------------------- |
-| `heading`         | Text             | Yes      | Main page heading.                 |
-| `introduction`    | Text             | Yes      | Concise invitation.                |
-| `supportingImage` | `editorialImage` | Yes      | Image visible in the final design. |
-| `seo`             | `seoFields`      | No       | Optional override.                 |
+| Field                 | Type             | Required |
+| --------------------- | ---------------- | -------- |
+| `heading`             | Text             | Yes      |
+| `introduction`        | Text             | Yes      |
+| `supportingImage`     | `editorialImage` | Yes      |
+| `supportingStatement` | String           | Yes      |
+| `seo`                 | `seoFields`      | No       |
 
-The following stay outside Sanity:
+The contact form keeps its structure, field order, labels, placeholders, validation, submission endpoint, spam protection, and result behavior in Astro.
 
-- Form fields and their order
-- Field labels and placeholders
-- Form validation rules
-- Service, budget, or timing option logic
-- Submission endpoint
-- Spam protection
-- Success and error behavior
-- Toast messages
-
-The public email address is read from `siteSettings`.
+The four Service choice labels and values come from `servicesPage.services` so they cannot drift from the Services page.
 
 ---
 
 ## 8. `service`
 
-| Field          | Type             | Required | Notes                                                                                             |
-| -------------- | ---------------- | -------- | ------------------------------------------------------------------------------------------------- |
-| `title`        | String           | Yes      | Service name.                                                                                     |
-| `shortSummary` | Text             | Yes      | Short reusable summary.                                                                           |
-| `description`  | Text             | Yes      | Full service description. Keep as plain text unless the final layout explicitly needs formatting. |
-| `deliverables` | Array of strings | Yes      | Ordered list of typical deliverables.                                                             |
+| Field          | Type             | Required | Notes                                                      |
+| -------------- | ---------------- | -------- | ---------------------------------------------------------- |
+| `title`        | String           | Yes      | Public Service name.                                       |
+| `shortSummary` | Text             | Yes      | Used in compact Home presentation.                         |
+| `description`  | Text             | Yes      | Full Services-page description.                            |
+| `image`        | `editorialImage` | Yes      | Required by the final Services design.                     |
+| `deliverables` | Array of strings | Yes      | Ordered deliverables; prevent empty values and duplicates. |
 
-Rules:
-
-- No slug
-- No route
-- No individual SEO
-- No ordering field
-- No service-specific CTA
-- No image unless a final design visibly assigns an image to each service
-
-Display order is owned by the arrays on Home and Services.
+A Service has no slug, route, SEO fields, numeric order field, style settings, or Service-specific call to action. Page reference arrays own display order.
 
 ---
 
-## 9. `project`
+## 9. `workProject`
 
-Each project uses one fixed case-study template.
+Each Work Project uses one fixed page template.
 
-### Core identity
+### Identity and card content
 
-| Field          | Type                             | Required | Notes                                               |
-| -------------- | -------------------------------- | -------- | --------------------------------------------------- |
-| `title`        | String                           | Yes      | Public project/client or concept name.              |
-| `slug`         | Slug                             | Yes      | Generated from title and unique among projects.     |
-| `sector`       | Controlled string                | Yes      | One value from the project-sector list.             |
-| `shortSummary` | Text                             | Yes      | Used in project cards and the project introduction. |
-| `services`     | Array of references to `service` | Yes      | Strong references; prevent duplicates.              |
+| Field         | Type                             | Required | Notes                                                                |
+| ------------- | -------------------------------- | -------- | -------------------------------------------------------------------- |
+| `title`       | String                           | Yes      | Public Work Project title.                                           |
+| `slug`        | Slug                             | Yes      | Generated from title, unique, and read-only after first publication. |
+| `sectorLabel` | String                           | Yes      | Short editable display label; not a taxonomy.                        |
+| `cardSummary` | Text                             | Yes      | Summary on Work and Home cards.                                      |
+| `cardImage`   | `editorialImage`                 | Yes      | Used on Work, Home, and next-Work-Project presentation.              |
+| `services`    | Array of references to `service` | Yes      | Strong references; no duplicates.                                    |
+
+### Introduction and hero
+
+| Field                  | Type             | Required |
+| ---------------------- | ---------------- | -------- |
+| `positioningStatement` | Text             | Yes      |
+| `introduction`         | Text             | Yes      |
+| `heroArtwork`          | `editorialImage` | Yes      |
+| `heroPhotograph`       | `editorialImage` | Yes      |
+
+The card image, hero artwork, and hero photograph are separate required images because the final design uses different compositions.
+
+### Narrative
+
+| Field          | Type               | Required |
+| -------------- | ------------------ | -------- |
+| `challenge`    | `narrativeSection` | Yes      |
+| `contribution` | `narrativeSection` | Yes      |
+
+Each narrative section contains an editable heading and constrained rich text. Structural labels stay in Astro.
+
+### Gallery
+
+| Field            | Type                                          | Required | Notes                    |
+| ---------------- | --------------------------------------------- | -------- | ------------------------ |
+| `galleryHeading` | String                                        | Yes      | Visible gallery heading. |
+| `gallery`        | Array of approved Work Project gallery blocks | Yes      | Ordered and open-ended.  |
+
+Allowed gallery blocks:
+
+1. `workProjectGalleryImage`: one full-width image
+2. `workProjectGalleryBrandPanel`: editable title, statement, label, and one image
+
+Do not add a generic two-image pair. The final design uses a brand-language panel beside one image.
+
+### Outcome
+
+| Field            | Type                  | Required |
+| ---------------- | --------------------- | -------- |
+| `outcomeHeading` | Text                  | Yes      |
+| `outcomeCopy`    | Constrained rich text | Yes      |
+
+The structural “The outcome” label stays in Astro.
+
+### SEO
+
+| Field | Type        | Required |
+| ----- | ----------- | -------- |
+| `seo` | `seoFields` | No       |
+
+### Exclusions
+
+Do not add:
+
+- featured booleans
+- numeric order fields
+- next-Work-Project references
+- arbitrary page-builder blocks
+- editor-controlled gallery width or alignment
+- design or style settings
+- testimonial fields
+
+---
+
+## 10. `journalArticle`
+
+### Identity
+
+| Field             | Type                           | Required | Notes                                                                |
+| ----------------- | ------------------------------ | -------- | -------------------------------------------------------------------- |
+| `title`           | String                         | Yes      | Public Journal Article title.                                        |
+| `slug`            | Slug                           | Yes      | Generated from title, unique, and read-only after first publication. |
+| `category`        | Reference to `journalCategory` | Yes      | Strong reference.                                                    |
+| `author`          | Reference to `author`          | Yes      | Strong reference.                                                    |
+| `publicationDate` | Date                           | Yes      | Public editorial date.                                               |
+| `standfirst`      | Text                           | Yes      | Used in introductions and cards.                                     |
+| `readingTime`     | String                         | Yes      | Manually entered display value, such as `5 min read`.                |
 
 ### Hero
 
@@ -404,126 +540,42 @@ Each project uses one fixed case-study template.
 | ----------- | ---------------- | -------- |
 | `heroImage` | `editorialImage` | Yes      |
 
-The hero image is also the default project-card and social-sharing image unless an SEO image overrides it.
-
-### Narrative
-
-| Field          | Type                          | Required | Notes                                                          |
-| -------------- | ----------------------------- | -------- | -------------------------------------------------------------- |
-| `challenge`    | Constrained project rich text | Yes      | Paragraphs, emphasis, and links only.                          |
-| `contribution` | Constrained project rich text | Yes      | Paragraphs, emphasis, and links only.                          |
-| `outcome`      | Constrained project rich text | No       | Optional result or impact copy. It is not a testimonial field. |
-
-Section headings such as “Challenge” and “Stillroom’s contribution” remain fixed in code.
-
-### Gallery
-
-| Field     | Type                                                    | Required | Notes                         |
-| --------- | ------------------------------------------------------- | -------- | ----------------------------- |
-| `gallery` | Array of `projectGallerySingle` or `projectGalleryPair` | Yes      | Ordered art-directed gallery. |
-
-Only two gallery block types are permitted:
-
-1. One image
-2. An image pair
-
-Editors do not control widths, spacing, alignment, responsive behavior, or arbitrary layout variants.
-
-### SEO
-
-| Field | Type        | Required |
-| ----- | ----------- | -------- |
-| `seo` | `seoFields` | No       |
-
-### Project exclusions
-
-Do not add:
-
-- Testimonial fields
-- Featured booleans
-- Numeric ordering fields
-- Next-project references
-- Custom section builders
-- Card-specific title, summary, or image fields
-- Individual design/style settings
-
----
-
-## 10. `article`
-
-The linked final article design establishes this fixed editorial model:
-
-- Category and manually entered reading time
-- Title
-- Author and publication date
-- Standfirst
-- Hero image with optional caption
-- Numbered/labeled article sections
-- Full-width pull quote
-- Author note
-- Exactly two related articles
-
-### Core identity
-
-| Field             | Type                           | Required | Notes                                                                                                                |
-| ----------------- | ------------------------------ | -------- | -------------------------------------------------------------------------------------------------------------------- |
-| `title`           | String                         | Yes      | Public article title.                                                                                                |
-| `slug`            | Slug                           | Yes      | Generated from title and unique among articles.                                                                      |
-| `category`        | Reference to `journalCategory` | Yes      | Strong reference.                                                                                                    |
-| `author`          | Reference to `author`          | Yes      | Strong reference.                                                                                                    |
-| `publicationDate` | Date or datetime               | Yes      | Editorial display date. Do not use `_createdAt` as the public date.                                                  |
-| `standfirst`      | Text                           | Yes      | Used in the article introduction and article cards.                                                                  |
-| `readingTime`     | String                         | Yes      | Manually entered display value, such as `5 min read`. Keep this editable until automated calculation is implemented. |
-
-### Hero
-
-| Field       | Type             | Required | Notes                                                            |
-| ----------- | ---------------- | -------- | ---------------------------------------------------------------- |
-| `heroImage` | `editorialImage` | Yes      | Caption is optional. This is also the default card/social image. |
+The same source image is used for cards and the Journal Article hero with frontend-controlled responsive crops. A separate card override is not part of the initial model.
 
 ### Body
 
-| Field  | Type                                                                  | Required | Notes                                                |
-| ------ | --------------------------------------------------------------------- | -------- | ---------------------------------------------------- |
-| `body` | Array of `articleSection`, `articlePullQuote`, and `articleBodyImage` | Yes      | Ordered and constrained to approved design patterns. |
+| Field  | Type                                                           | Required | Validation            |
+| ------ | -------------------------------------------------------------- | -------- | --------------------- |
+| `body` | Array of `journalArticleSection` and `journalArticlePullQuote` | Yes      | At least one section. |
 
-#### `articleSection`
+#### `journalArticleSection`
 
-| Field     | Type                      | Required | Notes                                                          |
-| --------- | ------------------------- | -------- | -------------------------------------------------------------- |
-| `label`   | String                    | Yes      | Editorial margin label, such as `01 / THE FEELING OF A PLACE`. |
-| `content` | Constrained Portable Text | Yes      | Paragraphs, subheadings, strong/emphasis, and links only.      |
+| Field     | Type                      | Required |
+| --------- | ------------------------- | -------- |
+| `label`   | String                    | Yes      |
+| `content` | Constrained Portable Text | Yes      |
 
-Tables, embeds, code blocks, arbitrary layout blocks, and additional heading levels are excluded.
+Allowed content:
 
-#### `articlePullQuote`
+- paragraphs
+- approved subheadings
+- strong and emphasis marks
+- approved links
+
+#### `journalArticlePullQuote`
 
 | Field   | Type   | Required |
 | ------- | ------ | -------- |
 | `label` | String | No       |
 | `quote` | Text   | Yes      |
 
-No attribution field is needed unless a future final design includes one.
+The initial model does not support images inside the Journal Article body.
 
-#### `articleBodyImage`
+### Related Journal Articles
 
-| Field   | Type             | Required | Notes                                                                                                                                      |
-| ------- | ---------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `image` | `editorialImage` | Yes      | Full-width image displayed between article sections. Alt text is required unless explicitly decorative; the inherited caption is optional. |
-
-Article body images use the fixed full-width composition from the article template. Editors do not control width, alignment, aspect ratio, spacing, or responsive behavior.
-
-### Related content
-
-| Field             | Type                             | Required | Notes                                       |
-| ----------------- | -------------------------------- | -------- | ------------------------------------------- |
-| `relatedArticles` | Array of references to `article` | Yes      | Exactly two; manually selected and ordered. |
-
-Validation must prevent:
-
-- Selecting the current article
-- Selecting the same related article twice
-- Publishing with fewer or more than two related articles
+| Field                    | Type                                    | Required | Validation                                  |
+| ------------------------ | --------------------------------------- | -------- | ------------------------------------------- |
+| `relatedJournalArticles` | Array of references to `journalArticle` | Yes      | Exactly 2; no self-reference or duplicates. |
 
 ### SEO
 
@@ -531,42 +583,52 @@ Validation must prevent:
 | ----- | ----------- | -------- |
 | `seo` | `seoFields` | No       |
 
-### Article exclusions
+### Exclusions
 
 Do not add:
 
-- Automated or calculated reading time
-- Updated date
-- Scheduled date field
-- Tags
-- Arbitrary image layout controls
-- Embedded video or social posts
-- Arbitrary page-builder blocks
-- Card-specific content overrides
+- automated reading time
+- updated or scheduled date fields
+- tags
+- body images
+- embeds, video, or social posts
+- arbitrary page-builder blocks
+- card-specific content overrides
 
 ---
 
 ## 11. `author`
 
-| Field       | Type             | Required | Notes                                       |
-| ----------- | ---------------- | -------- | ------------------------------------------- |
-| `name`      | String           | Yes      | Public byline name.                         |
-| `role`      | String           | No       | Optional author role.                       |
-| `biography` | Text             | Yes      | Short author note shown at the article end. |
-| `portrait`  | `editorialImage` | No       | Only if the article design renders it.      |
+| Field       | Type   | Required |
+| ----------- | ------ | -------- |
+| `name`      | String | Yes      |
+| `biography` | Text   | Yes      |
 
-Do not add an author slug, author page, social links, contact details, or author SEO.
+The final design does not show an author role, portrait, route, slug, social links, contact details, or SEO fields.
 
 ---
 
 ## 12. `journalCategory`
 
-| Field   | Type   | Required | Notes                                            |
-| ------- | ------ | -------- | ------------------------------------------------ |
-| `title` | String | Yes      | Visible category label.                          |
-| `slug`  | Slug   | Yes      | Stable internal identifier generated from title. |
+| Field   | Type   | Required |
+| ------- | ------ | -------- |
+| `title` | String | Yes      |
+| `slug`  | Slug   | Yes      |
 
-Do not add hierarchy, description, image, category page, or category SEO.
+The slug is a stable internal identifier. A Journal Category has no hierarchy, description, image, public page, or SEO fields.
+
+---
+
+## 13. `clientLogo`
+
+| Field        | Type        | Required | Notes                                          |
+| ------------ | ----------- | -------- | ---------------------------------------------- |
+| `clientName` | String      | Yes      | Accessible name and Studio title.              |
+| `logo`       | Image asset | Yes      | Complete approved logo lockup. SVG is allowed. |
+
+Editors upload one complete logo lockup. They do not assemble a logo from symbol, font, name, tagline, spacing, or style controls.
+
+A Client Logo has no route, description, category, link, or SEO fields.
 
 ---
 
@@ -574,57 +636,39 @@ Do not add hierarchy, description, image, category page, or category SEO.
 
 ## `editorialImage`
 
-| Field            | Type         | Required    | Notes                                                                                      |
-| ---------------- | ------------ | ----------- | ------------------------------------------------------------------------------------------ |
-| `asset`          | Sanity image | Yes         | Enable hotspot and crop.                                                                   |
-| `decorative`     | Boolean      | Yes         | Defaults to false.                                                                         |
-| `alt`            | String       | Conditional | Required when `decorative` is false; must be empty when decorative.                        |
-| `caption`        | Text         | No          | Used only where the design supports a caption.                                             |
-| `mobileOverride` | Sanity image | No          | Only when mobile uses genuinely different artwork or composition. Enable hotspot and crop. |
+| Field            | Type         | Required    | Notes                                                           |
+| ---------------- | ------------ | ----------- | --------------------------------------------------------------- |
+| `asset`          | Sanity image | Yes         | Enable hotspot and crop.                                        |
+| `decorative`     | Boolean      | Yes         | Default `false`.                                                |
+| `alt`            | String       | Conditional | Required when not decorative; empty when decorative.            |
+| `caption`        | Text         | No          | Only rendered where the fixed design supports it.               |
+| `mobileOverride` | Sanity image | No          | Use only for genuinely different mobile artwork or composition. |
 
 Rules:
 
-- Use one source image with responsive crops by default.
-- Do not require separate mobile assets everywhere.
-- Avoid filenames as alt text.
-- Captions describe editorial context; they do not replace alt text.
-- Project, article, portrait, and logo imagery should normally be non-decorative.
+- use one source image with responsive crops by default
+- do not require separate mobile assets everywhere
+- reject filenames used as alt text
+- captions do not replace alt text
+- Work Project, Journal Article, portrait, Service, and Client Logo imagery is normally non-decorative
 
 ## `seoFields`
 
-| Field             | Type                                       | Required | Notes                                                             |
-| ----------------- | ------------------------------------------ | -------- | ----------------------------------------------------------------- |
-| `metaTitle`       | String                                     | No       | Optional override. Show recommended-length guidance as a warning. |
-| `metaDescription` | Text                                       | No       | Optional override. Show recommended-length guidance as a warning. |
-| `socialImage`     | Sanity image or simplified editorial image | No       | Optional sharing-image override.                                  |
+| Field             | Type         | Required |
+| ----------------- | ------------ | -------- |
+| `metaTitle`       | String       | No       |
+| `metaDescription` | Text         | No       |
+| `socialImage`     | Sanity image | No       |
 
-Do not add keyword fields, canonical URL inputs, robots/noindex controls, schema.org editors, or social-network-specific copies.
+SEO values are optional overrides. Length guidance uses warnings, not hard limits.
 
-### SEO fallback chain
+Fallback order:
 
-1. Document-specific SEO value
-2. Document title/description and hero or card image
-3. Global defaults from `siteSettings`
+1. document SEO override
+2. visible document title, description, and primary image
+3. Site Settings defaults
 
-Canonical URLs and structured metadata are generated in code.
-
-## `internalCta`
-
-| Field         | Type                            | Required |
-| ------------- | ------------------------------- | -------- |
-| `label`       | String                          | Yes      |
-| `destination` | Controlled internal destination | Yes      |
-
-Allowed destinations should map to known routes rather than asking editors to type paths. Do not expose style, color, size, alignment, icon, or animation fields.
-
-## `navigationItem`
-
-| Field         | Type                            | Required |
-| ------------- | ------------------------------- | -------- |
-| `label`       | String                          | Yes      |
-| `destination` | Controlled internal destination | Yes      |
-
-Prevent duplicate destinations within the same navigation array.
+Astro generates canonical URLs, Open Graph URLs, site name, title templates, robots directives, and structured data.
 
 ## `socialLink`
 
@@ -633,26 +677,7 @@ Prevent duplicate destinations within the same navigation array.
 | `platform` | String | Yes      |
 | `url`      | URL    | Yes      |
 
-Require `https://` URLs. Icons are mapped in code for known platforms.
-
-## `clientLogo`
-
-| Field        | Type        | Required |
-| ------------ | ----------- | -------- |
-| `clientName` | String      | Yes      |
-| `logo`       | Image asset | Yes      |
-
-The client name supplies accessible text. Do not add links, descriptions, categories, or client documents.
-
-## `sectorSummary`
-
-| Field     | Type                    | Required |
-| --------- | ----------------------- | -------- |
-| `sector`  | Controlled sector value | Yes      |
-| `heading` | String                  | Yes      |
-| `summary` | Text                    | Yes      |
-
-Prevent duplicate sector values within one page’s array.
+Require `https://`. Astro maps known platform names to icons.
 
 ## `processStep`
 
@@ -661,7 +686,7 @@ Prevent duplicate sector values within one page’s array.
 | `title`       | String | Yes      |
 | `description` | Text   | Yes      |
 
-The visible step number is derived from array order rather than entered manually.
+The visible number comes from array order.
 
 ## `teamProfile`
 
@@ -672,272 +697,188 @@ The visible step number is derived from array order rather than entered manually
 | `biography` | Text             | Yes      |
 | `portrait`  | `editorialImage` | Yes      |
 
-Do not add slugs, profile pages, social links, or contact details.
+Team profiles remain embedded because the website has no team-member routes.
 
-## Project gallery blocks
+## `narrativeSection`
 
-### `projectGallerySingle`
+| Field     | Type                      | Required |
+| --------- | ------------------------- | -------- |
+| `heading` | Text                      | Yes      |
+| `content` | Constrained Portable Text | Yes      |
+
+Allow paragraphs, emphasis, and approved links. Keep the structural section label in Astro.
+
+## Work Project gallery blocks
+
+### `workProjectGalleryImage`
 
 | Field   | Type             | Required |
 | ------- | ---------------- | -------- |
 | `image` | `editorialImage` | Yes      |
 
-### `projectGalleryPair`
+### `workProjectGalleryBrandPanel`
 
-| Field        | Type             | Required |
-| ------------ | ---------------- | -------- |
-| `leftImage`  | `editorialImage` | Yes      |
-| `rightImage` | `editorialImage` | Yes      |
+| Field       | Type             | Required |
+| ----------- | ---------------- | -------- |
+| `title`     | Text             | Yes      |
+| `statement` | Text             | Yes      |
+| `label`     | String           | Yes      |
+| `image`     | `editorialImage` | Yes      |
 
-The frontend owns stacking order on small screens.
+Astro owns the panel styling, desktop composition, and mobile stacking order.
 
 ---
 
-# Relationships
+# Relationships and ordering
 
 ```text
 siteSettings
-  ├── global navigation and footer destinations
-  └── default SEO and newsletter content
+  └── global labels, contact details, newsletter, footer, and SEO defaults
 
 homePage
-  ├── project[]
-  ├── service[]
-  └── article[]
+  ├── clientLogo[5]
+  ├── workProject[2]
+  ├── service[4]
+  └── journalArticle[3]
 
 workPage
-  └── project[] (canonical portfolio order)
+  └── workProject[] (canonical Work Project order)
 
 servicesPage
-  └── service[]
+  └── service[4]
+
+aboutPage
+  └── clientLogo[5]
 
 journalPage
-  └── article (featured)
+  └── journalArticle (featured)
 
-project
+workProject
   └── service[]
 
-article
+journalArticle
   ├── author
   ├── journalCategory
-  └── article[] (exactly two related articles)
+  └── journalArticle[2] (related)
 ```
 
-All references are strong references.
+Ordering ownership:
 
-## Ordering ownership
-
-- Work project order: `workPage.projects`
-- Home featured work order: `homePage.featuredProjects`
+- Work page order: `workPage.workProjects`
+- Home featured Work Projects: `homePage.featuredWorkProjects`
 - Services page order: `servicesPage.services`
-- Home services order: `homePage.featuredServices`
-- Home article order: `homePage.featuredArticles`
+- Home Services order: `homePage.featuredServices`
+- Home Journal Article order: `homePage.featuredJournalArticles`
 - Journal archive order: `publicationDate` descending
-- Related article order: `article.relatedArticles`
-- Project gallery order: `project.gallery`
+- related Journal Article order: `journalArticle.relatedJournalArticles`
+- Work Project gallery order: `workProject.gallery`
+- Home and About Client Logo order: each page’s reference array
 
-Do not add numeric order fields or order-ranking plugins initially.
-
----
-
-# Taxonomy
-
-## Project sectors
-
-Use a controlled string list rather than sector documents:
-
-- Restaurants
-- Boutique hotels
-- Cafés and bars
-- Food and beverage brands
-
-Store stable internal values separately from display labels so copy casing can change safely.
-
-Sector labels are used for project classification. Home and Services use page-specific `sectorSummary` objects tied to the same controlled values.
-
-## Journal categories
-
-Use `journalCategory` documents because editors need to create and reuse category labels across articles.
-
-Do not implement:
-
-- Tags
-- Nested categories
-- Sector pages
-- Category pages
-- Taxonomy descriptions
-- Frontend filtering at launch
+Do not add numeric order fields.
 
 ---
 
 # Validation strategy
 
-## Errors: block publishing
+## Errors that block publishing
 
-Use hard validation only where missing or invalid content would break a page, relationship, accessibility, or URL.
+Use hard validation when invalid content would break a page, URL, relationship, accessibility requirement, or fixed layout.
 
-Examples:
+Required hard validation includes:
 
-- Required public titles and headings
-- Required slugs on projects and articles
-- Unique project/article slugs within their type
-- Required hero and section images
-- Required alt text for non-decorative images
-- Required references
-- Exactly two related articles
-- No self-reference or duplicates in related articles
-- Exactly four process steps where the fixed layout requires four
-- Valid email address
-- Valid `https://` external URLs
-- Required project gallery content
-- No duplicate references inside arrays where duplication is not meaningful
+- all required public headings and titles
+- unique Work Project and Journal Article slugs
+- read-only slugs after first publication
+- all required images and references
+- alt text for non-decorative images
+- empty alt text for decorative images
+- valid email address
+- valid `https://` social URLs
+- no duplicate references where duplication has no meaning
+- exact fixed-item counts
+- exactly two related Journal Articles
+- no related-Journal-Article self-reference
+- no empty Work Project galleries
+- valid approved body and gallery block types
 
-## Warnings: allow publishing
+## Warnings
 
-Use warnings for editorial guidance and layout-sensitive copy rather than rigid character limits.
+Use warnings for editorial guidance and layout-sensitive copy:
 
-Examples:
+- SEO title or description is unusually short or long
+- heading, standfirst, summary, or statement may exceed the design
+- caption is unusually long
+- Work Project or Journal Article copy is unusually sparse
 
-- SEO title is unusually short or long
-- Meta description is unusually short or long
-- Heading or standfirst may exceed the expected design length
-- Project summary is unusually long
-- Image caption is unusually long
-- A fixed card area contains fewer items than the preferred design count but can still render safely
+Warnings do not block publishing.
 
-## Array limits
+## Exact item counts
 
-Apply minimum/maximum limits only where the final composition depends on them.
+| Field                                   | Required count |
+| --------------------------------------- | -------------: |
+| `homePage.featuredWorkProjects`         |              2 |
+| `homePage.featuredServices`             |              4 |
+| `homePage.featuredJournalArticles`      |              3 |
+| `homePage.clientLogos`                  |              5 |
+| `servicesPage.services`                 |              4 |
+| `homePage.processSteps`                 |              4 |
+| `servicesPage.processSteps`             |              4 |
+| `aboutPage.teamMembers`                 |              3 |
+| `aboutPage.principles`                  |              3 |
+| `aboutPage.clientLogos`                 |              5 |
+| `journalArticle.relatedJournalArticles` |              2 |
 
-Confirmed strict examples:
-
-- `servicesPage.processSteps`: exactly 4
-- `homePage.processSteps`: exactly 4
-- `article.relatedArticles`: exactly 2
-- `projectGalleryPair`: exactly 2 images by object structure
-
-Naturally flowing arrays, especially project galleries, may remain open-ended.
-
-## Slug behavior
-
-- Generate project and article slugs from titles.
-- Require uniqueness within the relevant content type.
-- Warn editors before changing the slug of an already published document.
-- Fixed pages do not have editable slugs.
-- Redirect management is outside this initial schema.
+Work Project lists, Journal Article lists, and Work Project galleries can grow.
 
 ---
 
 # Assets
 
-## Supported assets
+Sanity manages content assets:
 
-The initial CMS supports images only:
+- Work Project card images, hero artwork, hero photographs, and galleries
+- Journal Article hero images
+- page imagery and artwork
+- Service images
+- team and founder portraits
+- Client Logo lockups
+- social-sharing images
 
-- Project imagery
-- Journal hero and body imagery
-- Page imagery
-- Team/founder portraits
-- Client logos
-- Social-sharing images
+Astro manages fixed interface and brand assets:
 
-Do not add video, audio, PDF, document-download, or arbitrary file fields.
+- Stillroom wordmark presentation
+- menu icons
+- decorative step-number artwork
+- fixed background patterns
+- other non-editorial interface graphics
 
-Use standard raster formats for photography. SVG may be accepted for logos or graphic assets, with the understanding that Sanity’s normal raster image transformations do not apply to SVG files.
-
-## Image responsibilities
-
-Editors control:
-
-- Source asset
-- Hotspot and crop
-- Required alt text or explicit decorative status
-- Optional caption where supported
-- Optional mobile override where genuinely needed
-
-The frontend controls:
-
-- Rendered sizes
-- Aspect ratios
-- Responsive source sets
-- Compression and format selection
-- Layout position
-- Gallery widths and spacing
-- Mobile stacking
-
----
-
-# SEO requirements
-
-Every public singleton page, project, and article receives optional `seoFields`.
-
-Services, authors, and journal categories do not receive SEO fields because they do not have standalone public pages.
-
-## Generated in code
-
-- Canonical URL
-- Open Graph URL and site name
-- Twitter/X card type
-- Structured data
-- Robots directives
-- Title templates
-- Fallback metadata
-
-## Editor guidance
-
-SEO fields are overrides, not duplicate required content. The frontend should use visible page content when overrides are empty.
-
-No initial keyword, `noindex`, canonical URL, or structured-data controls are needed.
+The frontend controls rendered dimensions, aspect ratios, responsive source sets, image formats, compression, layout, and mobile stacking.
 
 ---
 
 # Editorial workflow
 
-## Workflow states
-
-Use Sanity’s built-in workflow only:
+Use Sanity’s built-in workflow:
 
 1. Draft
-2. Preview
+2. Preview in Presentation
 3. Publish
 
-Do not add:
+Do not add custom approval states, scheduled publishing, assignments, localization, or editorial calendars at launch.
 
-- Custom approval states
-- Scheduled publishing
-- Role-based review stages
-- Editorial assignments
-- Content calendars
-- Localization workflow
+Presentation must provide document locations for:
 
-## Preview
+- singleton pages
+- Work Project routes and placements
+- Journal Article routes and placements
+- Service placements
+- Client Logo placements
 
-Every singleton page, project, and article should eventually expose a preview action that renders the current draft in the website.
-
-Sanity list previews should show:
-
-- A useful title
-- A useful subtitle, such as sector, category, role, or publication date
-- A thumbnail when an appropriate image exists
-
-Preview URL wiring belongs to the later CMS setup session.
-
-## Suggested publishing sequence
-
-Because references are strong:
-
-1. Create services, authors, and journal categories.
-2. Create projects and article drafts.
-3. Complete related-article relationships once at least three articles exist.
-4. Populate singleton pages with ordered references.
-5. Preview the site.
-6. Publish referenced documents before publishing pages that depend on them.
+List previews should show a useful title, subtitle, and image where available.
 
 ---
 
-# Suggested Sanity Studio organization
-
-This is an information architecture recommendation, not implementation code.
+# Studio organization
 
 ```text
 Content
@@ -951,62 +892,40 @@ Content
 │   ├── Journal
 │   └── Contact
 ├── Work
-│   └── Projects
+│   └── Work Projects
 ├── Journal
-│   ├── Articles
+│   ├── Journal Articles
 │   ├── Authors
-│   └── Categories
+│   └── Journal Categories
 └── Reusable Content
-    └── Services
+    ├── Services
+    └── Client Logos
 ```
 
-Hide singleton document types from generic document lists and generic create menus.
+Hide singleton types from generic document lists and create menus.
 
 ---
 
 # Explicit exclusions
 
-The following are intentionally outside the initial content model:
+The initial model does not include:
 
-- Generic page builder
-- Editor-controlled section order
-- Testimonial content
-- Individual service pages
-- Individual author pages
-- Sector or category archive pages
-- Search and filtering configuration
+- a generic page builder
+- editor-controlled section order
+- testimonials
+- individual Service, Author, Client Logo, sector, or Journal Category pages
+- search and filtering configuration
 - CMS-controlled form structure
-- Video, audio, embeds, and downloadable documents
-- Inline article images
-- Localization
-- Scheduled publishing
-- Approval workflows
-- Redirect management
-- CMS-managed 404 page
-- CMS-managed colors, typography, spacing, animation, icons, or component variants
-- Card-specific duplicate content
-- Featured booleans
-- Numeric ordering fields
-- Automated article reading time
-- SEO keyword fields
-- Editor-controlled canonical URLs or `noindex`
-
----
-
-# Implementation checklist for the later CMS session
-
-1. Create the eleven document schemas listed in this specification.
-2. Create the reusable object schemas.
-3. Add singleton desk structure and duplicate-prevention rules.
-4. Add constrained internal-destination options.
-5. Add controlled project-sector options.
-6. Configure strong references and duplicate-reference validation.
-7. Configure conditional image alt-text validation.
-8. Configure article self-reference and related-article validation.
-9. Add slug generation and published-slug warnings.
-10. Add Studio previews and document list previews.
-11. Implement frontend draft preview.
-12. Render the manually entered article reading time consistently on cards and article pages.
-13. Implement SEO fallback rules.
-14. Confirm fixed-layout array limits against the final rendered components before applying nonessential hard limits.
-15. Test draft, preview, publish, reference deletion, missing-image, missing-alt, duplicate-reference, and slug-change behavior.
+- video, audio, embeds, or downloadable files
+- Journal Article body images
+- localization
+- scheduled publishing
+- custom approval workflows
+- redirect management in Sanity
+- editable published slugs
+- CMS-managed 404 content
+- CMS-managed colors, typography, spacing, animation, icons, or variants
+- featured booleans
+- numeric ordering fields
+- automated reading time
+- SEO keywords, canonical URL inputs, or `noindex` controls
