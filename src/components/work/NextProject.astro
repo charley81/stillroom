@@ -1,41 +1,41 @@
 ---
-import { Image } from 'astro:assets'
-import type { CollectionEntry } from 'astro:content'
+import type { WorkProjectCard } from '../../sanity/content'
+import EditorialImage from '../content/EditorialImage.astro'
 
 interface Props {
-  project: CollectionEntry<'workProjects'>
+  project: WorkProjectCard
+  projectNumber: number
 }
 
-const { project } = Astro.props
-const projectNumber = String(project.data.order).padStart(2, '0')
+const { project, projectNumber } = Astro.props
+const displayNumber = String(projectNumber).padStart(2, '0')
 ---
 
 <section class="grid grid-cols-1 bg-primary text-light md:min-h-[497px] md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:gap-8">
   <a
     class="group overflow-hidden"
-    href={`/work/${project.id}`}
+    href={`/work/${project.slug}`}
     aria-hidden="true"
     tabindex="-1"
   >
-    <Image
+    <EditorialImage
       class="h-[275.327px] w-full object-cover transition-transform duration-200 group-hover:scale-[1.015] md:h-[497px]"
-      src={project.data.cardImage}
-      alt=""
+      image={{ ...project.cardImage, decorative: true, alt: null }}
       width={704}
       height={497}
     />
   </a>
   <div class="flex min-h-[379px] flex-col justify-center gap-8 px-4 py-16 md:min-h-[497px] md:px-0 md:py-32">
     <p class="m-0 font-body text-base leading-[16.2px] font-bold text-light uppercase">
-      Next project / {projectNumber}
+      Next project / {displayNumber}
     </p>
     <h2 class="m-0 font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[72px] md:leading-[1.05]">
-      <a class="hover:text-light" href={`/work/${project.id}`}>
-        {project.data.title} →
+      <a class="hover:text-light" href={`/work/${project.slug}`}>
+        {project.title} →
       </a>
     </h2>
     <p class="m-0 max-w-[640px] font-display text-[36px] leading-[1.05] font-normal text-light uppercase">
-      {project.data.tagline}
+      {project.positioningStatement}
     </p>
   </div>
 </section>

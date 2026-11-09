@@ -1,45 +1,49 @@
 ---
-import { Image } from 'astro:assets'
-import { getCollection, type CollectionEntry } from 'astro:content'
+import EditorialImage from '../../components/content/EditorialImage.astro'
 import NextProject from '../../components/work/NextProject.astro'
 import ProjectGallery from '../../components/work/ProjectGallery.astro'
 import ProjectIntroduction from '../../components/work/ProjectIntroduction.astro'
 import ProjectNarrative from '../../components/work/ProjectNarrative.astro'
 import ProjectOutcome from '../../components/work/ProjectOutcome.astro'
 import Layout from '../../layouts/Layout.astro'
+import {
+  getWorkProjectPage,
+  WorkProjectNotFoundError,
+} from '../../sanity/content'
+import { PUBLIC_PREVIEW_STATE } from '../../sanity/preview'
 
-const projects = (
-  await getCollection('workProjects', ({ data }) => data.detailAvailable)
-).sort((a, b) => a.data.order - b.data.order)
-const projectIndex = projects.findIndex(
-  (entry) => entry.id === Astro.params.slug,
-)
+const slug = Astro.params.slug
+if (!slug) return Astro.rewrite('/404')
 
-if (projectIndex === -1) {
-  return Astro.rewrite('/404')
+const preview = Astro.locals.preview ?? PUBLIC_PREVIEW_STATE
+let content
+try {
+  content = await getWorkProjectPage(slug, preview)
+} catch (error) {
+  if (error instanceof WorkProjectNotFoundError) {
+    return Astro.rewrite('/404')
+  }
+  throw error
 }
-
-const project: CollectionEntry<'workProjects'> = projects[projectIndex]
-const nextProject: CollectionEntry<'workProjects'> =
-  projects[(projectIndex + 1) % projects.length]
+const { project, nextProject, nextProjectNumber } = content
+const title = project.seo?.metaTitle ?? `${project.title} — Stillroom`
+const description = project.seo?.metaDescription ?? project.cardSummary
+const socialImageUrl = project.seo?.socialImageUrl ?? project.cardImage.url
 ---
 
-<Layout
-  title={`${project.data.title} — Stillroom`}
-  description={project.data.summary}
->
+<Layout title={title} description={description} socialImageUrl={socialImageUrl}>
   <ProjectIntroduction project={project} />
 
-  <Image
+  <EditorialImage
     class="h-[243.75px] w-full object-cover md:h-[900px]"
-    src={project.data.heroImage.src}
-    alt={project.data.heroImage.alt}
+    image={project.heroPhotograph}
     width={1440}
     height={900}
+    loading="eager"
   />
 
   <ProjectNarrative project={project} />
   <ProjectGallery project={project} />
   <ProjectOutcome project={project} />
-  <NextProject project={nextProject} />
+  <NextProject project={nextProject} projectNumber={nextProjectNumber} />
 </Layout>

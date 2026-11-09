@@ -1,0 +1,168 @@
+import { defineField, defineType } from 'sanity'
+import { PublishedSlugInput } from '../locked-slug-input'
+import { simplePortableText } from '../objects/simple-portable-text'
+import { approvedGalleryBlocks, uniqueReferences } from '../validation'
+
+export const workProject = defineType({
+  name: 'workProject',
+  title: 'Work Project',
+  type: 'document',
+  groups: [
+    { name: 'identity', title: 'Identity and card', default: true },
+    { name: 'introduction', title: 'Introduction and hero' },
+    { name: 'narrative', title: 'Narrative' },
+    { name: 'gallery', title: 'Gallery' },
+    { name: 'outcome', title: 'Outcome' },
+    { name: 'seo', title: 'SEO' },
+  ],
+  fields: [
+    defineField({
+      name: 'title',
+      title: 'Title',
+      type: 'string',
+      group: 'identity',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'slug',
+      title: 'Slug',
+      description:
+        'Generated from the title. It becomes read-only after first publication.',
+      type: 'slug',
+      group: 'identity',
+      options: { source: 'title', maxLength: 96 },
+      components: { input: PublishedSlugInput },
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'sectorLabel',
+      title: 'Sector label',
+      type: 'string',
+      group: 'identity',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'cardSummary',
+      title: 'Card summary',
+      type: 'text',
+      rows: 3,
+      group: 'identity',
+      validation: (rule) => [
+        rule.required(),
+        rule.max(180).warning('Long summaries may not fit Work Project cards.'),
+      ],
+    }),
+    defineField({
+      name: 'cardImage',
+      title: 'Card image',
+      type: 'editorialImage',
+      group: 'identity',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'services',
+      title: 'Services',
+      type: 'array',
+      group: 'identity',
+      of: [{ type: 'reference', to: [{ type: 'service' }] }],
+      validation: (rule) => [
+        rule.required().min(1),
+        rule.custom((value) => uniqueReferences(value)),
+      ],
+    }),
+    defineField({
+      name: 'positioningStatement',
+      title: 'Positioning statement',
+      type: 'text',
+      rows: 3,
+      group: 'introduction',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'introduction',
+      title: 'Introduction',
+      type: 'text',
+      rows: 4,
+      group: 'introduction',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'heroArtwork',
+      title: 'Hero artwork',
+      type: 'editorialImage',
+      group: 'introduction',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'heroPhotograph',
+      title: 'Hero photograph',
+      type: 'editorialImage',
+      group: 'introduction',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'challenge',
+      title: 'Challenge',
+      type: 'narrativeSection',
+      group: 'narrative',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'contribution',
+      title: 'Contribution',
+      type: 'narrativeSection',
+      group: 'narrative',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'galleryHeading',
+      title: 'Gallery heading',
+      type: 'string',
+      group: 'gallery',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'gallery',
+      title: 'Gallery',
+      type: 'array',
+      group: 'gallery',
+      of: [
+        { type: 'workProjectGalleryImage' },
+        { type: 'workProjectGalleryBrandPanel' },
+      ],
+      validation: (rule) => [
+        rule.required().min(1),
+        rule.custom((value) => approvedGalleryBlocks(value)),
+      ],
+    }),
+    defineField({
+      name: 'outcomeHeading',
+      title: 'Outcome heading',
+      type: 'text',
+      rows: 3,
+      group: 'outcome',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'outcomeCopy',
+      title: 'Outcome copy',
+      type: 'array',
+      group: 'outcome',
+      of: simplePortableText,
+      validation: (rule) => rule.required().min(1),
+    }),
+    defineField({
+      name: 'seo',
+      title: 'SEO overrides',
+      type: 'seoFields',
+      group: 'seo',
+    }),
+  ],
+  preview: {
+    select: {
+      title: 'title',
+      subtitle: 'sectorLabel',
+      media: 'cardImage.asset',
+    },
+  },
+})

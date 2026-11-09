@@ -1,0 +1,16 @@
+---
+import {
+  renderPortableText,
+  type PortableTextBlock,
+} from '../../sanity/portable-text'
+
+interface Props {
+  value: PortableTextBlock[]
+  paragraphClass: string
+}
+
+const { value, paragraphClass } = Astro.props
+const html = renderPortableText(value, paragraphClass)
+---
+
+<Fragment set:html={html} />

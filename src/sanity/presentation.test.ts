@@ -6,6 +6,8 @@ import {
   serviceLocations,
   servicesPageLocations,
   siteSettingsLocations,
+  workPageLocations,
+  workProjectLocations,
 } from './presentation'
 
 describe('Sanity Presentation configuration', () => {
@@ -65,6 +67,30 @@ describe('Sanity Presentation configuration', () => {
     )
   })
 
+  it('locates Work documents on their routes and shared placements', () => {
+    expect(workPageLocations.locations).toEqual([
+      { title: 'Work', href: '/work' },
+    ])
+    expect(
+      workProjectLocations.resolve({
+        title: 'The Good Table',
+        slug: 'the-good-table',
+      }),
+    ).toEqual({
+      locations: [
+        { title: 'The Good Table', href: '/work/the-good-table' },
+        { title: 'Work listing', href: '/work' },
+        { title: 'Home featured Work placement', href: '/' },
+      ],
+    })
+    expect(PRESENTATION_OPTIONS.resolve?.locations).toEqual(
+      expect.objectContaining({
+        workPage: workPageLocations,
+        workProject: workProjectLocations,
+      }),
+    )
+  })
+
   it('locates Services and Contact documents where their content appears', () => {
     expect(servicesPageLocations.locations).toEqual([
       { title: 'Services', href: '/services' },
@@ -73,9 +99,16 @@ describe('Sanity Presentation configuration', () => {
     expect(contactPageLocations.locations).toEqual([
       { title: 'Contact', href: '/contact' },
     ])
-    expect(serviceLocations.locations).toEqual([
+    expect(
+      serviceLocations.resolve({
+        title: 'Brand strategy',
+        workProjects: [{ title: 'The Good Table', slug: 'the-good-table' }],
+      }).locations,
+    ).toEqual([
       { title: 'Services', href: '/services' },
       { title: 'Contact form', href: '/contact' },
+      { title: 'Home featured Services placement', href: '/' },
+      { title: 'The Good Table', href: '/work/the-good-table' },
     ])
     expect(PRESENTATION_OPTIONS.resolve?.locations).toEqual(
       expect.objectContaining({

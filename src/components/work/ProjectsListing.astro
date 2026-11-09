@@ -1,10 +1,12 @@
 ---
-import { getCollection } from 'astro:content'
+import type { WorkPage } from '../../sanity/content'
 import ProjectCard from '../content/ProjectCard.astro'
 
-const projects = (await getCollection('workProjects')).sort(
-  (a, b) => a.data.order - b.data.order,
-)
+interface Props {
+  page: WorkPage
+}
+
+const { page } = Astro.props
 ---
 
 <section
@@ -15,7 +17,7 @@ const projects = (await getCollection('workProjects')).sort(
     Our work
   </p>
   <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
-    {projects.map((project) => (
+    {page.workProjects.map((project) => (
       <ProjectCard project={project} />
     ))}
   </div>

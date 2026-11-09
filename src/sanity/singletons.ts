@@ -3,12 +3,14 @@ import {
   CONTACT_PAGE_ID,
   SERVICES_PAGE_ID,
   SITE_SETTINGS_ID,
+  WORK_PAGE_ID,
 } from './constants'
 
-export { CONTACT_PAGE_ID, SERVICES_PAGE_ID, SITE_SETTINGS_ID }
+export { CONTACT_PAGE_ID, SERVICES_PAGE_ID, SITE_SETTINGS_ID, WORK_PAGE_ID }
 
 const SINGLETON_IDS = new Map([
   ['siteSettings', SITE_SETTINGS_ID],
+  ['workPage', WORK_PAGE_ID],
   ['servicesPage', SERVICES_PAGE_ID],
   ['contactPage', CONTACT_PAGE_ID],
 ])
@@ -78,6 +80,15 @@ export const structure: StructureResolver = (S) =>
             .title('Pages')
             .items([
               S.listItem()
+                .title('Work')
+                .schemaType('workPage')
+                .child(
+                  S.document()
+                    .title('Work')
+                    .schemaType('workPage')
+                    .documentId(WORK_PAGE_ID),
+                ),
+              S.listItem()
                 .title('Services')
                 .schemaType('servicesPage')
                 .child(
@@ -95,6 +106,15 @@ export const structure: StructureResolver = (S) =>
                     .schemaType('contactPage')
                     .documentId(CONTACT_PAGE_ID),
                 ),
+            ]),
+        ),
+      S.listItem()
+        .title('Work')
+        .child(
+          S.list()
+            .title('Work')
+            .items([
+              S.documentTypeListItem('workProject').title('Work Projects'),
             ]),
         ),
       S.listItem()

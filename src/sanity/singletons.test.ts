@@ -5,6 +5,7 @@ import {
   filterSingletonTemplates,
   SERVICES_PAGE_ID,
   SITE_SETTINGS_ID,
+  WORK_PAGE_ID,
 } from './singletons'
 
 describe('Site Settings singleton behavior', () => {
@@ -24,13 +25,19 @@ describe('Site Settings singleton behavior', () => {
     ).toEqual(['publish', 'discardChanges'])
   })
 
-  it('protects the Services and Contact singleton documents', () => {
+  it('protects the Work, Services, and Contact singleton documents', () => {
     const actions = [
       { action: 'publish' },
       { action: 'duplicate' },
       { action: 'delete' },
     ]
 
+    expect(
+      filterSingletonActions(actions, {
+        documentId: WORK_PAGE_ID,
+        schemaType: 'workPage',
+      }).map((action) => action.action),
+    ).toEqual(['publish'])
     expect(
       filterSingletonActions(actions, {
         documentId: SERVICES_PAGE_ID,
@@ -48,6 +55,7 @@ describe('Site Settings singleton behavior', () => {
   it('removes all singleton pages from the normal create menu', () => {
     const templates = [
       { templateId: 'siteSettings', schemaType: 'siteSettings' },
+      { templateId: 'workPage', schemaType: 'workPage' },
       { templateId: 'servicesPage', schemaType: 'servicesPage' },
       { templateId: 'contactPage', schemaType: 'contactPage' },
       { templateId: 'service', schemaType: 'service' },

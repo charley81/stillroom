@@ -4,12 +4,14 @@ import Button from './Button.astro'
 interface Props {
   eyebrow?: string
   title?: string
+  label?: string
   variant?: 'default' | 'work' | 'about'
 }
 
 const {
   eyebrow = 'Something good starts with a conversation',
   title = 'Pull up a chair.',
+  label = 'Start a Project',
   variant = 'default',
 } = Astro.props
 
@@ -34,7 +36,7 @@ const heights = {
       {title}
     </h2>
     <Button href="/contact" variant="light">
-      Start a Project
+      {label}
     </Button>
   </div>
 </section>

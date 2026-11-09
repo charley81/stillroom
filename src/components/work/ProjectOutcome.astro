@@ -1,8 +1,9 @@
 ---
-import type { CollectionEntry } from 'astro:content'
+import type { WorkProject } from '../../sanity/content'
+import PortableText from '../content/PortableText.astro'
 
 interface Props {
-  project: CollectionEntry<'workProjects'>
+  project: WorkProject
 }
 
 const { project } = Astro.props
@@ -13,9 +14,10 @@ const { project } = Astro.props
     The outcome
   </p>
   <h2 class="m-0 w-full max-w-[1184px] font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[128px] md:leading-[1.05]">
-    {project.data.outcome.heading}
+    {project.outcomeHeading}
   </h2>
-  <p class="m-0 w-full text-base leading-[27px] text-dark-grey md:max-w-[784px]">
-    {project.data.outcome.copy}
-  </p>
+  <PortableText
+    value={project.outcomeCopy}
+    paragraphClass="m-0 w-full text-base leading-[27px] text-dark-grey md:max-w-[784px]"
+  />
 </section>

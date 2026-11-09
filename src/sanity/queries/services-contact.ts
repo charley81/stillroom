@@ -1,18 +1,5 @@
 import { defineQuery } from 'groq'
-
-const EDITORIAL_IMAGE_PROJECTION = `
-  decorative,
-  alt,
-  caption,
-  "url": asset.asset->url,
-  "mobileUrl": mobileOverride.asset->url
-`
-
-const SEO_PROJECTION = `
-  metaTitle,
-  metaDescription,
-  "socialImageUrl": socialImage.asset->url
-`
+import { EDITORIAL_IMAGE_PROJECTION, SEO_PROJECTION } from './projections'
 
 export const SERVICES_PAGE_QUERY = defineQuery(`
   *[_type == "servicesPage" && _id == "servicesPage"][0]{
