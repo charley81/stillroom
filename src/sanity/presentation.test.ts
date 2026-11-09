@@ -2,7 +2,11 @@ import { describe, expect, it } from 'vitest'
 import {
   PRESENTATION_OPTIONS,
   TRUSTED_PRESENTATION_ORIGINS,
+  authorLocations,
   contactPageLocations,
+  journalArticleLocations,
+  journalCategoryLocations,
+  journalPageLocations,
   serviceLocations,
   servicesPageLocations,
   siteSettingsLocations,
@@ -87,6 +91,77 @@ describe('Sanity Presentation configuration', () => {
       expect.objectContaining({
         workPage: workPageLocations,
         workProject: workProjectLocations,
+      }),
+    )
+  })
+
+  it('locates Journal documents on their routes and shared placements', () => {
+    expect(journalPageLocations.locations).toEqual([
+      { title: 'Journal', href: '/journal' },
+    ])
+    expect(
+      journalArticleLocations.resolve({
+        title: 'What Makes a Place Stay With Us?',
+        slug: 'what-makes-a-place-stay-with-us',
+        relatedIn: [
+          {
+            title: 'The Quiet Power of a Good Menu.',
+            slug: 'the-quiet-power-of-a-good-menu',
+          },
+        ],
+      }).locations,
+    ).toEqual([
+      {
+        title: 'What Makes a Place Stay With Us?',
+        href: '/journal/what-makes-a-place-stay-with-us',
+      },
+      { title: 'Journal listing', href: '/journal' },
+      { title: 'Home featured Journal placement', href: '/' },
+      {
+        title: 'Related in The Quiet Power of a Good Menu.',
+        href: '/journal/the-quiet-power-of-a-good-menu',
+      },
+    ])
+    expect(
+      authorLocations.resolve({
+        name: 'Stillroom',
+        articles: [
+          {
+            title: 'What Makes a Place Stay With Us?',
+            slug: 'what-makes-a-place-stay-with-us',
+          },
+        ],
+      }).locations,
+    ).toEqual([
+      {
+        title: 'What Makes a Place Stay With Us?',
+        href: '/journal/what-makes-a-place-stay-with-us',
+      },
+    ])
+    expect(
+      journalCategoryLocations.resolve({
+        title: 'Culture',
+        articles: [
+          {
+            title: 'What Makes a Place Stay With Us?',
+            slug: 'what-makes-a-place-stay-with-us',
+          },
+        ],
+      }).locations,
+    ).toEqual([
+      {
+        title: 'What Makes a Place Stay With Us?',
+        href: '/journal/what-makes-a-place-stay-with-us',
+      },
+      { title: 'Journal listing', href: '/journal' },
+      { title: 'Home featured Journal placement', href: '/' },
+    ])
+    expect(PRESENTATION_OPTIONS.resolve?.locations).toEqual(
+      expect.objectContaining({
+        journalPage: journalPageLocations,
+        journalArticle: journalArticleLocations,
+        author: authorLocations,
+        journalCategory: journalCategoryLocations,
       }),
     )
   })

@@ -7,10 +7,11 @@ import {
 interface Props {
   value: PortableTextBlock[]
   paragraphClass: string
+  headingClass?: string
 }
 
-const { value, paragraphClass } = Astro.props
-const html = renderPortableText(value, paragraphClass)
+const { value, paragraphClass, headingClass } = Astro.props
+const html = renderPortableText(value, paragraphClass, headingClass)
 ---
 
 <Fragment set:html={html} />

@@ -1,22 +1,16 @@
 ---
-import { Image } from 'astro:assets'
-import type { CollectionEntry } from 'astro:content'
+import { formatJournalDate } from '../journal/date'
+import type { JournalArticleCard } from '../../sanity/content'
+import EditorialImage from './EditorialImage.astro'
 
 interface Props {
-  article: CollectionEntry<'journalArticles'>
+  article: JournalArticleCard
   variant?: 'listing' | 'related'
 }
 
 const { article, variant = 'listing' } = Astro.props
-const href = article.data.detailAvailable ? `/journal/${article.id}` : undefined
-const date = article.data.date
-  .toLocaleDateString('en-GB', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-    timeZone: 'UTC',
-  })
-  .toUpperCase()
+const href = `/journal/${article.slug}`
+const date = formatJournalDate(article.publicationDate, 'short')
 const cardHeight =
   variant === 'related'
     ? 'min-h-[512.333px] md:min-h-[664px]'
@@ -26,54 +20,33 @@ const imageClasses =
 ---
 
 <article class:list={['flex flex-col gap-4 overflow-hidden', cardHeight]}>
-  {href ? (
-    <a
-      class="group mb-1 block overflow-hidden"
-      href={href}
-      aria-label={`Read ${article.data.title}`}
-    >
-      <Image
-        class:list={[imageClasses, 'group-hover:scale-[1.015]']}
-        src={article.data.image}
-        alt={article.data.imageAlt}
-        width={672}
-        height={448}
-      />
-    </a>
-  ) : (
-    <div class="mb-1 block overflow-hidden">
-      <Image
-        class={imageClasses}
-        src={article.data.image}
-        alt={article.data.imageAlt}
-        width={672}
-        height={448}
-      />
-    </div>
-  )}
+  <a
+    class="group mb-1 block overflow-hidden"
+    href={href}
+    aria-label={`Read ${article.title}`}
+  >
+    <EditorialImage
+      class={`${imageClasses} group-hover:scale-[1.015]`}
+      image={article.heroImage}
+      width={672}
+      height={448}
+    />
+  </a>
   <p class="m-0 font-body text-base leading-5 font-normal text-dark uppercase">
-    {article.data.category} / {article.data.readTime}
+    {article.category.title} / {article.readingTime}
   </p>
   <h2 class="m-0 font-display text-[36px] leading-[1.05] font-normal text-dark uppercase">
-    {href ? (
-      <a class="hover:text-primary" href={href}>
-        {article.data.title}
-      </a>
-    ) : (
-      article.data.title
-    )}
+    <a class="hover:text-primary" href={href}>
+      {article.title}
+    </a>
   </h2>
   <p class="m-0 text-base leading-[27px] text-dark-grey">
-    {article.data.excerpt}
+    {article.standfirst}
   </p>
   <div class="m-0 flex flex-col gap-8 text-base leading-5 text-dark md:flex-row md:justify-between md:gap-4">
-    <time datetime={article.data.date.toISOString()}>{date}</time>
-    {href ? (
-      <a class="font-bold text-primary hover:text-dark" href={href}>
-        Read the story →
-      </a>
-    ) : (
-      <span class="text-primary">Read the story →</span>
-    )}
+    <time datetime={article.publicationDate}>{date}</time>
+    <a class="font-bold text-primary hover:text-dark" href={href}>
+      Read the story →
+    </a>
   </div>
 </article>

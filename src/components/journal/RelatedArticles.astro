@@ -1,9 +1,9 @@
 ---
-import type { CollectionEntry } from 'astro:content'
+import type { JournalArticleCard } from '../../sanity/content'
 import ArticleCard from '../content/ArticleCard.astro'
 
 interface Props {
-  articles: CollectionEntry<'journalArticles'>[]
+  articles: JournalArticleCard[]
 }
 
 const { articles } = Astro.props

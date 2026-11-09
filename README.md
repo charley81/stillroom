@@ -37,11 +37,7 @@ Presentation enables draft preview through `/api/preview/enable`; `/api/preview/
 
 Sanity source is organized under `src/sanity/`, with generated schema and query types in `sanity.types.ts`. Regenerate them with `pnpm sanity:typegen`.
 
-Work Projects and Journal Articles still use Astro content collections in this first CMS slice:
-
-- `src/content/work-projects/`
-- `src/content/journal-articles/`
-- Schemas: `src/content.config.ts`
+Work Projects and the complete Journal journey load from Sanity at request time. Journal Articles, Authors, Journal Categories, and the Journal singleton are migrated with `pnpm sanity:migrate:journal` (drafts) or `pnpm sanity:migrate:journal:publish`.
 
 ## Structure
 

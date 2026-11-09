@@ -1,21 +1,20 @@
 ---
-import { Image } from 'astro:assets'
-import { getCollection } from 'astro:content'
 import ArticleCard from '../../components/content/ArticleCard.astro'
+import EditorialImage from '../../components/content/EditorialImage.astro'
 import FeaturedArticle from '../../components/journal/FeaturedArticle.astro'
 import Layout from '../../layouts/Layout.astro'
+import { getJournalPage } from '../../sanity/content'
+import { PUBLIC_PREVIEW_STATE } from '../../sanity/preview'
 
-const articles = (await getCollection('journalArticles')).sort(
-  (a, b) => a.data.order - b.data.order,
-)
-const featured = articles.find((article) => article.data.featured)!
-const latest = articles.filter((article) => !article.data.featured)
+const preview = Astro.locals.preview ?? PUBLIC_PREVIEW_STATE
+const page = await getJournalPage(preview)
+const title = page.seo?.metaTitle ?? `${page.heading} — Stillroom`
+const description = page.seo?.metaDescription ?? page.introduction
+const socialImageUrl =
+  page.seo?.socialImageUrl ?? page.featuredJournalArticle.heroImage.url
 ---
 
-<Layout
-  title="Journal — Stillroom"
-  description="Ideas and observations about hospitality, culture and design."
->
+<Layout title={title} description={description} socialImageUrl={socialImageUrl}>
   <section class="flex h-[362px] flex-col gap-8 overflow-hidden px-4 pt-4 pb-16 md:h-[658px] md:px-8 md:pt-32 md:pb-20">
     <div class="w-full max-w-none p-0">
       <p class="m-0 font-body text-base leading-[16.2px] font-black text-dark-grey uppercase">
@@ -24,39 +23,36 @@ const latest = articles.filter((article) => !article.data.featured)
     </div>
     <div class="grid h-auto w-full max-w-none grid-cols-1 gap-8 md:h-[393px] md:grid-cols-2 md:gap-[clamp(32px,8.889vw,128px)]">
       <h1 class="m-0 font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[clamp(72px,8.889vw,128px)] md:leading-[1.05]">
-        Food for
-        <br />
-        thought.
+        {page.heading}
       </h1>
       <div class="flex h-auto flex-col pb-4 md:h-[393px]">
         <div class="mx-auto flex w-full max-w-[624px] flex-col gap-8">
           <div class="hidden min-h-0 md:block">
-            <Image
+            <EditorialImage
               class="h-auto w-full"
-              src="/images/387-3818.webp"
-              alt=""
+              image={page.introductionArtwork}
               width={550}
               height={219}
               loading="eager"
+              fetchpriority="high"
             />
           </div>
           <p class="m-0 w-full text-base leading-[27px] text-dark-grey md:w-[min(420px,calc(100%_-_32px))]">
-            Ideas, observations, and the things we keep coming back to. On
-            hospitality, culture, and design — and what happens when they meet.
+            {page.introduction}
           </p>
         </div>
       </div>
     </div>
   </section>
 
-  <FeaturedArticle article={featured} />
+  <FeaturedArticle article={page.featuredJournalArticle} />
 
   <section class="flex h-[3582px] flex-col gap-16 overflow-hidden px-4 py-16 md:h-[2516px] md:px-8 md:py-32">
     <h2 class="m-0 font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[72px] md:leading-[1.05]">
       Fresh from the notebook.
     </h2>
     <div class="flex w-full flex-col gap-8 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-16">
-      {latest.map((article) => (
+      {page.articles.map((article) => (
         <ArticleCard article={article} />
       ))}
     </div>

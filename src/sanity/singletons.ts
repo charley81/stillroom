@@ -1,18 +1,26 @@
 import type { StructureResolver } from 'sanity/structure'
 import {
   CONTACT_PAGE_ID,
+  JOURNAL_PAGE_ID,
   SERVICES_PAGE_ID,
   SITE_SETTINGS_ID,
   WORK_PAGE_ID,
 } from './constants'
 
-export { CONTACT_PAGE_ID, SERVICES_PAGE_ID, SITE_SETTINGS_ID, WORK_PAGE_ID }
+export {
+  CONTACT_PAGE_ID,
+  JOURNAL_PAGE_ID,
+  SERVICES_PAGE_ID,
+  SITE_SETTINGS_ID,
+  WORK_PAGE_ID,
+}
 
 const SINGLETON_IDS = new Map([
   ['siteSettings', SITE_SETTINGS_ID],
   ['workPage', WORK_PAGE_ID],
   ['servicesPage', SERVICES_PAGE_ID],
   ['contactPage', CONTACT_PAGE_ID],
+  ['journalPage', JOURNAL_PAGE_ID],
 ])
 const BLOCKED_SINGLETON_ACTIONS = new Set(['delete', 'duplicate'])
 
@@ -98,6 +106,15 @@ export const structure: StructureResolver = (S) =>
                     .documentId(SERVICES_PAGE_ID),
                 ),
               S.listItem()
+                .title('Journal')
+                .schemaType('journalPage')
+                .child(
+                  S.document()
+                    .title('Journal')
+                    .schemaType('journalPage')
+                    .documentId(JOURNAL_PAGE_ID),
+                ),
+              S.listItem()
                 .title('Contact')
                 .schemaType('contactPage')
                 .child(
@@ -115,6 +132,21 @@ export const structure: StructureResolver = (S) =>
             .title('Work')
             .items([
               S.documentTypeListItem('workProject').title('Work Projects'),
+            ]),
+        ),
+      S.listItem()
+        .title('Journal')
+        .child(
+          S.list()
+            .title('Journal')
+            .items([
+              S.documentTypeListItem('journalArticle').title(
+                'Journal Articles',
+              ),
+              S.documentTypeListItem('author').title('Authors'),
+              S.documentTypeListItem('journalCategory').title(
+                'Journal Categories',
+              ),
             ]),
         ),
       S.listItem()

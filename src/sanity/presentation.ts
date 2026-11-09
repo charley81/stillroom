@@ -43,6 +43,100 @@ const workProjectLocationResolver = {
 
 export const workProjectLocations = workProjectLocationResolver
 
+export const journalPageLocations = {
+  locations: [{ title: 'Journal', href: '/journal' }],
+} satisfies DocumentLocationsState
+
+interface JournalArticleLocationValue {
+  title?: string
+  slug?: string
+  relatedIn?: Array<{ title?: string; slug?: string }>
+}
+
+export const journalArticleLocations = {
+  select: {
+    title: 'title',
+    slug: 'slug.current',
+    relatedIn:
+      '*[_type == "journalArticle" && references(^._id)]{title, "slug": slug.current}',
+  },
+  resolve: (document: JournalArticleLocationValue | null) => {
+    if (!document?.slug) {
+      return { message: 'Add a slug to preview this Journal Article.' }
+    }
+    return {
+      locations: [
+        {
+          title: document.title || 'Journal Article',
+          href: `/journal/${document.slug}`,
+        },
+        { title: 'Journal listing', href: '/journal' },
+        { title: 'Home featured Journal placement', href: '/' },
+        ...(document.relatedIn ?? []).flatMap((article) =>
+          article.slug
+            ? [
+                {
+                  title: `Related in ${article.title || 'Journal Article'}`,
+                  href: `/journal/${article.slug}`,
+                },
+              ]
+            : [],
+        ),
+      ],
+    }
+  },
+} satisfies DocumentLocationResolverObject<'title' | 'slug' | 'relatedIn'>
+
+interface JournalReferenceLocationValue {
+  name?: string
+  title?: string
+  articles?: Array<{ title?: string; slug?: string }>
+}
+
+export const authorLocations = {
+  select: {
+    name: 'name',
+    articles:
+      '*[_type == "journalArticle" && references(^._id)]{title, "slug": slug.current}',
+  },
+  resolve: (document: JournalReferenceLocationValue | null) => ({
+    locations: (document?.articles ?? []).flatMap((article) =>
+      article.slug
+        ? [
+            {
+              title: article.title || document?.name || 'Journal Article',
+              href: `/journal/${article.slug}`,
+            },
+          ]
+        : [],
+    ),
+  }),
+} satisfies DocumentLocationResolverObject<'name' | 'articles'>
+
+export const journalCategoryLocations = {
+  select: {
+    title: 'title',
+    articles:
+      '*[_type == "journalArticle" && references(^._id)]{title, "slug": slug.current}',
+  },
+  resolve: (document: JournalReferenceLocationValue | null) => ({
+    locations: [
+      ...(document?.articles ?? []).flatMap((article) =>
+        article.slug
+          ? [
+              {
+                title: article.title || document?.title || 'Journal Article',
+                href: `/journal/${article.slug}`,
+              },
+            ]
+          : [],
+      ),
+      { title: 'Journal listing', href: '/journal' },
+      { title: 'Home featured Journal placement', href: '/' },
+    ],
+  }),
+} satisfies DocumentLocationResolverObject<'title' | 'articles'>
+
 export const servicesPageLocations = {
   locations: [
     { title: 'Services', href: '/services' },
@@ -108,6 +202,8 @@ export const PRESENTATION_OPTIONS = {
       { route: '/work', type: 'workPage' },
       { route: '/work/:slug', type: 'workProject' },
       { route: '/services', type: 'servicesPage' },
+      { route: '/journal', type: 'journalPage' },
+      { route: '/journal/:slug', type: 'journalArticle' },
       { route: '/contact', type: 'contactPage' },
     ],
     locations: {
@@ -115,6 +211,10 @@ export const PRESENTATION_OPTIONS = {
       workPage: workPageLocations,
       workProject: workProjectLocations,
       servicesPage: servicesPageLocations,
+      journalPage: journalPageLocations,
+      journalArticle: journalArticleLocations,
+      author: authorLocations,
+      journalCategory: journalCategoryLocations,
       contactPage: contactPageLocations,
       service: serviceLocations,
     },
