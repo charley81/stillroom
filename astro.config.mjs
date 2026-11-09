@@ -35,6 +35,19 @@ export default defineConfig({
   ],
   vite: {
     plugins: [tailwindcss()],
+    optimizeDeps: {
+      // Visual Editing is client-only, so Vite's startup scan misses these
+      // CommonJS and Studio dependencies and serves them as invalid ESM.
+      include: [
+        '@sanity/astro > @sanity/visual-editing > @sanity/mutate',
+        '@sanity/astro > @sanity/visual-editing > @sanity/mutate/_unstable_machine',
+        '@sanity/astro > @sanity/visual-editing > @sanity/mutate/_unstable_store',
+        'react/compiler-runtime',
+        'sanity',
+        'sanity/presentation',
+        'sanity/structure',
+      ],
+    },
   },
   fonts: [
     {
