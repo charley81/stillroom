@@ -1,4 +1,5 @@
 ---
+import { stegaClean } from '@sanity/client/stega'
 import { Image } from 'astro:assets'
 import type { SiteSettings } from '../../sanity/content'
 import Button from './Button.astro'
@@ -17,8 +18,9 @@ const links = [
   { href: '/journal', label: settings.journalLabel },
 ]
 const { text: wordmark, hasRegisteredMark } = splitRegisteredMark(
-  settings.registeredMarkText,
+  stegaClean(settings.registeredMarkText),
 )
+const cleanStudioName = stegaClean(settings.studioName)
 
 const isActive = (href: string) =>
   pathname === href || pathname.startsWith(`${href}/`)
@@ -28,7 +30,7 @@ const isActive = (href: string) =>
   <a
     class="font-display text-[36px] leading-[36px] font-normal tracking-normal text-dark lowercase"
     href="/"
-    aria-label={`${settings.studioName} home`}
+    aria-label={`${cleanStudioName} home`}
   >
     {wordmark}
     {hasRegisteredMark && <span class="text-primary">®</span>}

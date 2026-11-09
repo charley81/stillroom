@@ -3,10 +3,20 @@ export interface SanityEnvironmentConfig {
   dataset: string
 }
 
-interface SanityEnvironmentValues {
+export interface SanityEnvironmentValues {
+  readonly [key: string]: unknown
   PUBLIC_SANITY_PROJECT_ID?: string
   PUBLIC_SANITY_DATASET?: string
   CONTEXT?: string
+}
+
+export function resolveRuntimeSanityEnvironment(
+  browserEnvironment?: SanityEnvironmentValues,
+): SanityEnvironmentConfig {
+  const environment =
+    typeof process === 'undefined' ? (browserEnvironment ?? {}) : process.env
+
+  return resolveSanityEnvironment(environment)
 }
 
 export function resolveSanityEnvironment(

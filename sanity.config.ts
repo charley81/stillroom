@@ -1,6 +1,8 @@
 import { defineConfig } from 'sanity'
+import { presentationTool } from 'sanity/presentation'
 import { structureTool } from 'sanity/structure'
-import { resolveSanityEnvironment } from './src/sanity/environment'
+import { resolveRuntimeSanityEnvironment } from './src/sanity/environment'
+import { PRESENTATION_OPTIONS } from './src/sanity/presentation'
 import { schemaTypes } from './src/sanity/schemaTypes'
 import {
   filterSingletonActions,
@@ -8,14 +10,17 @@ import {
   structure,
 } from './src/sanity/singletons'
 
-const { projectId, dataset } = resolveSanityEnvironment(process.env)
+const { projectId, dataset } = resolveRuntimeSanityEnvironment(import.meta.env)
 
 export default defineConfig({
   name: 'stillroom',
   title: 'Stillroom',
   projectId,
   dataset,
-  plugins: [structureTool({ structure })],
+  plugins: [
+    structureTool({ structure }),
+    presentationTool(PRESENTATION_OPTIONS),
+  ],
   schema: { types: schemaTypes },
   document: {
     actions: (previousActions, context) =>

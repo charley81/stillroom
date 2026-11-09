@@ -1,4 +1,5 @@
 ---
+import { stegaClean } from '@sanity/client/stega'
 import type { SiteSettings } from '../../sanity/content'
 import { splitRegisteredMark } from './wordmark'
 
@@ -10,8 +11,9 @@ interface Props {
 const { settings, currentYear = new Date().getFullYear() } = Astro.props
 const socialLinks = settings.socialLinks ?? []
 const { text: wordmark, hasRegisteredMark } = splitRegisteredMark(
-  settings.registeredMarkText,
+  stegaClean(settings.registeredMarkText),
 )
+const cleanEmailAddress = stegaClean(settings.emailAddress)
 ---
 
 <footer class="min-h-[1118px] px-4 pt-16 pb-8 md:min-h-[530px] md:px-8">
@@ -75,15 +77,15 @@ const { text: wordmark, hasRegisteredMark } = splitRegisteredMark(
         </a>
         <a
           class="text-base leading-[27px] text-dark-grey hover:text-primary"
-          href={`mailto:${settings.emailAddress}`}
-          aria-label={`Email ${settings.emailAddress}`}
+          href={`mailto:${cleanEmailAddress}`}
+          aria-label={`Email ${cleanEmailAddress}`}
         >
           Email
         </a>
         {socialLinks.map((link) => (
           <a
             class="text-base leading-[27px] text-dark-grey hover:text-primary"
-            href={link.url}
+            href={stegaClean(link.url)}
             target="_blank"
             rel="noreferrer"
           >
