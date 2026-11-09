@@ -1,20 +1,24 @@
 ---
-import { Image } from 'astro:assets'
-import type { CollectionEntry } from 'astro:content'
+import type { JournalArticle } from '../../sanity/content'
+import PortableText from '../content/PortableText.astro'
 
 interface Props {
-  article: CollectionEntry<'journalArticles'>
+  article: JournalArticle
 }
 
 const { article } = Astro.props
-const lastSectionIndex = article.data.body.reduce(
-  (lastIndex, block, index) => (block.type === 'section' ? index : lastIndex),
+const sectionKeys = article.body.flatMap((block) =>
+  block._type === 'journalArticleSection' ? [block._key] : [],
+)
+const lastSectionIndex = article.body.reduce(
+  (lastIndex, block, index) =>
+    block._type === 'journalArticleSection' ? index : lastIndex,
   -1,
 )
 ---
 
-{article.data.body.map((block, index) => {
-  if (block.type === 'pullQuote') {
+{article.body.map((block, index) => {
+  if (block._type === 'journalArticlePullQuote') {
     return (
       <section class="flex flex-col gap-10 overflow-hidden bg-primary px-4 py-16 text-light md:min-h-[620px] md:p-32">
         {block.label && (
@@ -29,49 +33,31 @@ const lastSectionIndex = article.data.body.reduce(
     )
   }
 
-  if (block.type === 'image') {
-    return (
-      <figure class="m-0 flex flex-col gap-4 px-4 md:px-8">
-        <Image
-          class="h-[220px] w-full object-cover md:h-[800px]"
-          src={block.image.src}
-          alt={block.image.alt}
-          width={1376}
-          height={800}
-        />
-        {block.image.caption && (
-          <figcaption class="max-w-[720px] text-sm leading-6 text-dark-grey md:ml-[352px]">
-            {block.image.caption}
-          </figcaption>
-        )}
-      </figure>
-    )
-  }
-
+  const sectionNumber = sectionKeys.indexOf(block._key)
   return (
-    <section class="grid w-full grid-cols-1 gap-8 overflow-hidden px-4 py-16 md:grid-cols-[320px_720px] md:px-8 md:py-32">
+    <section
+      class:list={[
+        'grid w-full grid-cols-1 gap-8 overflow-hidden px-4 py-16 md:grid-cols-[320px_720px] md:px-8 md:py-32',
+        sectionNumber === 0 && 'min-h-[1533px] md:min-h-[1150px]',
+        sectionNumber === 1 && 'min-h-[1409px] md:min-h-[1188px]',
+      ]}
+    >
       <p class="m-0 font-body text-base leading-5 font-normal text-primary uppercase">
         {block.label}
       </p>
       <div class="flex w-full flex-col gap-8 md:w-[720px]">
-        {block.content.map((content) =>
-          content.type === 'heading' ? (
-            <h2 class="m-0 font-display text-[36px] leading-[1.05] font-normal text-dark uppercase">
-              {content.text}
-            </h2>
-          ) : (
-            <p class="m-0 text-base leading-[27px] text-dark-grey">
-              {content.text}
-            </p>
-          ),
-        )}
+        <PortableText
+          value={block.content}
+          paragraphClass="m-0 text-base leading-[27px] text-dark-grey"
+          headingClass="m-0 font-display text-[36px] leading-[1.05] font-normal text-dark uppercase"
+        />
         {index === lastSectionIndex && (
           <div class="mt-0 flex flex-col gap-8 border-t border-light-grey py-8">
             <p class="m-0 text-base leading-[27px] text-dark">
-              <strong>WORDS BY {article.data.author.toUpperCase()}</strong>
+              <strong>WORDS BY {article.author.name.toUpperCase()}</strong>
             </p>
             <p class="m-0 max-w-[640px] text-base leading-[27px] text-dark-grey">
-              {article.data.authorBio}
+              {article.author.biography}
             </p>
             <a
               class="leading-[24.3px] font-bold text-primary hover:text-dark"

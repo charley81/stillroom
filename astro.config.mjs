@@ -35,6 +35,17 @@ export default defineConfig({
   ],
   vite: {
     plugins: [tailwindcss()],
+    build: {
+      rollupOptions: {
+        onwarn(warning, warn) {
+          const isReactCompilerHint =
+            warning.code === 'MODULE_LEVEL_DIRECTIVE' &&
+            warning.id?.includes('react-compiler-runtime') &&
+            warning.message.includes('use no memo')
+          if (!isReactCompilerHint) warn(warning)
+        },
+      },
+    },
     optimizeDeps: {
       // Visual Editing is client-only, so Vite's startup scan misses these
       // CommonJS and Studio dependencies and serves them as invalid ESM.

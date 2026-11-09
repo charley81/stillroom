@@ -1,22 +1,16 @@
 ---
-import type { CollectionEntry } from 'astro:content'
+import type { JournalArticle } from '../../sanity/content'
+import { formatJournalDate } from './date'
 
 interface Props {
-  article: CollectionEntry<'journalArticles'>
+  article: JournalArticle
 }
 
 const { article } = Astro.props
-const displayDate = article.data.date
-  .toLocaleDateString('en-GB', {
-    day: '2-digit',
-    month: 'long',
-    year: 'numeric',
-    timeZone: 'UTC',
-  })
-  .toUpperCase()
+const displayDate = formatJournalDate(article.publicationDate, 'long')
 ---
 
-<section class="flex flex-col gap-16 overflow-hidden px-4 pt-4 pb-20 md:min-h-[694px] md:px-8 md:py-20">
+<section class="flex min-h-[619px] flex-col gap-16 overflow-hidden px-4 pt-4 pb-20 md:min-h-[694px] md:px-8 md:py-20">
   <a
     class="leading-[24.3px] font-bold text-primary hover:text-dark"
     href="/journal"
@@ -25,27 +19,24 @@ const displayDate = article.data.date
   </a>
   <div class="flex flex-col gap-8 text-dark">
     <p class="m-0 font-body text-base leading-5 font-normal uppercase">
-      {article.data.category} / {article.data.readTime}
+      {article.category.title} / {article.readingTime}
     </p>
     <h1 class="m-0 w-full font-display text-5xl leading-12 font-normal uppercase md:text-[128px] md:leading-[1.05]">
-      {article.data.title}
+      {article.title}
     </h1>
   </div>
   <div class="grid w-full grid-cols-1 gap-8 md:grid-cols-2 md:gap-16">
     <div>
       <strong class="leading-[24.3px]">
-        BY {article.data.author.toUpperCase()}
+        BY {article.author.name.toUpperCase()}
       </strong>
       <br />
-      <time
-        class="leading-5 text-dark-grey"
-        datetime={article.data.date.toISOString()}
-      >
+      <time class="leading-5 text-dark-grey" datetime={article.publicationDate}>
         {displayDate}
       </time>
     </div>
     <p class="m-0 w-full text-base leading-[27px] text-dark-grey md:max-w-[640px]">
-      {article.data.excerpt}
+      {article.standfirst}
     </p>
   </div>
 </section>

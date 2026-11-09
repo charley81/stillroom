@@ -1,47 +1,53 @@
 ---
-import { Image } from 'astro:assets'
-import { getCollection } from 'astro:content'
+import EditorialImage from '../../components/content/EditorialImage.astro'
 import ArticleBody from '../../components/journal/ArticleBody.astro'
 import ArticleIntroduction from '../../components/journal/ArticleIntroduction.astro'
 import RelatedArticles from '../../components/journal/RelatedArticles.astro'
 import Layout from '../../layouts/Layout.astro'
+import {
+  getJournalArticlePage,
+  JournalArticleNotFoundError,
+} from '../../sanity/content'
+import { PUBLIC_PREVIEW_STATE } from '../../sanity/preview'
 
-const allArticles = await getCollection('journalArticles')
-const article = allArticles.find(
-  (entry) => entry.id === Astro.params.slug && entry.data.detailAvailable,
-)
+const slug = Astro.params.slug
+if (!slug) return Astro.rewrite('/404')
 
-if (!article) {
-  return Astro.rewrite('/404')
+const preview = Astro.locals.preview ?? PUBLIC_PREVIEW_STATE
+let content
+try {
+  content = await getJournalArticlePage(slug, preview)
+} catch (error) {
+  if (error instanceof JournalArticleNotFoundError) {
+    return Astro.rewrite('/404')
+  }
+  throw error
 }
-
-const related = article.data.relatedArticles.flatMap((articleId) => {
-  const relatedArticle = allArticles.find((entry) => entry.id === articleId)
-  return relatedArticle ? [relatedArticle] : []
-})
+const { article } = content
+const title = article.seo?.metaTitle ?? `${article.title} — Stillroom Journal`
+const description = article.seo?.metaDescription ?? article.standfirst
+const socialImageUrl = article.seo?.socialImageUrl ?? article.heroImage.url
 ---
 
-<Layout
-  title={`${article.data.title} — Stillroom Journal`}
-  description={article.data.excerpt}
->
+<Layout title={title} description={description} socialImageUrl={socialImageUrl}>
   <ArticleIntroduction article={article} />
 
   <figure class="m-0 flex flex-col gap-4 px-4 md:px-8">
-    <Image
+    <EditorialImage
       class="h-[189.535px] w-full object-cover md:h-[800px]"
-      src={article.data.heroImage.src}
-      alt={article.data.heroImage.alt}
+      image={article.heroImage}
       width={1376}
       height={800}
+      loading="eager"
+      fetchpriority="high"
     />
-    {article.data.heroImage.caption && (
+    {article.heroImage.caption && (
       <figcaption class="max-w-[720px] text-sm leading-6 text-dark-grey md:ml-[352px]">
-        {article.data.heroImage.caption}
+        {article.heroImage.caption}
       </figcaption>
     )}
   </figure>
 
   <ArticleBody article={article} />
-  <RelatedArticles articles={related} />
+  <RelatedArticles articles={article.relatedJournalArticles} />
 </Layout>

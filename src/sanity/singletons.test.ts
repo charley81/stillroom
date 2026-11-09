@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   CONTACT_PAGE_ID,
   filterSingletonActions,
+  JOURNAL_PAGE_ID,
   filterSingletonTemplates,
   SERVICES_PAGE_ID,
   SITE_SETTINGS_ID,
@@ -25,7 +26,7 @@ describe('Site Settings singleton behavior', () => {
     ).toEqual(['publish', 'discardChanges'])
   })
 
-  it('protects the Work, Services, and Contact singleton documents', () => {
+  it('protects the Work, Services, Journal, and Contact singleton documents', () => {
     const actions = [
       { action: 'publish' },
       { action: 'duplicate' },
@@ -46,6 +47,12 @@ describe('Site Settings singleton behavior', () => {
     ).toEqual(['publish'])
     expect(
       filterSingletonActions(actions, {
+        documentId: JOURNAL_PAGE_ID,
+        schemaType: 'journalPage',
+      }).map((action) => action.action),
+    ).toEqual(['publish'])
+    expect(
+      filterSingletonActions(actions, {
         documentId: CONTACT_PAGE_ID,
         schemaType: 'contactPage',
       }).map((action) => action.action),
@@ -58,6 +65,7 @@ describe('Site Settings singleton behavior', () => {
       { templateId: 'workPage', schemaType: 'workPage' },
       { templateId: 'servicesPage', schemaType: 'servicesPage' },
       { templateId: 'contactPage', schemaType: 'contactPage' },
+      { templateId: 'journalPage', schemaType: 'journalPage' },
       { templateId: 'service', schemaType: 'service' },
     ]
 

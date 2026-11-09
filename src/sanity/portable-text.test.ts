@@ -25,6 +25,48 @@ describe('Work Project Portable Text rendering', () => {
     )
   })
 
+  it('renders approved Journal Article subheadings only when a heading style is provided', () => {
+    expect(
+      renderPortableText(
+        [
+          {
+            _type: 'block',
+            style: 'h2',
+            children: [{ _type: 'span', text: 'A useful subheading' }],
+          },
+        ],
+        'copy',
+        'heading',
+      ),
+    ).toBe('<h2 class="heading">A useful subheading</h2>')
+    expect(() =>
+      renderPortableText(
+        [
+          {
+            _type: 'block',
+            style: 'h2',
+            children: [{ _type: 'span', text: 'Unsupported here' }],
+          },
+        ],
+        'copy',
+      ),
+    ).toThrow('Unsupported Portable Text block')
+  })
+
+  it('fails clearly for unsupported marks', () => {
+    expect(() =>
+      renderPortableText(
+        [
+          {
+            _type: 'block',
+            children: [{ _type: 'span', text: 'Unsupported', marks: ['code'] }],
+          },
+        ],
+        'copy',
+      ),
+    ).toThrow('Unsupported Portable Text mark: code')
+  })
+
   it('does not render unsafe or protocol-relative links', () => {
     const html = renderPortableText(
       [

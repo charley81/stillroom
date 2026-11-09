@@ -7,6 +7,10 @@ const APPROVED_WORK_PROJECT_GALLERY_BLOCKS = new Set([
   'workProjectGalleryImage',
   'workProjectGalleryBrandPanel',
 ])
+const APPROVED_JOURNAL_ARTICLE_BLOCKS = new Set([
+  'journalArticleSection',
+  'journalArticlePullQuote',
+])
 
 export function approvedGalleryBlocks(
   blocks: unknown[] | undefined,
@@ -23,6 +27,50 @@ export function approvedGalleryBlocks(
   return approved
     ? true
     : 'Work Project galleries may only contain approved gallery blocks.'
+}
+
+export function approvedJournalArticleBody(
+  blocks: unknown[] | undefined,
+): true | string {
+  if (!blocks) return true
+  const approved = blocks.every(
+    (block) =>
+      block &&
+      typeof block === 'object' &&
+      APPROVED_JOURNAL_ARTICLE_BLOCKS.has(
+        String((block as { _type?: unknown })._type),
+      ),
+  )
+  if (!approved) {
+    return 'Journal Article bodies may only contain approved sections and pull quotes.'
+  }
+  return blocks.some(
+    (block) =>
+      block &&
+      typeof block === 'object' &&
+      (block as { _type?: unknown })._type === 'journalArticleSection',
+  )
+    ? true
+    : 'Journal Article bodies require at least one article section.'
+}
+
+export function relatedJournalArticles(
+  references: unknown[] | undefined,
+  documentId: string | undefined,
+): true | string {
+  if (!references) return true
+  const ids = references.flatMap((reference) => {
+    if (!reference || typeof reference !== 'object') return []
+    const id = (reference as { _ref?: unknown })._ref
+    return typeof id === 'string' ? [id.replace(/^drafts\./, '')] : []
+  })
+  if (new Set(ids).size !== ids.length) {
+    return 'Related Journal Articles must be unique.'
+  }
+  const currentId = documentId?.replace(/^drafts\./, '')
+  return currentId && ids.includes(currentId)
+    ? 'A Journal Article cannot relate to itself.'
+    : true
 }
 
 export function exactCount(

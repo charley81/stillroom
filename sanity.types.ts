@@ -83,6 +83,35 @@ export type NarrativeSection = {
   }>
 }
 
+export type JournalArticlePullQuote = {
+  _type: 'journalArticlePullQuote'
+  label?: string
+  quote: string
+}
+
+export type JournalArticleSection = {
+  _type: 'journalArticleSection'
+  label: string
+  content: Array<{
+    children?: Array<{
+      marks?: Array<string>
+      text?: string
+      _type: 'span'
+      _key: string
+    }>
+    style?: 'normal' | 'h2'
+    listItem?: never
+    markDefs?: Array<{
+      href: string
+      _type: 'link'
+      _key: string
+    }>
+    level?: number
+    _type: 'block'
+    _key: string
+  }>
+}
+
 export type EditorialImage = {
   _type: 'editorialImage'
   asset: {
@@ -194,6 +223,90 @@ export type ContactPage = {
   supportingImage: EditorialImage
   supportingStatement: string
   seo?: SeoFields
+}
+
+export type JournalArticleReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'journalArticle'
+}
+
+export type JournalPage = {
+  _id: string
+  _type: 'journalPage'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  heading: string
+  introduction: string
+  introductionArtwork: EditorialImage
+  featuredJournalArticle: JournalArticleReference
+  seo?: SeoFields
+}
+
+export type JournalCategoryReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'journalCategory'
+}
+
+export type AuthorReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'author'
+}
+
+export type JournalArticle = {
+  _id: string
+  _type: 'journalArticle'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title: string
+  slug: Slug
+  category: JournalCategoryReference
+  author: AuthorReference
+  publicationDate: string
+  standfirst: string
+  readingTime: string
+  heroImage: EditorialImage
+  body: Array<
+    | ({
+        _key: string
+      } & JournalArticleSection)
+    | ({
+        _key: string
+      } & JournalArticlePullQuote)
+  >
+  relatedJournalArticles: Array<
+    {
+      _key: string
+    } & JournalArticleReference
+  >
+  seo?: SeoFields
+}
+
+export type Author = {
+  _id: string
+  _type: 'author'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  name: string
+  biography: string
+}
+
+export type JournalCategory = {
+  _id: string
+  _type: 'journalCategory'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title: string
+  slug: Slug
 }
 
 export type ServicesPage = {
@@ -403,12 +516,21 @@ export type AllSanitySchemaTypes =
   | WorkProjectGalleryBrandPanel
   | WorkProjectGalleryImage
   | NarrativeSection
+  | JournalArticlePullQuote
+  | JournalArticleSection
   | EditorialImage
   | Service
   | ServiceReference
   | WorkProject
   | Slug
   | ContactPage
+  | JournalArticleReference
+  | JournalPage
+  | JournalCategoryReference
+  | AuthorReference
+  | JournalArticle
+  | Author
+  | JournalCategory
   | ServicesPage
   | WorkProjectReference
   | WorkPage
@@ -423,6 +545,156 @@ export type AllSanitySchemaTypes =
   | SanityAssetSourceData
   | SanityImageAsset
   | Geopoint
+
+// Source: src/sanity/queries/journal.ts
+// Variable: JOURNAL_PAGE_QUERY
+// Query: {    "page": *[_type == "journalPage" && _id == "journalPage"][0]{      _id,      heading,      introduction,      introductionArtwork{          decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url      },      featuredJournalArticle->{          _id,  title,  "slug": slug.current,  category->{      _id,  title,  "slug": slug.current  },  publicationDate,  standfirst,  readingTime,  heroImage{      decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url  }      },      seo{          metaTitle,  metaDescription,  "socialImageUrl": socialImage.asset->url      }    },    "articles": *[      _type == "journalArticle" &&      !(_id in [        *[_type == "journalPage" && _id == "journalPage"][0].featuredJournalArticle._ref,        "drafts." + *[_type == "journalPage" && _id == "journalPage"][0].featuredJournalArticle._ref      ])    ] | order(publicationDate desc){        _id,  title,  "slug": slug.current,  category->{      _id,  title,  "slug": slug.current  },  publicationDate,  standfirst,  readingTime,  heroImage{      decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url  }    }  }
+export type JOURNAL_PAGE_QUERY_RESULT = {
+  page: {
+    _id: 'journalPage'
+    heading: string
+    introduction: string
+    introductionArtwork: {
+      decorative: boolean
+      alt: string | null
+      caption: string | null
+      url: string | null
+      mobileUrl: string | null
+    }
+    featuredJournalArticle: {
+      _id: string
+      title: string
+      slug: string
+      category: {
+        _id: string
+        title: string
+        slug: string
+      }
+      publicationDate: string
+      standfirst: string
+      readingTime: string
+      heroImage: {
+        decorative: boolean
+        alt: string | null
+        caption: string | null
+        url: string | null
+        mobileUrl: string | null
+      }
+    }
+    seo: {
+      metaTitle: string | null
+      metaDescription: string | null
+      socialImageUrl: string | null
+    } | null
+  } | null
+  articles: Array<{
+    _id: string
+    title: string
+    slug: string
+    category: {
+      _id: string
+      title: string
+      slug: string
+    }
+    publicationDate: string
+    standfirst: string
+    readingTime: string
+    heroImage: {
+      decorative: boolean
+      alt: string | null
+      caption: string | null
+      url: string | null
+      mobileUrl: string | null
+    }
+  }>
+}
+
+// Source: src/sanity/queries/journal.ts
+// Variable: JOURNAL_ARTICLE_QUERY
+// Query: {    "article": *[_type == "journalArticle" && slug.current == $slug][0]{        _id,  title,  "slug": slug.current,  category->{      _id,  title,  "slug": slug.current  },  publicationDate,  standfirst,  readingTime,  heroImage{      decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url  },      author->{          _id,  name,  biography      },      body[]{        _key,        _type,        _type == "journalArticleSection" => {          label,          content        },        _type == "journalArticlePullQuote" => {          label,          quote        }      },      relatedJournalArticles[]->{          _id,  title,  "slug": slug.current,  category->{      _id,  title,  "slug": slug.current  },  publicationDate,  standfirst,  readingTime,  heroImage{      decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url  }      },      seo{          metaTitle,  metaDescription,  "socialImageUrl": socialImage.asset->url      }    }  }
+export type JOURNAL_ARTICLE_QUERY_RESULT = {
+  article: {
+    _id: string
+    title: string
+    slug: string
+    category: {
+      _id: string
+      title: string
+      slug: string
+    }
+    publicationDate: string
+    standfirst: string
+    readingTime: string
+    heroImage: {
+      decorative: boolean
+      alt: string | null
+      caption: string | null
+      url: string | null
+      mobileUrl: string | null
+    }
+    author: {
+      _id: string
+      name: string
+      biography: string
+    }
+    body: Array<
+      | {
+          _key: string
+          _type: 'journalArticlePullQuote'
+          label: string | null
+          quote: string
+        }
+      | {
+          _key: string
+          _type: 'journalArticleSection'
+          label: string
+          content: Array<{
+            children?: Array<{
+              marks?: Array<string>
+              text?: string
+              _type: 'span'
+              _key: string
+            }>
+            style?: 'h2' | 'normal'
+            listItem?: never
+            markDefs?: Array<{
+              href: string
+              _type: 'link'
+              _key: string
+            }>
+            level?: number
+            _type: 'block'
+            _key: string
+          }>
+        }
+    >
+    relatedJournalArticles: Array<{
+      _id: string
+      title: string
+      slug: string
+      category: {
+        _id: string
+        title: string
+        slug: string
+      }
+      publicationDate: string
+      standfirst: string
+      readingTime: string
+      heroImage: {
+        decorative: boolean
+        alt: string | null
+        caption: string | null
+        url: string | null
+        mobileUrl: string | null
+      }
+    }>
+    seo: {
+      metaTitle: string | null
+      metaDescription: string | null
+      socialImageUrl: string | null
+    } | null
+  } | null
+}
 
 // Source: src/sanity/queries/services-contact.ts
 // Variable: SERVICES_PAGE_QUERY
@@ -756,6 +1028,8 @@ export type WORK_PROJECT_QUERY_RESULT = {
 // Query TypeMap
 declare global {
   interface SanityQueries {
+    '\n  {\n    "page": *[_type == "journalPage" && _id == "journalPage"][0]{\n      _id,\n      heading,\n      introduction,\n      introductionArtwork{\n        \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n      },\n      featuredJournalArticle->{\n        \n  _id,\n  title,\n  "slug": slug.current,\n  category->{\n    \n  _id,\n  title,\n  "slug": slug.current\n\n  },\n  publicationDate,\n  standfirst,\n  readingTime,\n  heroImage{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n  }\n\n      },\n      seo{\n        \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n      }\n    },\n    "articles": *[\n      _type == "journalArticle" &&\n      !(_id in [\n        *[_type == "journalPage" && _id == "journalPage"][0].featuredJournalArticle._ref,\n        "drafts." + *[_type == "journalPage" && _id == "journalPage"][0].featuredJournalArticle._ref\n      ])\n    ] | order(publicationDate desc){\n      \n  _id,\n  title,\n  "slug": slug.current,\n  category->{\n    \n  _id,\n  title,\n  "slug": slug.current\n\n  },\n  publicationDate,\n  standfirst,\n  readingTime,\n  heroImage{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n  }\n\n    }\n  }\n': JOURNAL_PAGE_QUERY_RESULT
+    '\n  {\n    "article": *[_type == "journalArticle" && slug.current == $slug][0]{\n      \n  _id,\n  title,\n  "slug": slug.current,\n  category->{\n    \n  _id,\n  title,\n  "slug": slug.current\n\n  },\n  publicationDate,\n  standfirst,\n  readingTime,\n  heroImage{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n  }\n,\n      author->{\n        \n  _id,\n  name,\n  biography\n\n      },\n      body[]{\n        _key,\n        _type,\n        _type == "journalArticleSection" => {\n          label,\n          content\n        },\n        _type == "journalArticlePullQuote" => {\n          label,\n          quote\n        }\n      },\n      relatedJournalArticles[]->{\n        \n  _id,\n  title,\n  "slug": slug.current,\n  category->{\n    \n  _id,\n  title,\n  "slug": slug.current\n\n  },\n  publicationDate,\n  standfirst,\n  readingTime,\n  heroImage{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n  }\n\n      },\n      seo{\n        \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n      }\n    }\n  }\n': JOURNAL_ARTICLE_QUERY_RESULT
     '\n  *[_type == "servicesPage" && _id == "servicesPage"][0]{\n    _id,\n    heroHeading,\n    heroIntroduction,\n    heroImage{\n      \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n    },\n    heroCtaLabel,\n    services[]->{\n      _id,\n      title,\n      shortSummary,\n      description,\n      image{\n        \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n      },\n      deliverables\n    },\n    processHeading,\n    processSteps[]{\n      _key,\n      title,\n      description\n    },\n    hospitalityHeading,\n    hospitalitySectorLabels,\n    hospitalityPointOfView,\n    hospitalityImage{\n      \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n    },\n    hospitalityCtaLabel,\n    finalStatementEyebrow,\n    finalStatementHeading,\n    seo{\n      \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n    }\n  }\n': SERVICES_PAGE_QUERY_RESULT
     '\n  {\n    "page": *[_type == "contactPage" && _id == "contactPage"][0]{\n      _id,\n      heading,\n      introduction,\n      supportingImage{\n        \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n      },\n      supportingStatement,\n      seo{\n        \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n      }\n    },\n    "services": *[_type == "servicesPage" && _id == "servicesPage"][0].services[]->{\n      _id,\n      title\n    }\n  }\n': CONTACT_PAGE_QUERY_RESULT
     '\n  *[_type == "siteSettings" && _id == "siteSettings"][0]{\n    _id,\n    studioName,\n    registeredMarkText,\n    homeLabel,\n    workLabel,\n    servicesLabel,\n    aboutLabel,\n    journalLabel,\n    contactLabel,\n    headerCtaLabel,\n    emailAddress,\n    socialLinks[]{\n      _key,\n      platform,\n      url\n    },\n    newsletterHeading,\n    newsletterDescription,\n    footerTagline,\n    defaultSeoTitle,\n    defaultSeoDescription,\n    defaultSocialImage{\n      decorative,\n      alt,\n      "url": asset.asset->url\n    }\n  }\n': SITE_SETTINGS_QUERY_RESULT

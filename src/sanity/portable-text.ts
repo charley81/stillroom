@@ -12,7 +12,7 @@ export interface PortableTextMarkDefinition {
 
 export interface PortableTextBlock {
   _type: 'block'
-  style?: 'normal'
+  style?: 'normal' | 'h2'
   children?: PortableTextSpan[]
   markDefs?: PortableTextMarkDefinition[]
 }
@@ -43,13 +43,14 @@ function renderSpan(
     else if (mark === 'em') html = `<em>${html}</em>`
     else {
       const definition = definitions.get(mark)
-      if (definition?._type === 'link') {
-        const href = escapeHtml(safeHref(definition.href))
-        const external = /^https?:\/\//i.test(definition.href)
-          ? ' rel="noreferrer"'
-          : ''
-        html = `<a href="${href}"${external}>${html}</a>`
+      if (definition?._type !== 'link') {
+        throw new Error(`Unsupported Portable Text mark: ${mark}`)
       }
+      const href = escapeHtml(safeHref(definition.href))
+      const external = /^https?:\/\//i.test(definition.href)
+        ? ' rel="noreferrer"'
+        : ''
+      html = `<a href="${href}"${external}>${html}</a>`
     }
   }
   return html
@@ -58,12 +59,14 @@ function renderSpan(
 export function renderPortableText(
   value: PortableTextBlock[],
   paragraphClass: string,
+  headingClass?: string,
 ) {
   return value
     .map((block) => {
       if (
         block._type !== 'block' ||
-        (block.style && block.style !== 'normal')
+        (block.style && block.style !== 'normal' && block.style !== 'h2') ||
+        (block.style === 'h2' && !headingClass)
       ) {
         throw new Error(`Unsupported Portable Text block: ${block._type}`)
       }
@@ -74,9 +77,16 @@ export function renderPortableText(
         ]),
       )
       const content = (block.children ?? [])
-        .map((span) => renderSpan(span, definitions))
+        .map((span) => {
+          if (span._type !== 'span') {
+            throw new Error(`Unsupported Portable Text child: ${span._type}`)
+          }
+          return renderSpan(span, definitions)
+        })
         .join('')
-      return `<p class="${paragraphClass}">${content}</p>`
+      return block.style === 'h2'
+        ? `<h2 class="${headingClass}">${content}</h2>`
+        : `<p class="${paragraphClass}">${content}</p>`
     })
     .join('')
 }
