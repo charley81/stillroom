@@ -1,14 +1,24 @@
 ---
 import { Image } from 'astro:assets'
+import type { SiteSettings } from '../../sanity/content'
 import Button from './Button.astro'
+import { splitRegisteredMark } from './wordmark'
 
-const pathname = Astro.url.pathname
+interface Props {
+  settings: SiteSettings
+  pathname?: string
+}
+
+const { settings, pathname = Astro.url.pathname } = Astro.props
 const links = [
-  { href: '/work', label: 'Work' },
-  { href: '/services', label: 'Services' },
-  { href: '/about', label: 'About' },
-  { href: '/journal', label: 'Journal' },
+  { href: '/work', label: settings.workLabel },
+  { href: '/services', label: settings.servicesLabel },
+  { href: '/about', label: settings.aboutLabel },
+  { href: '/journal', label: settings.journalLabel },
 ]
+const { text: wordmark, hasRegisteredMark } = splitRegisteredMark(
+  settings.registeredMarkText,
+)
 
 const isActive = (href: string) =>
   pathname === href || pathname.startsWith(`${href}/`)
@@ -18,9 +28,10 @@ const isActive = (href: string) =>
   <a
     class="font-display text-[36px] leading-[36px] font-normal tracking-normal text-dark lowercase"
     href="/"
-    aria-label="Stillroom home"
+    aria-label={`${settings.studioName} home`}
   >
-    stillroom<span class="text-primary">®</span>
+    {wordmark}
+    {hasRegisteredMark && <span class="text-primary">®</span>}
   </a>
   <nav
     class="hidden w-[550px] items-center justify-center gap-16 md:flex"
@@ -39,7 +50,7 @@ const isActive = (href: string) =>
     ))}
   </nav>
   <div class="hidden justify-self-end md:block">
-    <Button href="/contact">Start a Project</Button>
+    <Button href="/contact">{settings.headerCtaLabel}</Button>
   </div>
   <button
     class="grid size-11 place-items-center justify-self-end border-0 bg-transparent p-2.5 md:hidden"
@@ -70,7 +81,8 @@ const isActive = (href: string) =>
       class="font-display text-[36px] leading-[36px] font-normal text-light lowercase"
       href="/"
     >
-      stillroom<span>®</span>
+      {wordmark}
+      {hasRegisteredMark && <span>®</span>}
     </a>
     <button
       class="border-0 bg-transparent text-[2.5rem] text-light"
@@ -94,7 +106,7 @@ const isActive = (href: string) =>
       class="font-display text-[clamp(2.8rem,14vw,5rem)] leading-none uppercase hover:text-primary"
       href="/contact"
     >
-      Start a Project →
+      {settings.headerCtaLabel} →
     </a>
   </nav>
 </div>
