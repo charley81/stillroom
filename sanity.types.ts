@@ -28,6 +28,25 @@ export type SanityImageAssetReference = {
   [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
 }
 
+export type SeoFields = {
+  _type: 'seoFields'
+  metaTitle?: string
+  metaDescription?: string
+  socialImage?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    _type: 'image'
+  }
+}
+
+export type ProcessStep = {
+  _type: 'processStep'
+  title: string
+  description: string
+}
+
 export type EditorialImage = {
   _type: 'editorialImage'
   asset: {
@@ -47,6 +66,86 @@ export type EditorialImage = {
     crop?: SanityImageCrop
     _type: 'image'
   }
+}
+
+export type Service = {
+  _id: string
+  _type: 'service'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title: string
+  shortSummary: string
+  description: string
+  image: EditorialImage
+  deliverables: Array<string>
+}
+
+export type ContactPage = {
+  _id: string
+  _type: 'contactPage'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  heading: string
+  introduction: string
+  supportingImage: EditorialImage
+  supportingStatement: string
+  seo?: SeoFields
+}
+
+export type ServiceReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'service'
+}
+
+export type ServicesPage = {
+  _id: string
+  _type: 'servicesPage'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  heroHeading: string
+  heroIntroduction: string
+  heroImage: EditorialImage
+  heroCtaLabel: string
+  services: Array<
+    {
+      _key: string
+    } & ServiceReference
+  >
+  processHeading: string
+  processSteps: Array<
+    {
+      _key: string
+    } & ProcessStep
+  >
+  hospitalityHeading: string
+  hospitalitySectorLabels: Array<string>
+  hospitalityPointOfView: string
+  hospitalityImage: EditorialImage
+  hospitalityCtaLabel: string
+  finalStatementEyebrow: string
+  finalStatementHeading: string
+  seo?: SeoFields
+}
+
+export type SanityImageCrop = {
+  _type: 'sanity.imageCrop'
+  top: number
+  bottom: number
+  left: number
+  right: number
+}
+
+export type SanityImageHotspot = {
+  _type: 'sanity.imageHotspot'
+  x: number
+  y: number
+  height: number
+  width: number
 }
 
 export type SiteSettings = {
@@ -76,22 +175,6 @@ export type SiteSettings = {
   defaultSeoTitle: string
   defaultSeoDescription: string
   defaultSocialImage: EditorialImage
-}
-
-export type SanityImageCrop = {
-  _type: 'sanity.imageCrop'
-  top: number
-  bottom: number
-  left: number
-  right: number
-}
-
-export type SanityImageHotspot = {
-  _type: 'sanity.imageHotspot'
-  x: number
-  y: number
-  height: number
-  width: number
 }
 
 export type SanityImagePaletteSwatch = {
@@ -200,10 +283,16 @@ export type Slug = {
 export type AllSanitySchemaTypes =
   | SocialLink
   | SanityImageAssetReference
+  | SeoFields
+  | ProcessStep
   | EditorialImage
-  | SiteSettings
+  | Service
+  | ContactPage
+  | ServiceReference
+  | ServicesPage
   | SanityImageCrop
   | SanityImageHotspot
+  | SiteSettings
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
@@ -213,6 +302,89 @@ export type AllSanitySchemaTypes =
   | SanityImageAsset
   | Geopoint
   | Slug
+
+// Source: src/sanity/queries/services-contact.ts
+// Variable: SERVICES_PAGE_QUERY
+// Query: *[_type == "servicesPage" && _id == "servicesPage"][0]{    _id,    heroHeading,    heroIntroduction,    heroImage{        decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url    },    heroCtaLabel,    services[]->{      _id,      title,      shortSummary,      description,      image{          decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url      },      deliverables    },    processHeading,    processSteps[]{      _key,      title,      description    },    hospitalityHeading,    hospitalitySectorLabels,    hospitalityPointOfView,    hospitalityImage{        decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url    },    hospitalityCtaLabel,    finalStatementEyebrow,    finalStatementHeading,    seo{        metaTitle,  metaDescription,  "socialImageUrl": socialImage.asset->url    }  }
+export type SERVICES_PAGE_QUERY_RESULT = {
+  _id: 'servicesPage'
+  heroHeading: string
+  heroIntroduction: string
+  heroImage: {
+    decorative: boolean
+    alt: string | null
+    caption: string | null
+    url: string | null
+    mobileUrl: string | null
+  }
+  heroCtaLabel: string
+  services: Array<{
+    _id: string
+    title: string
+    shortSummary: string
+    description: string
+    image: {
+      decorative: boolean
+      alt: string | null
+      caption: string | null
+      url: string | null
+      mobileUrl: string | null
+    }
+    deliverables: Array<string>
+  }>
+  processHeading: string
+  processSteps: Array<{
+    _key: string
+    title: string
+    description: string
+  }>
+  hospitalityHeading: string
+  hospitalitySectorLabels: Array<string>
+  hospitalityPointOfView: string
+  hospitalityImage: {
+    decorative: boolean
+    alt: string | null
+    caption: string | null
+    url: string | null
+    mobileUrl: string | null
+  }
+  hospitalityCtaLabel: string
+  finalStatementEyebrow: string
+  finalStatementHeading: string
+  seo: {
+    metaTitle: string | null
+    metaDescription: string | null
+    socialImageUrl: string | null
+  } | null
+} | null
+
+// Source: src/sanity/queries/services-contact.ts
+// Variable: CONTACT_PAGE_QUERY
+// Query: {    "page": *[_type == "contactPage" && _id == "contactPage"][0]{      _id,      heading,      introduction,      supportingImage{          decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url      },      supportingStatement,      seo{          metaTitle,  metaDescription,  "socialImageUrl": socialImage.asset->url      }    },    "services": *[_type == "servicesPage" && _id == "servicesPage"][0].services[]->{      _id,      title    }  }
+export type CONTACT_PAGE_QUERY_RESULT = {
+  page: {
+    _id: 'contactPage'
+    heading: string
+    introduction: string
+    supportingImage: {
+      decorative: boolean
+      alt: string | null
+      caption: string | null
+      url: string | null
+      mobileUrl: string | null
+    }
+    supportingStatement: string
+    seo: {
+      metaTitle: string | null
+      metaDescription: string | null
+      socialImageUrl: string | null
+    } | null
+  } | null
+  services: Array<{
+    _id: string
+    title: string
+  }> | null
+}
 
 // Source: src/sanity/queries/site-settings.ts
 // Variable: SITE_SETTINGS_QUERY
@@ -249,6 +421,8 @@ export type SITE_SETTINGS_QUERY_RESULT = {
 // Query TypeMap
 declare global {
   interface SanityQueries {
+    '\n  *[_type == "servicesPage" && _id == "servicesPage"][0]{\n    _id,\n    heroHeading,\n    heroIntroduction,\n    heroImage{\n      \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n    },\n    heroCtaLabel,\n    services[]->{\n      _id,\n      title,\n      shortSummary,\n      description,\n      image{\n        \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n      },\n      deliverables\n    },\n    processHeading,\n    processSteps[]{\n      _key,\n      title,\n      description\n    },\n    hospitalityHeading,\n    hospitalitySectorLabels,\n    hospitalityPointOfView,\n    hospitalityImage{\n      \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n    },\n    hospitalityCtaLabel,\n    finalStatementEyebrow,\n    finalStatementHeading,\n    seo{\n      \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n    }\n  }\n': SERVICES_PAGE_QUERY_RESULT
+    '\n  {\n    "page": *[_type == "contactPage" && _id == "contactPage"][0]{\n      _id,\n      heading,\n      introduction,\n      supportingImage{\n        \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n      },\n      supportingStatement,\n      seo{\n        \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n      }\n    },\n    "services": *[_type == "servicesPage" && _id == "servicesPage"][0].services[]->{\n      _id,\n      title\n    }\n  }\n': CONTACT_PAGE_QUERY_RESULT
     '\n  *[_type == "siteSettings" && _id == "siteSettings"][0]{\n    _id,\n    studioName,\n    registeredMarkText,\n    homeLabel,\n    workLabel,\n    servicesLabel,\n    aboutLabel,\n    journalLabel,\n    contactLabel,\n    headerCtaLabel,\n    emailAddress,\n    socialLinks[]{\n      _key,\n      platform,\n      url\n    },\n    newsletterHeading,\n    newsletterDescription,\n    footerTagline,\n    defaultSeoTitle,\n    defaultSeoDescription,\n    defaultSocialImage{\n      decorative,\n      alt,\n      "url": asset.asset->url\n    }\n  }\n': SITE_SETTINGS_QUERY_RESULT
   }
 }

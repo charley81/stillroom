@@ -58,7 +58,7 @@ describe('Sanity-backed shared shell', () => {
   it('renders contact, social, newsletter, tagline and generated year content', async () => {
     const container = await AstroContainer.create()
     const html = await container.renderToString(Footer, {
-      props: { settings, currentYear: 2032 },
+      props: { settings, currentYear: 2032, isHome: false },
     })
 
     expect(html).toContain('A useful note, occasionally.')
@@ -68,5 +68,17 @@ describe('Sanity-backed shared shell', () => {
     expect(html).toContain('https://linkedin.com/company/stillroom')
     expect(html).toContain('© Stillroom Studio 2032')
     expect(html).toContain('Independent by nature.')
+    expect(html).toContain('h-[1118px]')
+    expect(html).toContain('md:h-[591px]')
+  })
+
+  it('keeps the shorter approved desktop footer on Home', async () => {
+    const container = await AstroContainer.create()
+    const html = await container.renderToString(Footer, {
+      props: { settings, currentYear: 2032, isHome: true },
+    })
+
+    expect(html).toContain('md:h-[530px]')
+    expect(html).not.toContain('md:h-[591px]')
   })
 })

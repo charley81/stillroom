@@ -1,11 +1,16 @@
 ---
 import ContactInquiry from '../components/contact/ContactInquiry.astro'
 import Layout from '../layouts/Layout.astro'
+import { getContactPage } from '../sanity/content'
+import { PUBLIC_PREVIEW_STATE } from '../sanity/preview'
+
+const preview = Astro.locals.preview ?? PUBLIC_PREVIEW_STATE
+const page = await getContactPage(preview)
+const title = page.seo?.metaTitle ?? `${page.heading} — Stillroom`
+const description = page.seo?.metaDescription ?? page.introduction
+const socialImageUrl = page.seo?.socialImageUrl ?? page.supportingImage.url
 ---
 
-<Layout
-  title="Contact — Stillroom"
-  description="Tell Stillroom about your hospitality brand or digital project."
->
-  <ContactInquiry />
+<Layout title={title} description={description} socialImageUrl={socialImageUrl}>
+  <ContactInquiry page={page} />
 </Layout>

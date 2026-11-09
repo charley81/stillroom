@@ -1,3 +1,7 @@
 export const SANITY_API_VERSION = '2026-11-08'
 export const SITE_SETTINGS_ID = 'siteSettings'
 export const SITE_SETTINGS_DRAFT_ID = `drafts.${SITE_SETTINGS_ID}`
+export const SERVICES_PAGE_ID = 'servicesPage'
+export const SERVICES_PAGE_DRAFT_ID = `drafts.${SERVICES_PAGE_ID}`
+export const CONTACT_PAGE_ID = 'contactPage'
+export const CONTACT_PAGE_DRAFT_ID = `drafts.${CONTACT_PAGE_ID}`

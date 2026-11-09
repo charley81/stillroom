@@ -11,6 +11,7 @@ import '../styles/global.css'
 interface Props {
   title?: string
   description?: string
+  socialImageUrl?: string
   showFooter?: boolean
 }
 
@@ -19,13 +20,14 @@ const settings = await getSiteSettings(preview)
 const {
   title = settings.defaultSeoTitle,
   description = settings.defaultSeoDescription,
+  socialImageUrl = settings.defaultSocialImage.url,
   showFooter = true,
 } = Astro.props
 
 const pathname = Astro.url.pathname.replace(/\/+$/, '') || '/'
 const cleanTitle = stegaClean(title)
 const cleanDescription = stegaClean(description)
-const cleanSocialImageUrl = stegaClean(settings.defaultSocialImage.url)
+const cleanSocialImageUrl = stegaClean(socialImageUrl)
 const cleanStudioName = stegaClean(settings.studioName)
 const exitPreviewHref = `/api/preview/exit?redirect=${encodeURIComponent(pathname)}`
 ---
@@ -62,7 +64,7 @@ const exitPreviewHref = `/api/preview/exit?redirect=${encodeURIComponent(pathnam
     >
       <slot />
     </main>
-    {showFooter && <Footer settings={settings} />}
+    {showFooter && <Footer settings={settings} isHome={pathname === '/'} />}
     {preview.enabled && (
       <a
         href={exitPreviewHref}

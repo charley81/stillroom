@@ -2,6 +2,9 @@ import { describe, expect, it } from 'vitest'
 import {
   PRESENTATION_OPTIONS,
   TRUSTED_PRESENTATION_ORIGINS,
+  contactPageLocations,
+  serviceLocations,
+  servicesPageLocations,
   siteSettingsLocations,
 } from './presentation'
 
@@ -57,8 +60,29 @@ describe('Sanity Presentation configuration', () => {
       { title: 'Journal', href: '/journal' },
       { title: 'Contact', href: '/contact' },
     ])
-    expect(PRESENTATION_OPTIONS.resolve?.locations).toEqual({
-      siteSettings: siteSettingsLocations,
-    })
+    expect(PRESENTATION_OPTIONS.resolve?.locations).toEqual(
+      expect.objectContaining({ siteSettings: siteSettingsLocations }),
+    )
+  })
+
+  it('locates Services and Contact documents where their content appears', () => {
+    expect(servicesPageLocations.locations).toEqual([
+      { title: 'Services', href: '/services' },
+      { title: 'Contact form', href: '/contact' },
+    ])
+    expect(contactPageLocations.locations).toEqual([
+      { title: 'Contact', href: '/contact' },
+    ])
+    expect(serviceLocations.locations).toEqual([
+      { title: 'Services', href: '/services' },
+      { title: 'Contact form', href: '/contact' },
+    ])
+    expect(PRESENTATION_OPTIONS.resolve?.locations).toEqual(
+      expect.objectContaining({
+        servicesPage: servicesPageLocations,
+        contactPage: contactPageLocations,
+        service: serviceLocations,
+      }),
+    )
   })
 })
