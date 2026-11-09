@@ -1,6 +1,13 @@
 ---
-import { Image } from 'astro:assets'
+import type { ServicesPage } from '../../sanity/content'
+import EditorialImage from '../content/EditorialImage.astro'
 import Button from '../site/Button.astro'
+
+interface Props {
+  page: ServicesPage
+}
+
+const { page } = Astro.props
 ---
 
 <section class="h-[477px] overflow-hidden bg-primary px-4 py-16 text-light md:h-[896px] md:px-16 md:py-32">
@@ -9,27 +16,23 @@ import Button from '../site/Button.astro'
       <p class="m-0 font-body text-base leading-5 font-normal text-light uppercase">
         Services / Stillroom
       </p>
-      <h1 class="m-0 font-display text-5xl leading-12 font-normal uppercase md:text-[128px] md:leading-[1.05]">
-        A little
-        <br />
-        thinking.
+      <h1 class="m-0 whitespace-pre-line font-display text-5xl leading-12 font-normal uppercase md:text-[128px] md:leading-[1.05]">
+        {page.heroHeading}
       </h1>
       <p class="m-0 w-full text-base leading-[27px] text-light md:w-[544px]">
-        Brand strategy, identity, websites and campaigns. Thoughtfully
-        connected, built around the world of hospitality.
+        {page.heroIntroduction}
       </p>
       <Button
         href="/contact"
         variant="light"
         class="!border-light !font-normal !leading-[27px]"
       >
-        Start a Project
+        {page.heroCtaLabel}
       </Button>
     </div>
-    <Image
+    <EditorialImage
       class="hidden size-[640px] rounded-full border-8 border-light object-cover md:block"
-      src="/images/375-1387.webp"
-      alt="Red napkin and service bell"
+      image={page.heroImage}
       width={640}
       height={640}
       loading="eager"

@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import {
+  CONTACT_PAGE_ID,
   filterSingletonActions,
   filterSingletonTemplates,
+  SERVICES_PAGE_ID,
   SITE_SETTINGS_ID,
 } from './singletons'
 
@@ -22,14 +24,37 @@ describe('Site Settings singleton behavior', () => {
     ).toEqual(['publish', 'discardChanges'])
   })
 
-  it('removes Site Settings from the normal create menu', () => {
+  it('protects the Services and Contact singleton documents', () => {
+    const actions = [
+      { action: 'publish' },
+      { action: 'duplicate' },
+      { action: 'delete' },
+    ]
+
+    expect(
+      filterSingletonActions(actions, {
+        documentId: SERVICES_PAGE_ID,
+        schemaType: 'servicesPage',
+      }).map((action) => action.action),
+    ).toEqual(['publish'])
+    expect(
+      filterSingletonActions(actions, {
+        documentId: CONTACT_PAGE_ID,
+        schemaType: 'contactPage',
+      }).map((action) => action.action),
+    ).toEqual(['publish'])
+  })
+
+  it('removes all singleton pages from the normal create menu', () => {
     const templates = [
       { templateId: 'siteSettings', schemaType: 'siteSettings' },
-      { templateId: 'workProject', schemaType: 'workProject' },
+      { templateId: 'servicesPage', schemaType: 'servicesPage' },
+      { templateId: 'contactPage', schemaType: 'contactPage' },
+      { templateId: 'service', schemaType: 'service' },
     ]
 
     expect(filterSingletonTemplates(templates)).toEqual([
-      { templateId: 'workProject', schemaType: 'workProject' },
+      { templateId: 'service', schemaType: 'service' },
     ])
   })
 })

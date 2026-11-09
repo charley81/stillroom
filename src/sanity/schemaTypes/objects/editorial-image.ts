@@ -1,7 +1,9 @@
 import { defineField, defineType } from 'sanity'
+import { validateEditorialImageAccessibility } from '../validation'
 
 interface EditorialImageParent {
   decorative?: boolean
+  alt?: string
 }
 
 export const editorialImage = defineType({
@@ -28,16 +30,12 @@ export const editorialImage = defineType({
       title: 'Alternative text',
       type: 'string',
       validation: (rule) =>
-        rule.custom((value, context) => {
-          const { decorative } = context.parent as EditorialImageParent
-          if (decorative && value) {
-            return 'Decorative images must have empty alternative text.'
-          }
-          if (!decorative && !value?.trim()) {
-            return 'Alternative text is required unless the image is decorative.'
-          }
-          return true
-        }),
+        rule.custom((value, context) =>
+          validateEditorialImageAccessibility({
+            ...(context.parent as EditorialImageParent),
+            alt: value,
+          }),
+        ),
     }),
     defineField({
       name: 'caption',

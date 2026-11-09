@@ -17,6 +17,24 @@ export const siteSettingsLocations = {
   ],
 } satisfies DocumentLocationsState
 
+export const servicesPageLocations = {
+  locations: [
+    { title: 'Services', href: '/services' },
+    { title: 'Contact form', href: '/contact' },
+  ],
+} satisfies DocumentLocationsState
+
+export const contactPageLocations = {
+  locations: [{ title: 'Contact', href: '/contact' }],
+} satisfies DocumentLocationsState
+
+export const serviceLocations = {
+  locations: [
+    { title: 'Services', href: '/services' },
+    { title: 'Contact form', href: '/contact' },
+  ],
+} satisfies DocumentLocationsState
+
 export const PRESENTATION_OPTIONS = {
   allowOrigins: [...TRUSTED_PRESENTATION_ORIGINS],
   previewUrl: {
@@ -38,9 +56,14 @@ export const PRESENTATION_OPTIONS = {
         route: ['/', '/work', '/services', '/about', '/journal', '/contact'],
         type: 'siteSettings',
       },
+      { route: '/services', type: 'servicesPage' },
+      { route: '/contact', type: 'contactPage' },
     ],
     locations: {
       siteSettings: siteSettingsLocations,
+      servicesPage: servicesPageLocations,
+      contactPage: contactPageLocations,
+      service: serviceLocations,
     },
   },
 } satisfies PresentationPluginOptions

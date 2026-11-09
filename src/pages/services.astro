@@ -4,29 +4,32 @@ import ServiceProcess from '../components/services/ServiceProcess.astro'
 import ServicesCatalog from '../components/services/ServicesCatalog.astro'
 import ServicesHero from '../components/services/ServicesHero.astro'
 import Layout from '../layouts/Layout.astro'
+import { getServicesPage } from '../sanity/content'
+import { PUBLIC_PREVIEW_STATE } from '../sanity/preview'
+
+const preview = Astro.locals.preview ?? PUBLIC_PREVIEW_STATE
+const page = await getServicesPage(preview)
+const title = page.seo?.metaTitle ?? `${page.heroHeading} — Stillroom`
+const description = page.seo?.metaDescription ?? page.heroIntroduction
+const socialImageUrl = page.seo?.socialImageUrl ?? page.heroImage.url
 ---
 
-<Layout
-  title="Services — Stillroom"
-  description="Brand strategy, identity, digital design and campaigns for hospitality."
->
-  <ServicesHero />
+<Layout title={title} description={description} socialImageUrl={socialImageUrl}>
+  <ServicesHero page={page} />
 
-  <ServicesCatalog />
+  <ServicesCatalog page={page} />
 
-  <ServiceProcess />
+  <ServiceProcess page={page} />
 
-  <HospitalityFocus />
+  <HospitalityFocus page={page} />
 
   <section class="relative isolate flex h-[276px] flex-col justify-center gap-8 overflow-hidden bg-primary bg-[length:1440px_1002px] bg-left-top bg-no-repeat px-4 py-16 text-light after:absolute after:inset-0 after:-z-10 after:bg-dark after:opacity-[0.64] after:content-[''] md:h-[576px] md:px-8 md:py-32">
     <div class="flex w-full max-w-none flex-col gap-8 p-0">
       <p class="m-0 font-body text-base leading-[16.2px] font-normal text-light-grey uppercase">
-        Something good starts here
+        {page.finalStatementEyebrow}
       </p>
-      <h2 class="m-0 font-display text-5xl leading-12 font-normal text-light uppercase md:text-[128px] md:leading-[1.05]">
-        Bring it
-        <br />
-        all together.
+      <h2 class="m-0 whitespace-pre-line font-display text-5xl leading-12 font-normal text-light uppercase md:text-[128px] md:leading-[1.05]">
+        {page.finalStatementHeading}
       </h2>
     </div>
   </section>

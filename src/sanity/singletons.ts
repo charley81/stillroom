@@ -1,9 +1,17 @@
 import type { StructureResolver } from 'sanity/structure'
-import { SITE_SETTINGS_ID } from './constants'
+import {
+  CONTACT_PAGE_ID,
+  SERVICES_PAGE_ID,
+  SITE_SETTINGS_ID,
+} from './constants'
 
-export { SITE_SETTINGS_ID }
+export { CONTACT_PAGE_ID, SERVICES_PAGE_ID, SITE_SETTINGS_ID }
 
-const SINGLETON_TYPES = new Set(['siteSettings'])
+const SINGLETON_IDS = new Map([
+  ['siteSettings', SITE_SETTINGS_ID],
+  ['servicesPage', SERVICES_PAGE_ID],
+  ['contactPage', CONTACT_PAGE_ID],
+])
 const BLOCKED_SINGLETON_ACTIONS = new Set(['delete', 'duplicate'])
 
 interface ActionLike {
@@ -23,9 +31,10 @@ export function filterSingletonActions<T extends ActionLike>(
   actions: T[],
   context: ActionContext,
 ): T[] {
+  const singletonId = SINGLETON_IDS.get(context.schemaType)
   if (
-    !SINGLETON_TYPES.has(context.schemaType) ||
-    context.documentId?.replace(/^drafts\./, '') !== SITE_SETTINGS_ID
+    !singletonId ||
+    context.documentId?.replace(/^drafts\./, '') !== singletonId
   ) {
     return actions
   }
@@ -38,9 +47,7 @@ export function filterSingletonActions<T extends ActionLike>(
 export function filterSingletonTemplates<T extends TemplateLike>(
   templates: T[],
 ): T[] {
-  return templates.filter(
-    (template) => !SINGLETON_TYPES.has(template.templateId),
-  )
+  return templates.filter((template) => !SINGLETON_IDS.has(template.templateId))
 }
 
 export const structure: StructureResolver = (S) =>
@@ -63,5 +70,38 @@ export const structure: StructureResolver = (S) =>
                     .documentId(SITE_SETTINGS_ID),
                 ),
             ]),
+        ),
+      S.listItem()
+        .title('Pages')
+        .child(
+          S.list()
+            .title('Pages')
+            .items([
+              S.listItem()
+                .title('Services')
+                .schemaType('servicesPage')
+                .child(
+                  S.document()
+                    .title('Services')
+                    .schemaType('servicesPage')
+                    .documentId(SERVICES_PAGE_ID),
+                ),
+              S.listItem()
+                .title('Contact')
+                .schemaType('contactPage')
+                .child(
+                  S.document()
+                    .title('Contact')
+                    .schemaType('contactPage')
+                    .documentId(CONTACT_PAGE_ID),
+                ),
+            ]),
+        ),
+      S.listItem()
+        .title('Reusable Content')
+        .child(
+          S.list()
+            .title('Reusable Content')
+            .items([S.documentTypeListItem('service').title('Services')]),
         ),
     ])

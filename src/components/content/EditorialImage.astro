@@ -1,0 +1,39 @@
+---
+import { stegaClean } from '@sanity/client/stega'
+import type { ContentImage } from '../../sanity/content'
+
+interface Props {
+  image: ContentImage
+  width: number
+  height: number
+  class?: string
+  loading?: 'eager' | 'lazy'
+  fetchpriority?: 'high' | 'low' | 'auto'
+}
+
+const {
+  image,
+  width,
+  height,
+  class: className,
+  loading = 'lazy',
+  fetchpriority,
+} = Astro.props
+const src = stegaClean(image.url)
+const mobileSrc = image.mobileUrl ? stegaClean(image.mobileUrl) : null
+const alt = image.decorative ? '' : stegaClean(image.alt ?? '')
+---
+
+<picture class="contents">
+  {mobileSrc && <source media="(max-width: 760px)" srcset={mobileSrc} />}
+  <img
+    class={className}
+    src={src}
+    alt={alt}
+    width={width}
+    height={height}
+    loading={loading}
+    fetchpriority={fetchpriority}
+    decoding="async"
+  />
+</picture>
