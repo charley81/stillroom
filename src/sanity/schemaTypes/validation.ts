@@ -3,6 +3,28 @@ interface EditorialImageValue {
   alt?: string
 }
 
+const APPROVED_WORK_PROJECT_GALLERY_BLOCKS = new Set([
+  'workProjectGalleryImage',
+  'workProjectGalleryBrandPanel',
+])
+
+export function approvedGalleryBlocks(
+  blocks: unknown[] | undefined,
+): true | string {
+  if (!blocks) return true
+  const approved = blocks.every(
+    (block) =>
+      block &&
+      typeof block === 'object' &&
+      APPROVED_WORK_PROJECT_GALLERY_BLOCKS.has(
+        String((block as { _type?: unknown })._type),
+      ),
+  )
+  return approved
+    ? true
+    : 'Work Project galleries may only contain approved gallery blocks.'
+}
+
 export function exactCount(
   value: unknown[] | undefined,
   count: number,

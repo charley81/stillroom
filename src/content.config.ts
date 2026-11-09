@@ -8,50 +8,6 @@ const editorialImage = z.object({
   caption: z.string().optional(),
 })
 
-const projectNarrative = z.object({
-  heading: z.string(),
-  copy: z.string(),
-})
-
-const projectGalleryBlock = z.discriminatedUnion('type', [
-  z.object({
-    type: z.literal('image'),
-    image: editorialImage,
-  }),
-  z.object({
-    type: z.literal('pair'),
-    brandPanel: z.object({
-      title: z.string(),
-      statement: z.string(),
-      label: z.string(),
-    }),
-    image: editorialImage,
-  }),
-])
-
-const workProjects = defineCollection({
-  loader: glob({ base: './src/content/work-projects', pattern: '**/*.json' }),
-  schema: z.object({
-    title: z.string(),
-    sector: z.string(),
-    summary: z.string(),
-    services: z.array(z.string()),
-    cardImage: z.string(),
-    cardAlt: z.string(),
-    order: z.number(),
-    detailAvailable: z.boolean().default(true),
-    tagline: z.string(),
-    introduction: z.string(),
-    heroArtwork: editorialImage,
-    heroImage: editorialImage,
-    challenge: projectNarrative,
-    contribution: projectNarrative,
-    galleryLabel: z.string(),
-    gallery: z.array(projectGalleryBlock),
-    outcome: projectNarrative,
-  }),
-})
-
 const articleContentBlock = z.discriminatedUnion('type', [
   z.object({
     type: z.literal('heading'),
@@ -104,4 +60,4 @@ const journalArticles = defineCollection({
   }),
 })
 
-export const collections = { workProjects, journalArticles }
+export const collections = { journalArticles }

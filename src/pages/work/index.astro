@@ -1,14 +1,21 @@
 ---
-import { Image } from 'astro:assets'
+import EditorialImage from '../../components/content/EditorialImage.astro'
 import ProjectInvitation from '../../components/site/ProjectInvitation.astro'
 import ProjectsListing from '../../components/work/ProjectsListing.astro'
 import Layout from '../../layouts/Layout.astro'
+import { getWorkPage } from '../../sanity/content'
+import { PUBLIC_PREVIEW_STATE } from '../../sanity/preview'
+
+const preview = Astro.locals.preview ?? PUBLIC_PREVIEW_STATE
+const page = await getWorkPage(preview)
+const title = page.seo?.metaTitle ?? `${page.heading} — Stillroom`
+const description =
+  page.seo?.metaDescription ??
+  'Selected hospitality branding and digital work by Stillroom.'
+const socialImageUrl = page.seo?.socialImageUrl ?? page.heroArtwork.url
 ---
 
-<Layout
-  title="Work — Stillroom"
-  description="Selected hospitality branding and digital work by Stillroom."
->
+<Layout title={title} description={description} socialImageUrl={socialImageUrl}>
   <section class="flex h-[517.262px] flex-col gap-8 overflow-hidden px-4 pt-4 pb-16 md:h-[833px] md:px-8 md:py-32">
     <div class="w-full max-w-none p-0">
       <p class="m-0 font-body text-base leading-[16.2px] font-black text-dark-grey uppercase">
@@ -17,12 +24,11 @@ import Layout from '../../layouts/Layout.astro'
     </div>
     <div class="grid h-auto w-full max-w-none grid-cols-1 gap-8 md:h-[520px] md:grid-cols-2 items-center">
       <h1 class="m-0 font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[128px] md:leading-[1.05]">
-        Places with personality.
+        {page.heading}
       </h1>
-      <Image
+      <EditorialImage
         class="h-[252.262px] w-full object-contain md:h-[520px] md:w-[672px]"
-        src="/images/381-1857.webp"
-        alt="Abstract red Stillroom artwork"
+        image={page.heroArtwork}
         width={672}
         height={520}
         loading="eager"
@@ -30,6 +36,11 @@ import Layout from '../../layouts/Layout.astro'
       />
     </div>
   </section>
-  <ProjectsListing />
-  <ProjectInvitation variant="work" />
+  <ProjectsListing page={page} />
+  <ProjectInvitation
+    eyebrow={page.finalCtaEyebrow}
+    title={page.finalCtaHeading}
+    label={page.finalCtaLabel}
+    variant="work"
+  />
 </Layout>

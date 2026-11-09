@@ -47,6 +47,42 @@ export type ProcessStep = {
   description: string
 }
 
+export type WorkProjectGalleryBrandPanel = {
+  _type: 'workProjectGalleryBrandPanel'
+  title: string
+  statement: string
+  label: string
+  image: EditorialImage
+}
+
+export type WorkProjectGalleryImage = {
+  _type: 'workProjectGalleryImage'
+  image: EditorialImage
+}
+
+export type NarrativeSection = {
+  _type: 'narrativeSection'
+  heading: string
+  content: Array<{
+    children?: Array<{
+      marks?: Array<string>
+      text?: string
+      _type: 'span'
+      _key: string
+    }>
+    style?: 'normal'
+    listItem?: never
+    markDefs?: Array<{
+      href: string
+      _type: 'link'
+      _key: string
+    }>
+    level?: number
+    _type: 'block'
+    _key: string
+  }>
+}
+
 export type EditorialImage = {
   _type: 'editorialImage'
   asset: {
@@ -81,6 +117,72 @@ export type Service = {
   deliverables: Array<string>
 }
 
+export type ServiceReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'service'
+}
+
+export type WorkProject = {
+  _id: string
+  _type: 'workProject'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title: string
+  slug: Slug
+  sectorLabel: string
+  cardSummary: string
+  cardImage: EditorialImage
+  services: Array<
+    {
+      _key: string
+    } & ServiceReference
+  >
+  positioningStatement: string
+  introduction: string
+  heroArtwork: EditorialImage
+  heroPhotograph: EditorialImage
+  challenge: NarrativeSection
+  contribution: NarrativeSection
+  galleryHeading: string
+  gallery: Array<
+    | ({
+        _key: string
+      } & WorkProjectGalleryImage)
+    | ({
+        _key: string
+      } & WorkProjectGalleryBrandPanel)
+  >
+  outcomeHeading: string
+  outcomeCopy: Array<{
+    children?: Array<{
+      marks?: Array<string>
+      text?: string
+      _type: 'span'
+      _key: string
+    }>
+    style?: 'normal'
+    listItem?: never
+    markDefs?: Array<{
+      href: string
+      _type: 'link'
+      _key: string
+    }>
+    level?: number
+    _type: 'block'
+    _key: string
+  }>
+  seo?: SeoFields
+}
+
+export type Slug = {
+  _type: 'slug'
+  current: string
+  source?: string
+}
+
 export type ContactPage = {
   _id: string
   _type: 'contactPage'
@@ -92,13 +194,6 @@ export type ContactPage = {
   supportingImage: EditorialImage
   supportingStatement: string
   seo?: SeoFields
-}
-
-export type ServiceReference = {
-  _ref: string
-  _type: 'reference'
-  _weak?: boolean
-  [internalGroqTypeReferenceTo]?: 'service'
 }
 
 export type ServicesPage = {
@@ -129,6 +224,32 @@ export type ServicesPage = {
   hospitalityCtaLabel: string
   finalStatementEyebrow: string
   finalStatementHeading: string
+  seo?: SeoFields
+}
+
+export type WorkProjectReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'workProject'
+}
+
+export type WorkPage = {
+  _id: string
+  _type: 'workPage'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  heading: string
+  heroArtwork: EditorialImage
+  workProjects: Array<
+    {
+      _key: string
+    } & WorkProjectReference
+  >
+  finalCtaEyebrow: string
+  finalCtaHeading: string
+  finalCtaLabel: string
   seo?: SeoFields
 }
 
@@ -274,22 +395,23 @@ export type Geopoint = {
   alt?: number
 }
 
-export type Slug = {
-  _type: 'slug'
-  current: string
-  source?: string
-}
-
 export type AllSanitySchemaTypes =
   | SocialLink
   | SanityImageAssetReference
   | SeoFields
   | ProcessStep
+  | WorkProjectGalleryBrandPanel
+  | WorkProjectGalleryImage
+  | NarrativeSection
   | EditorialImage
   | Service
-  | ContactPage
   | ServiceReference
+  | WorkProject
+  | Slug
+  | ContactPage
   | ServicesPage
+  | WorkProjectReference
+  | WorkPage
   | SanityImageCrop
   | SanityImageHotspot
   | SiteSettings
@@ -301,7 +423,6 @@ export type AllSanitySchemaTypes =
   | SanityAssetSourceData
   | SanityImageAsset
   | Geopoint
-  | Slug
 
 // Source: src/sanity/queries/services-contact.ts
 // Variable: SERVICES_PAGE_QUERY
@@ -418,12 +539,228 @@ export type SITE_SETTINGS_QUERY_RESULT = {
   }
 } | null
 
+// Source: src/sanity/queries/work.ts
+// Variable: WORK_PAGE_QUERY
+// Query: *[_type == "workPage" && _id == "workPage"][0]{      _id,  heading,  heroArtwork{      decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url  },  workProjects[]->{      _id,  title,  "slug": slug.current,  sectorLabel,  cardSummary,  cardImage{      decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url  },  services[]->{      _id,  title  },  positioningStatement  },  finalCtaEyebrow,  finalCtaHeading,  finalCtaLabel,  seo{      metaTitle,  metaDescription,  "socialImageUrl": socialImage.asset->url  }  }
+export type WORK_PAGE_QUERY_RESULT = {
+  _id: 'workPage'
+  heading: string
+  heroArtwork: {
+    decorative: boolean
+    alt: string | null
+    caption: string | null
+    url: string | null
+    mobileUrl: string | null
+  }
+  workProjects: Array<{
+    _id: string
+    title: string
+    slug: string
+    sectorLabel: string
+    cardSummary: string
+    cardImage: {
+      decorative: boolean
+      alt: string | null
+      caption: string | null
+      url: string | null
+      mobileUrl: string | null
+    }
+    services: Array<{
+      _id: string
+      title: string
+    }>
+    positioningStatement: string
+  }>
+  finalCtaEyebrow: string
+  finalCtaHeading: string
+  finalCtaLabel: string
+  seo: {
+    metaTitle: string | null
+    metaDescription: string | null
+    socialImageUrl: string | null
+  } | null
+} | null
+
+// Source: src/sanity/queries/work.ts
+// Variable: WORK_PROJECT_QUERY
+// Query: {    "page": *[_type == "workPage" && _id == "workPage"][0]{        _id,  heading,  heroArtwork{      decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url  },  workProjects[]->{      _id,  title,  "slug": slug.current,  sectorLabel,  cardSummary,  cardImage{      decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url  },  services[]->{      _id,  title  },  positioningStatement  },  finalCtaEyebrow,  finalCtaHeading,  finalCtaLabel,  seo{      metaTitle,  metaDescription,  "socialImageUrl": socialImage.asset->url  }    },    "project": *[_type == "workProject" && slug.current == $slug][0]{        _id,  title,  "slug": slug.current,  sectorLabel,  cardSummary,  cardImage{      decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url  },  services[]->{      _id,  title  },  positioningStatement,      introduction,      heroArtwork{          decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url      },      heroPhotograph{          decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url      },      challenge{        heading,        content      },      contribution{        heading,        content      },      galleryHeading,      gallery[]{        _key,        _type,        _type == "workProjectGalleryImage" => {          image{              decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url          }        },        _type == "workProjectGalleryBrandPanel" => {          title,          statement,          label,          image{              decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url          }        }      },      outcomeHeading,      outcomeCopy,      seo{          metaTitle,  metaDescription,  "socialImageUrl": socialImage.asset->url      }    }  }
+export type WORK_PROJECT_QUERY_RESULT = {
+  page: {
+    _id: 'workPage'
+    heading: string
+    heroArtwork: {
+      decorative: boolean
+      alt: string | null
+      caption: string | null
+      url: string | null
+      mobileUrl: string | null
+    }
+    workProjects: Array<{
+      _id: string
+      title: string
+      slug: string
+      sectorLabel: string
+      cardSummary: string
+      cardImage: {
+        decorative: boolean
+        alt: string | null
+        caption: string | null
+        url: string | null
+        mobileUrl: string | null
+      }
+      services: Array<{
+        _id: string
+        title: string
+      }>
+      positioningStatement: string
+    }>
+    finalCtaEyebrow: string
+    finalCtaHeading: string
+    finalCtaLabel: string
+    seo: {
+      metaTitle: string | null
+      metaDescription: string | null
+      socialImageUrl: string | null
+    } | null
+  } | null
+  project: {
+    _id: string
+    title: string
+    slug: string
+    sectorLabel: string
+    cardSummary: string
+    cardImage: {
+      decorative: boolean
+      alt: string | null
+      caption: string | null
+      url: string | null
+      mobileUrl: string | null
+    }
+    services: Array<{
+      _id: string
+      title: string
+    }>
+    positioningStatement: string
+    introduction: string
+    heroArtwork: {
+      decorative: boolean
+      alt: string | null
+      caption: string | null
+      url: string | null
+      mobileUrl: string | null
+    }
+    heroPhotograph: {
+      decorative: boolean
+      alt: string | null
+      caption: string | null
+      url: string | null
+      mobileUrl: string | null
+    }
+    challenge: {
+      heading: string
+      content: Array<{
+        children?: Array<{
+          marks?: Array<string>
+          text?: string
+          _type: 'span'
+          _key: string
+        }>
+        style?: 'normal'
+        listItem?: never
+        markDefs?: Array<{
+          href: string
+          _type: 'link'
+          _key: string
+        }>
+        level?: number
+        _type: 'block'
+        _key: string
+      }>
+    }
+    contribution: {
+      heading: string
+      content: Array<{
+        children?: Array<{
+          marks?: Array<string>
+          text?: string
+          _type: 'span'
+          _key: string
+        }>
+        style?: 'normal'
+        listItem?: never
+        markDefs?: Array<{
+          href: string
+          _type: 'link'
+          _key: string
+        }>
+        level?: number
+        _type: 'block'
+        _key: string
+      }>
+    }
+    galleryHeading: string
+    gallery: Array<
+      | {
+          _key: string
+          _type: 'workProjectGalleryBrandPanel'
+          title: string
+          statement: string
+          label: string
+          image: {
+            decorative: boolean
+            alt: string | null
+            caption: string | null
+            url: string | null
+            mobileUrl: string | null
+          }
+        }
+      | {
+          _key: string
+          _type: 'workProjectGalleryImage'
+          image: {
+            decorative: boolean
+            alt: string | null
+            caption: string | null
+            url: string | null
+            mobileUrl: string | null
+          }
+        }
+    >
+    outcomeHeading: string
+    outcomeCopy: Array<{
+      children?: Array<{
+        marks?: Array<string>
+        text?: string
+        _type: 'span'
+        _key: string
+      }>
+      style?: 'normal'
+      listItem?: never
+      markDefs?: Array<{
+        href: string
+        _type: 'link'
+        _key: string
+      }>
+      level?: number
+      _type: 'block'
+      _key: string
+    }>
+    seo: {
+      metaTitle: string | null
+      metaDescription: string | null
+      socialImageUrl: string | null
+    } | null
+  } | null
+}
+
 // Query TypeMap
 declare global {
   interface SanityQueries {
     '\n  *[_type == "servicesPage" && _id == "servicesPage"][0]{\n    _id,\n    heroHeading,\n    heroIntroduction,\n    heroImage{\n      \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n    },\n    heroCtaLabel,\n    services[]->{\n      _id,\n      title,\n      shortSummary,\n      description,\n      image{\n        \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n      },\n      deliverables\n    },\n    processHeading,\n    processSteps[]{\n      _key,\n      title,\n      description\n    },\n    hospitalityHeading,\n    hospitalitySectorLabels,\n    hospitalityPointOfView,\n    hospitalityImage{\n      \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n    },\n    hospitalityCtaLabel,\n    finalStatementEyebrow,\n    finalStatementHeading,\n    seo{\n      \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n    }\n  }\n': SERVICES_PAGE_QUERY_RESULT
     '\n  {\n    "page": *[_type == "contactPage" && _id == "contactPage"][0]{\n      _id,\n      heading,\n      introduction,\n      supportingImage{\n        \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n      },\n      supportingStatement,\n      seo{\n        \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n      }\n    },\n    "services": *[_type == "servicesPage" && _id == "servicesPage"][0].services[]->{\n      _id,\n      title\n    }\n  }\n': CONTACT_PAGE_QUERY_RESULT
     '\n  *[_type == "siteSettings" && _id == "siteSettings"][0]{\n    _id,\n    studioName,\n    registeredMarkText,\n    homeLabel,\n    workLabel,\n    servicesLabel,\n    aboutLabel,\n    journalLabel,\n    contactLabel,\n    headerCtaLabel,\n    emailAddress,\n    socialLinks[]{\n      _key,\n      platform,\n      url\n    },\n    newsletterHeading,\n    newsletterDescription,\n    footerTagline,\n    defaultSeoTitle,\n    defaultSeoDescription,\n    defaultSocialImage{\n      decorative,\n      alt,\n      "url": asset.asset->url\n    }\n  }\n': SITE_SETTINGS_QUERY_RESULT
+    '\n  *[_type == "workPage" && _id == "workPage"][0]{\n    \n  _id,\n  heading,\n  heroArtwork{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n  },\n  workProjects[]->{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  sectorLabel,\n  cardSummary,\n  cardImage{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n  },\n  services[]->{\n    \n  _id,\n  title\n\n  },\n  positioningStatement\n\n  },\n  finalCtaEyebrow,\n  finalCtaHeading,\n  finalCtaLabel,\n  seo{\n    \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n  }\n\n  }\n': WORK_PAGE_QUERY_RESULT
+    '\n  {\n    "page": *[_type == "workPage" && _id == "workPage"][0]{\n      \n  _id,\n  heading,\n  heroArtwork{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n  },\n  workProjects[]->{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  sectorLabel,\n  cardSummary,\n  cardImage{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n  },\n  services[]->{\n    \n  _id,\n  title\n\n  },\n  positioningStatement\n\n  },\n  finalCtaEyebrow,\n  finalCtaHeading,\n  finalCtaLabel,\n  seo{\n    \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n  }\n\n    },\n    "project": *[_type == "workProject" && slug.current == $slug][0]{\n      \n  _id,\n  title,\n  "slug": slug.current,\n  sectorLabel,\n  cardSummary,\n  cardImage{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n  },\n  services[]->{\n    \n  _id,\n  title\n\n  },\n  positioningStatement\n,\n      introduction,\n      heroArtwork{\n        \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n      },\n      heroPhotograph{\n        \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n      },\n      challenge{\n        heading,\n        content\n      },\n      contribution{\n        heading,\n        content\n      },\n      galleryHeading,\n      gallery[]{\n        _key,\n        _type,\n        _type == "workProjectGalleryImage" => {\n          image{\n            \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n          }\n        },\n        _type == "workProjectGalleryBrandPanel" => {\n          title,\n          statement,\n          label,\n          image{\n            \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n          }\n        }\n      },\n      outcomeHeading,\n      outcomeCopy,\n      seo{\n        \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n      }\n    }\n  }\n': WORK_PROJECT_QUERY_RESULT
   }
 }
 // Lets @sanity/client releases that predate the global registry read it too

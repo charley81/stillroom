@@ -16,6 +16,8 @@
     "sanity:migrate:publish": "tsx scripts/sanity/migrate-site-settings.ts --publish",
     "sanity:migrate:services-contact": "tsx scripts/sanity/migrate-services-contact.ts",
     "sanity:migrate:services-contact:publish": "tsx scripts/sanity/migrate-services-contact.ts --publish",
+    "sanity:migrate:work": "tsx scripts/sanity/migrate-work.ts",
+    "sanity:migrate:work:publish": "tsx scripts/sanity/migrate-work.ts --publish",
     "sanity:typegen": "sanity schema extract --enforce-required-fields --force && sanity typegen generate",
     "sanity:typegen:check": "pnpm sanity:typegen && git diff --exit-code -- schema.json sanity.types.ts",
     "format": "prettier . --write",

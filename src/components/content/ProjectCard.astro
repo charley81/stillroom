@@ -1,70 +1,47 @@
 ---
-import { Image } from 'astro:assets'
-import type { CollectionEntry } from 'astro:content'
+import type { WorkProjectCard } from '../../sanity/content'
+import EditorialImage from './EditorialImage.astro'
 
 interface Props {
-  project: CollectionEntry<'workProjects'>
+  project: WorkProjectCard
 }
 
 const { project } = Astro.props
-const href = project.data.detailAvailable ? `/work/${project.id}` : undefined
+const href = `/work/${project.slug}`
 const imageClasses =
   'h-[244.5px] w-full object-cover transition-transform duration-200 md:h-[504px]'
 ---
 
 <article class="h-auto overflow-hidden md:min-h-[669px]">
-  {href ? (
-    <a
-      class="group mb-4 block h-[244.5px] overflow-hidden md:h-[504px]"
-      href={href}
-      aria-label={`View ${project.data.title}`}
-    >
-      <Image
-        class:list={[imageClasses, 'group-hover:scale-[1.015]']}
-        src={project.data.cardImage}
-        alt={project.data.cardAlt}
-        width={672}
-        height={504}
-        loading="lazy"
-      />
-    </a>
-  ) : (
-    <div class="mb-4 block h-[244.5px] overflow-hidden md:h-[504px]">
-      <Image
-        class={imageClasses}
-        src={project.data.cardImage}
-        alt={project.data.cardAlt}
-        width={672}
-        height={504}
-        loading="lazy"
-      />
-    </div>
-  )}
+  <a
+    class="group mb-4 block h-[244.5px] overflow-hidden md:h-[504px]"
+    href={href}
+    aria-label={`View ${project.title}`}
+  >
+    <EditorialImage
+      class={`${imageClasses} group-hover:scale-[1.015]`}
+      image={project.cardImage}
+      width={672}
+      height={504}
+      loading="lazy"
+    />
+  </a>
   <h2 class="m-0 mb-4 font-display text-[36px] leading-[1.05] font-normal text-dark uppercase md:min-h-[38px]">
-    {href ? (
-      <a class="hover:text-primary" href={href}>
-        {project.data.title}{' '}
-        <span class="text-primary" aria-hidden="true">
-          →
-        </span>
-      </a>
-    ) : (
-      <span>
-        {project.data.title}{' '}
-        <span class="text-primary" aria-hidden="true">
-          →
-        </span>
+    <a class="hover:text-primary" href={href}>
+      {project.title}{' '}
+      <span class="text-primary" aria-hidden="true">
+        →
       </span>
-    )}
+    </a>
   </h2>
   <p class="m-0 mb-2 font-body text-base leading-[24.3px] font-bold text-dark-grey uppercase">
-    <span>{project.data.sector} | </span>
+    <span>{project.sectorLabel} | </span>
     <span class="text-primary">View project</span>
   </p>
   <p class="m-0 mb-2 text-base leading-[27px] text-dark">
-    {project.data.summary}
+    {project.cardSummary}
   </p>
   <p class="m-0 text-base leading-[27px] text-dark-grey">
-    {project.data.services.join(' / ')}
+    {project.services.map((service) => service.title).join(' / ')}
   </p>
 </article>
