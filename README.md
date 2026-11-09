@@ -31,7 +31,9 @@ pnpm build
 
 Site Settings is loaded at request time from published Sanity content through the CDN. The shared header, footer, newsletter copy, contact details, social links, footer tagline, and default SEO metadata have no local-content fallback.
 
-Local development uses the public `development` dataset. Netlify production must set `PUBLIC_SANITY_DATASET=production`. Copy `.env.example` to `.env`, add local-only migration credentials, then run the dataset and migration commands above. The write token is not needed by the deployed website.
+Local development uses the public `development` dataset. Netlify production must set `PUBLIC_SANITY_DATASET=production`. Copy `.env.example` to `.env`, add local-only migration credentials, a Viewer `SANITY_API_READ_TOKEN`, and a random `SANITY_PREVIEW_SESSION_SECRET` of at least 32 characters. The write token is not needed by the deployed website.
+
+Presentation enables draft preview through `/api/preview/enable`; `/api/preview/exit` clears the signed, secure preview cookie. Authenticated Studio and preview access are restricted to `http://localhost:4321` and `https://stillroom-app.netlify.app`. Configure those exact origins with credentials in Sanity project CORS settings; do not add Netlify Deploy Preview wildcards.
 
 Sanity source is organized under `src/sanity/`, with generated schema and query types in `sanity.types.ts`. Regenerate them with `pnpm sanity:typegen`.
 

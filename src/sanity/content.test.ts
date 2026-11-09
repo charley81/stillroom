@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import {
   MissingContentError,
-  createPublishedContent,
+  createContent,
   requireSiteSettings,
 } from './content'
 import { SITE_SETTINGS_QUERY } from './queries/site-settings'
@@ -40,10 +40,14 @@ const completeSiteSettings = {
 
 describe('published Sanity content', () => {
   it('uses the CDN and published perspective without a token', async () => {
-    const fetch = vi.fn().mockResolvedValue(completeSiteSettings)
+    const fetch = vi.fn().mockResolvedValue({
+      result: completeSiteSettings,
+      resultSourceMap: undefined,
+    })
     const createClient = vi.fn().mockReturnValue({ fetch })
-    const content = createPublishedContent(
+    const content = createContent(
       { projectId: 'project', dataset: 'development' },
+      {},
       createClient,
     )
 
@@ -60,8 +64,58 @@ describe('published Sanity content', () => {
     expect(fetch).toHaveBeenCalledWith(
       SITE_SETTINGS_QUERY,
       {},
-      expect.objectContaining({ perspective: 'published' }),
+      expect.objectContaining({
+        perspective: 'published',
+        resultSourceMap: false,
+        stega: false,
+        useCdn: true,
+      }),
     )
+    expect(fetch.mock.calls[0][2]).not.toHaveProperty('token')
+  })
+
+  it('uses the same query with drafts, source maps, stega, and a server-only read token in preview', async () => {
+    const fetch = vi.fn().mockResolvedValue({
+      result: { ...completeSiteSettings, footerTagline: 'Draft tagline' },
+      resultSourceMap: { mappings: {} },
+    })
+    const createClient = vi.fn().mockReturnValue({ fetch })
+    const content = createContent(
+      { projectId: 'project', dataset: 'development' },
+      {
+        preview: { enabled: true, perspective: 'drafts' },
+        readToken: 'server-read-token',
+      },
+      createClient,
+    )
+
+    const result = await content.loadQuery(SITE_SETTINGS_QUERY)
+
+    expect(result.data).toEqual(
+      expect.objectContaining({ footerTagline: 'Draft tagline' }),
+    )
+    expect(result.perspective).toBe('drafts')
+    expect(fetch).toHaveBeenCalledWith(
+      SITE_SETTINGS_QUERY,
+      {},
+      expect.objectContaining({
+        perspective: 'drafts',
+        resultSourceMap: 'withKeyArraySelector',
+        stega: true,
+        token: 'server-read-token',
+        useCdn: false,
+      }),
+    )
+    expect(JSON.stringify(result)).not.toContain('server-read-token')
+  })
+
+  it('refuses preview queries when the server read token is missing', () => {
+    expect(() =>
+      createContent(
+        { projectId: 'project', dataset: 'development' },
+        { preview: { enabled: true, perspective: 'drafts' } },
+      ),
+    ).toThrow('SANITY_API_READ_TOKEN')
   })
 
   it('fails clearly when required Site Settings content is missing', () => {

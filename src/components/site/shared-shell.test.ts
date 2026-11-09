@@ -52,6 +52,7 @@ describe('Sanity-backed shared shell', () => {
     expect(html).toContain('What we do')
     expect(html).toContain('href="/contact"')
     expect(html).toContain('Make something')
+    expect(html).not.toContain('href="/studio"')
   })
 
   it('renders contact, social, newsletter, tagline and generated year content', async () => {

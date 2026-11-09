@@ -1,8 +1,11 @@
 ---
+import { stegaClean } from '@sanity/client/stega'
+import { VisualEditing } from '@sanity/astro/visual-editing'
 import { Font } from 'astro:assets'
 import Footer from '../components/site/Footer.astro'
 import Header from '../components/site/Header.astro'
 import { getSiteSettings } from '../sanity/content'
+import { PUBLIC_PREVIEW_STATE } from '../sanity/preview'
 import '../styles/global.css'
 
 interface Props {
@@ -11,7 +14,8 @@ interface Props {
   showFooter?: boolean
 }
 
-const settings = await getSiteSettings()
+const preview = Astro.locals.preview ?? PUBLIC_PREVIEW_STATE
+const settings = await getSiteSettings(preview)
 const {
   title = settings.defaultSeoTitle,
   description = settings.defaultSeoDescription,
@@ -19,6 +23,11 @@ const {
 } = Astro.props
 
 const pathname = Astro.url.pathname.replace(/\/+$/, '') || '/'
+const cleanTitle = stegaClean(title)
+const cleanDescription = stegaClean(description)
+const cleanSocialImageUrl = stegaClean(settings.defaultSocialImage.url)
+const cleanStudioName = stegaClean(settings.studioName)
+const exitPreviewHref = `/api/preview/exit?redirect=${encodeURIComponent(pathname)}`
 ---
 
 <!doctype html>
@@ -26,15 +35,15 @@ const pathname = Astro.url.pathname.replace(/\/+$/, '') || '/'
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content={description} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:image" content={settings.defaultSocialImage.url} />
-    <meta property="og:site_name" content={settings.studioName} />
+    <meta name="description" content={cleanDescription} />
+    <meta property="og:title" content={cleanTitle} />
+    <meta property="og:description" content={cleanDescription} />
+    <meta property="og:image" content={cleanSocialImageUrl} />
+    <meta property="og:site_name" content={cleanStudioName} />
     <meta name="theme-color" content="#fff7eb" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
+    <title>{cleanTitle}</title>
     <Font
       cssVariable="--font-anton"
       preload={[{ weight: 400, style: 'normal', subset: 'latin' }]}
@@ -54,5 +63,14 @@ const pathname = Astro.url.pathname.replace(/\/+$/, '') || '/'
       <slot />
     </main>
     {showFooter && <Footer settings={settings} />}
+    {preview.enabled && (
+      <a
+        href={exitPreviewHref}
+        class="fixed right-4 bottom-4 z-[1001] rounded-full bg-dark px-5 py-3 font-body text-sm font-bold text-light shadow-lg"
+      >
+        Exit preview
+      </a>
+    )}
+    <VisualEditing enabled={preview.enabled} zIndex={1000} />
   </body>
 </html>

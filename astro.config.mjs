@@ -28,6 +28,7 @@ export default defineConfig({
       apiVersion: SANITY_API_VERSION,
       useCdn: true,
       studioBasePath: '/studio',
+      stega: { studioUrl: '/studio' },
       injectTypes: true,
     }),
     react(),
