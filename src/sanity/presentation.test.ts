@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest'
 import {
   PRESENTATION_OPTIONS,
   TRUSTED_PRESENTATION_ORIGINS,
+  aboutPageLocations,
   authorLocations,
+  clientLogoLocations,
   contactPageLocations,
   journalArticleLocations,
   journalCategoryLocations,
@@ -162,6 +164,21 @@ describe('Sanity Presentation configuration', () => {
         journalArticle: journalArticleLocations,
         author: authorLocations,
         journalCategory: journalCategoryLocations,
+      }),
+    )
+  })
+
+  it('locates About and Client Logo documents on the About route', () => {
+    expect(aboutPageLocations.locations).toEqual([
+      { title: 'About', href: '/about' },
+    ])
+    expect(
+      clientLogoLocations.resolve({ clientName: 'Orlo House' }).locations,
+    ).toEqual([{ title: 'About', href: '/about' }])
+    expect(PRESENTATION_OPTIONS.resolve?.locations).toEqual(
+      expect.objectContaining({
+        aboutPage: aboutPageLocations,
+        clientLogo: clientLogoLocations,
       }),
     )
   })

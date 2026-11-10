@@ -6,6 +6,7 @@ import {
 } from '@sanity/client'
 import { stegaClean } from '@sanity/client/stega'
 import type {
+  ABOUT_PAGE_QUERY_RESULT,
   CONTACT_PAGE_QUERY_RESULT,
   JOURNAL_ARTICLE_QUERY_RESULT,
   JOURNAL_PAGE_QUERY_RESULT,
@@ -20,6 +21,7 @@ import {
   type SanityEnvironmentConfig,
 } from './environment'
 import { PUBLIC_PREVIEW_STATE, type PreviewState } from './preview'
+import { ABOUT_PAGE_QUERY } from './queries/about'
 import {
   CONTACT_PAGE_QUERY,
   SERVICES_PAGE_QUERY,
@@ -83,6 +85,28 @@ export type ServicesPage = Omit<
 export interface ContactServiceOption {
   label: string
   value: string
+}
+
+type GeneratedAboutPage = NonNullable<ABOUT_PAGE_QUERY_RESULT>
+type GeneratedTeamProfile = GeneratedAboutPage['teamMembers'][number]
+
+export interface ClientLogo {
+  _id: string
+  clientName: string
+  url: string
+  mimeType: string | null
+}
+
+export type AboutPage = Omit<
+  GeneratedAboutPage,
+  'heroImage' | 'founderImage' | 'teamMembers' | 'clientLogos'
+> & {
+  heroImage: ContentImage
+  founderImage: ContentImage
+  teamMembers: Array<
+    Omit<GeneratedTeamProfile, 'portrait'> & { portrait: ContentImage }
+  >
+  clientLogos: ClientLogo[]
 }
 
 type GeneratedWorkPage = NonNullable<WORK_PAGE_QUERY_RESULT>
@@ -466,6 +490,99 @@ export function requireServicesPage(value: unknown): ServicesPage {
   }
 
   return value as ServicesPage
+}
+
+export function requireAboutPage(value: unknown): AboutPage {
+  if (!value || typeof value !== 'object') {
+    throw new MissingContentError(
+      'Required About document "aboutPage" was not found in Sanity content.',
+    )
+  }
+
+  const page = value as Record<string, unknown>
+  ;[
+    'heading',
+    'founderHeading',
+    'founderName',
+    'founderRole',
+    'teamHeading',
+    'teamIntroduction',
+    'principlesHeading',
+    'clientProofHeading',
+    'clientProofCopy',
+    'clientProofCtaLabel',
+    'finalCtaEyebrow',
+    'finalCtaHeading',
+    'finalCtaLabel',
+  ].forEach((field) => requireString(page, field, 'About'))
+  requireContentImage(page.heroImage, 'heroImage')
+  requireContentImage(page.founderImage, 'founderImage')
+
+  if (!Array.isArray(page.founderStory) || page.founderStory.length === 0) {
+    throw new MissingContentError(
+      'About is missing required content: founderStory',
+    )
+  }
+
+  const teamMembers = page.teamMembers
+  if (!Array.isArray(teamMembers) || teamMembers.length !== 3) {
+    throw new MissingContentError('About requires exactly three team profiles.')
+  }
+  teamMembers.forEach((item, index) => {
+    if (!item || typeof item !== 'object') {
+      throw new MissingContentError(`About is missing teamMembers[${index}].`)
+    }
+    const profile = item as Record<string, unknown>
+    ;['name', 'role', 'biography'].forEach((field) =>
+      requireString(profile, field, `About teamMembers[${index}]`),
+    )
+    requireContentImage(profile.portrait, `teamMembers[${index}].portrait`)
+  })
+
+  const principles = page.principles
+  if (!Array.isArray(principles) || principles.length !== 3) {
+    throw new MissingContentError(
+      'About requires exactly three working principles.',
+    )
+  }
+  principles.forEach((item, index) => {
+    if (!item || typeof item !== 'object') {
+      throw new MissingContentError(`About is missing principles[${index}].`)
+    }
+    const principle = item as Record<string, unknown>
+    ;['title', 'description'].forEach((field) =>
+      requireString(principle, field, `About principles[${index}]`),
+    )
+  })
+
+  const clientLogos = page.clientLogos
+  if (!Array.isArray(clientLogos) || clientLogos.length !== 5) {
+    throw new MissingContentError(
+      'About requires exactly five Client Logo references.',
+    )
+  }
+  const logoIds = clientLogos.map((item, index) => {
+    if (!item || typeof item !== 'object') {
+      throw new MissingContentError(`About is missing clientLogos[${index}].`)
+    }
+    const logo = item as Record<string, unknown>
+    requireString(logo, '_id', `About clientLogos[${index}]`)
+    requireString(logo, 'clientName', `About clientLogos[${index}]`)
+    requireString(logo, 'url', `About clientLogos[${index}]`)
+    if (logo.mimeType !== null && typeof logo.mimeType !== 'string') {
+      throw new MissingContentError(
+        `About clientLogos[${index}] is missing required content: mimeType`,
+      )
+    }
+    return String(logo._id).replace(/^drafts\./, '')
+  })
+  if (new Set(logoIds).size !== clientLogos.length) {
+    throw new MissingContentError(
+      'About requires five unique Client Logo references.',
+    )
+  }
+
+  return value as AboutPage
 }
 
 export function requireContactPage(value: unknown): ContactPage {
@@ -876,6 +993,13 @@ export async function getServicesPage(
 ): Promise<ServicesPage> {
   const { data } = await getContent(preview).loadQuery(SERVICES_PAGE_QUERY)
   return requireServicesPage(data)
+}
+
+export async function getAboutPage(
+  preview: PreviewState = PUBLIC_PREVIEW_STATE,
+): Promise<AboutPage> {
+  const { data } = await getContent(preview).loadQuery(ABOUT_PAGE_QUERY)
+  return requireAboutPage(data)
 }
 
 export async function getContactPage(

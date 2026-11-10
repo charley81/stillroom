@@ -15,6 +15,14 @@
 export declare const internalGroqTypeReferenceTo: unique symbol
 
 // Source: schema.json
+export type TeamProfile = {
+  _type: 'teamProfile'
+  name: string
+  role: string
+  biography: string
+  portrait: EditorialImage
+}
+
 export type SocialLink = {
   _type: 'socialLink'
   platform: string
@@ -63,24 +71,7 @@ export type WorkProjectGalleryImage = {
 export type NarrativeSection = {
   _type: 'narrativeSection'
   heading: string
-  content: Array<{
-    children?: Array<{
-      marks?: Array<string>
-      text?: string
-      _type: 'span'
-      _key: string
-    }>
-    style?: 'normal'
-    listItem?: never
-    markDefs?: Array<{
-      href: string
-      _type: 'link'
-      _key: string
-    }>
-    level?: number
-    _type: 'block'
-    _key: string
-  }>
+  content: ConstrainedRichText
 }
 
 export type JournalArticlePullQuote = {
@@ -131,6 +122,57 @@ export type EditorialImage = {
     crop?: SanityImageCrop
     _type: 'image'
   }
+}
+
+export type ConstrainedRichText = Array<{
+  children?: Array<{
+    marks?: Array<string>
+    text?: string
+    _type: 'span'
+    _key: string
+  }>
+  style?: 'normal'
+  listItem?: never
+  markDefs?: Array<{
+    href: string
+    _type: 'link'
+    _key: string
+  }>
+  level?: number
+  _type: 'block'
+  _key: string
+}>
+
+export type ClientLogo = {
+  _id: string
+  _type: 'clientLogo'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  clientName: string
+  logo: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    _type: 'image'
+  }
+}
+
+export type SanityImageCrop = {
+  _type: 'sanity.imageCrop'
+  top: number
+  bottom: number
+  left: number
+  right: number
+}
+
+export type SanityImageHotspot = {
+  _type: 'sanity.imageHotspot'
+  x: number
+  y: number
+  height: number
+  width: number
 }
 
 export type Service = {
@@ -185,24 +227,7 @@ export type WorkProject = {
       } & WorkProjectGalleryBrandPanel)
   >
   outcomeHeading: string
-  outcomeCopy: Array<{
-    children?: Array<{
-      marks?: Array<string>
-      text?: string
-      _type: 'span'
-      _key: string
-    }>
-    style?: 'normal'
-    listItem?: never
-    markDefs?: Array<{
-      href: string
-      _type: 'link'
-      _key: string
-    }>
-    level?: number
-    _type: 'block'
-    _key: string
-  }>
+  outcomeCopy: ConstrainedRichText
   seo?: SeoFields
 }
 
@@ -366,20 +391,52 @@ export type WorkPage = {
   seo?: SeoFields
 }
 
-export type SanityImageCrop = {
-  _type: 'sanity.imageCrop'
-  top: number
-  bottom: number
-  left: number
-  right: number
+export type ClientLogoReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'clientLogo'
 }
 
-export type SanityImageHotspot = {
-  _type: 'sanity.imageHotspot'
-  x: number
-  y: number
-  height: number
-  width: number
+export type AboutPage = {
+  _id: string
+  _type: 'aboutPage'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  heading: string
+  heroImage: EditorialImage
+  founderHeading: string
+  founderStory: ConstrainedRichText
+  founderName: string
+  founderRole: string
+  founderImage: EditorialImage
+  teamHeading: string
+  teamIntroduction: string
+  teamMembers: Array<
+    {
+      _key: string
+    } & TeamProfile
+  >
+  principlesHeading: string
+  principles: Array<{
+    title: string
+    description: string
+    _type: 'workingPrinciple'
+    _key: string
+  }>
+  clientProofHeading: string
+  clientProofCopy: string
+  clientLogos: Array<
+    {
+      _key: string
+    } & ClientLogoReference
+  >
+  clientProofCtaLabel: string
+  finalCtaEyebrow: string
+  finalCtaHeading: string
+  finalCtaLabel: string
+  seo?: SeoFields
 }
 
 export type SiteSettings = {
@@ -509,6 +566,7 @@ export type Geopoint = {
 }
 
 export type AllSanitySchemaTypes =
+  | TeamProfile
   | SocialLink
   | SanityImageAssetReference
   | SeoFields
@@ -519,6 +577,10 @@ export type AllSanitySchemaTypes =
   | JournalArticlePullQuote
   | JournalArticleSection
   | EditorialImage
+  | ConstrainedRichText
+  | ClientLogo
+  | SanityImageCrop
+  | SanityImageHotspot
   | Service
   | ServiceReference
   | WorkProject
@@ -534,8 +596,8 @@ export type AllSanitySchemaTypes =
   | ServicesPage
   | WorkProjectReference
   | WorkPage
-  | SanityImageCrop
-  | SanityImageHotspot
+  | ClientLogoReference
+  | AboutPage
   | SiteSettings
   | SanityImagePaletteSwatch
   | SanityImagePalette
@@ -545,6 +607,72 @@ export type AllSanitySchemaTypes =
   | SanityAssetSourceData
   | SanityImageAsset
   | Geopoint
+
+// Source: src/sanity/queries/about.ts
+// Variable: ABOUT_PAGE_QUERY
+// Query: *[_type == "aboutPage" && _id == "aboutPage"][0]{    _id,    heading,    heroImage{        decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url    },    founderHeading,    founderStory,    founderName,    founderRole,    founderImage{        decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url    },    teamHeading,    teamIntroduction,    teamMembers[]{      _key,      _type,      name,      role,      biography,      portrait{          decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url      }    },    principles[]{      _key,      _type,      title,      description    },    principlesHeading,    clientProofHeading,    clientProofCopy,    clientLogos[]->{      _id,      clientName,      "url": logo.asset->url,      "mimeType": logo.asset->mimeType    },    clientProofCtaLabel,    finalCtaEyebrow,    finalCtaHeading,    finalCtaLabel,    seo{        metaTitle,  metaDescription,  "socialImageUrl": socialImage.asset->url    }  }
+export type ABOUT_PAGE_QUERY_RESULT = {
+  _id: 'aboutPage'
+  heading: string
+  heroImage: {
+    decorative: boolean
+    alt: string | null
+    caption: string | null
+    url: string | null
+    mobileUrl: string | null
+  }
+  founderHeading: string
+  founderStory: ConstrainedRichText
+  founderName: string
+  founderRole: string
+  founderImage: {
+    decorative: boolean
+    alt: string | null
+    caption: string | null
+    url: string | null
+    mobileUrl: string | null
+  }
+  teamHeading: string
+  teamIntroduction: string
+  teamMembers: Array<{
+    _key: string
+    _type: 'teamProfile'
+    name: string
+    role: string
+    biography: string
+    portrait: {
+      decorative: boolean
+      alt: string | null
+      caption: string | null
+      url: string | null
+      mobileUrl: string | null
+    }
+  }>
+  principles: Array<{
+    _key: string
+    _type: 'workingPrinciple'
+    title: string
+    description: string
+  }>
+  principlesHeading: string
+  clientProofHeading: string
+  clientProofCopy: string
+  clientLogos: Array<{
+    _id: string
+    clientName: string
+    url: string | null
+    mimeType: string | null
+  }>
+  clientProofCtaLabel: string
+  finalCtaEyebrow: string
+  finalCtaHeading: string
+  finalCtaLabel: string
+  seo: {
+    metaTitle: string | null
+    metaDescription: string | null
+    socialImageUrl: string | null
+  } | null
+} | null
 
 // Source: src/sanity/queries/journal.ts
 // Variable: JOURNAL_PAGE_QUERY
@@ -930,45 +1058,11 @@ export type WORK_PROJECT_QUERY_RESULT = {
     }
     challenge: {
       heading: string
-      content: Array<{
-        children?: Array<{
-          marks?: Array<string>
-          text?: string
-          _type: 'span'
-          _key: string
-        }>
-        style?: 'normal'
-        listItem?: never
-        markDefs?: Array<{
-          href: string
-          _type: 'link'
-          _key: string
-        }>
-        level?: number
-        _type: 'block'
-        _key: string
-      }>
+      content: ConstrainedRichText
     }
     contribution: {
       heading: string
-      content: Array<{
-        children?: Array<{
-          marks?: Array<string>
-          text?: string
-          _type: 'span'
-          _key: string
-        }>
-        style?: 'normal'
-        listItem?: never
-        markDefs?: Array<{
-          href: string
-          _type: 'link'
-          _key: string
-        }>
-        level?: number
-        _type: 'block'
-        _key: string
-      }>
+      content: ConstrainedRichText
     }
     galleryHeading: string
     gallery: Array<
@@ -999,24 +1093,7 @@ export type WORK_PROJECT_QUERY_RESULT = {
         }
     >
     outcomeHeading: string
-    outcomeCopy: Array<{
-      children?: Array<{
-        marks?: Array<string>
-        text?: string
-        _type: 'span'
-        _key: string
-      }>
-      style?: 'normal'
-      listItem?: never
-      markDefs?: Array<{
-        href: string
-        _type: 'link'
-        _key: string
-      }>
-      level?: number
-      _type: 'block'
-      _key: string
-    }>
+    outcomeCopy: ConstrainedRichText
     seo: {
       metaTitle: string | null
       metaDescription: string | null
@@ -1028,6 +1105,7 @@ export type WORK_PROJECT_QUERY_RESULT = {
 // Query TypeMap
 declare global {
   interface SanityQueries {
+    '\n  *[_type == "aboutPage" && _id == "aboutPage"][0]{\n    _id,\n    heading,\n    heroImage{\n      \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n    },\n    founderHeading,\n    founderStory,\n    founderName,\n    founderRole,\n    founderImage{\n      \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n    },\n    teamHeading,\n    teamIntroduction,\n    teamMembers[]{\n      _key,\n      _type,\n      name,\n      role,\n      biography,\n      portrait{\n        \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n      }\n    },\n    principles[]{\n      _key,\n      _type,\n      title,\n      description\n    },\n    principlesHeading,\n    clientProofHeading,\n    clientProofCopy,\n    clientLogos[]->{\n      _id,\n      clientName,\n      "url": logo.asset->url,\n      "mimeType": logo.asset->mimeType\n    },\n    clientProofCtaLabel,\n    finalCtaEyebrow,\n    finalCtaHeading,\n    finalCtaLabel,\n    seo{\n      \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n    }\n  }\n': ABOUT_PAGE_QUERY_RESULT
     '\n  {\n    "page": *[_type == "journalPage" && _id == "journalPage"][0]{\n      _id,\n      heading,\n      introduction,\n      introductionArtwork{\n        \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n      },\n      featuredJournalArticle->{\n        \n  _id,\n  title,\n  "slug": slug.current,\n  category->{\n    \n  _id,\n  title,\n  "slug": slug.current\n\n  },\n  publicationDate,\n  standfirst,\n  readingTime,\n  heroImage{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n  }\n\n      },\n      seo{\n        \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n      }\n    },\n    "articles": *[\n      _type == "journalArticle" &&\n      !(_id in [\n        *[_type == "journalPage" && _id == "journalPage"][0].featuredJournalArticle._ref,\n        "drafts." + *[_type == "journalPage" && _id == "journalPage"][0].featuredJournalArticle._ref\n      ])\n    ] | order(publicationDate desc){\n      \n  _id,\n  title,\n  "slug": slug.current,\n  category->{\n    \n  _id,\n  title,\n  "slug": slug.current\n\n  },\n  publicationDate,\n  standfirst,\n  readingTime,\n  heroImage{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n  }\n\n    }\n  }\n': JOURNAL_PAGE_QUERY_RESULT
     '\n  {\n    "article": *[_type == "journalArticle" && slug.current == $slug][0]{\n      \n  _id,\n  title,\n  "slug": slug.current,\n  category->{\n    \n  _id,\n  title,\n  "slug": slug.current\n\n  },\n  publicationDate,\n  standfirst,\n  readingTime,\n  heroImage{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n  }\n,\n      author->{\n        \n  _id,\n  name,\n  biography\n\n      },\n      body[]{\n        _key,\n        _type,\n        _type == "journalArticleSection" => {\n          label,\n          content\n        },\n        _type == "journalArticlePullQuote" => {\n          label,\n          quote\n        }\n      },\n      relatedJournalArticles[]->{\n        \n  _id,\n  title,\n  "slug": slug.current,\n  category->{\n    \n  _id,\n  title,\n  "slug": slug.current\n\n  },\n  publicationDate,\n  standfirst,\n  readingTime,\n  heroImage{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n  }\n\n      },\n      seo{\n        \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n      }\n    }\n  }\n': JOURNAL_ARTICLE_QUERY_RESULT
     '\n  *[_type == "servicesPage" && _id == "servicesPage"][0]{\n    _id,\n    heroHeading,\n    heroIntroduction,\n    heroImage{\n      \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n    },\n    heroCtaLabel,\n    services[]->{\n      _id,\n      title,\n      shortSummary,\n      description,\n      image{\n        \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n      },\n      deliverables\n    },\n    processHeading,\n    processSteps[]{\n      _key,\n      title,\n      description\n    },\n    hospitalityHeading,\n    hospitalitySectorLabels,\n    hospitalityPointOfView,\n    hospitalityImage{\n      \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n    },\n    hospitalityCtaLabel,\n    finalStatementEyebrow,\n    finalStatementHeading,\n    seo{\n      \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n    }\n  }\n': SERVICES_PAGE_QUERY_RESULT

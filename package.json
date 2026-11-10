@@ -20,6 +20,8 @@
     "sanity:migrate:work:publish": "tsx scripts/sanity/migrate-work.ts --publish",
     "sanity:migrate:journal": "tsx scripts/sanity/migrate-journal.ts",
     "sanity:migrate:journal:publish": "tsx scripts/sanity/migrate-journal.ts --publish",
+    "sanity:migrate:about": "tsx scripts/sanity/migrate-about.ts",
+    "sanity:migrate:about:publish": "tsx scripts/sanity/migrate-about.ts --publish",
     "sanity:typegen": "sanity schema extract --enforce-required-fields --force && sanity typegen generate",
     "sanity:typegen:check": "pnpm sanity:typegen && git diff --exit-code -- schema.json sanity.types.ts",
     "format": "prettier . --write",

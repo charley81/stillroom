@@ -1,45 +1,27 @@
 ---
-import { Image } from 'astro:assets'
+import type { AboutPage } from '../../sanity/content'
+import EditorialImage from '../content/EditorialImage.astro'
 
-const team = [
-  {
-    name: 'Alex Morgan',
-    role: 'Founder / Creative direction',
-    portrait: '/figma-assets/alex-morgan.png',
-    bio: 'Alex brings a love of hospitality and a clear creative point of view to the studio, guiding every project from first conversation to final detail.',
-  },
-  {
-    name: 'Maya Chen',
-    role: 'Strategy / Design',
-    portrait: '/figma-assets/maya-chen.png',
-    bio: 'Maya connects the story to the system, finding what makes a place distinctive and shaping identities with warmth, clarity and character.',
-  },
-  {
-    name: 'Sam Rivera',
-    role: 'Digital / Collaboration',
-    portrait: '/figma-assets/sam-rivera.png',
-    bio: 'Sam brings brands to life online, pairing thoughtful design with intuitive digital experiences that make every interaction feel considered.',
-  },
-]
+interface Props {
+  page: AboutPage
+}
+
+const { page } = Astro.props
 ---
 
 <section class="flex h-[2298.233px] flex-col gap-8 overflow-hidden px-4 py-16 md:h-[1175px] md:gap-16 md:px-8 md:py-32">
   <div class="grid w-full grid-cols-1 gap-4 md:grid-cols-2 md:gap-16">
-    <h2 class="m-0 font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[72px] md:leading-[1.05]">
-      Good company.
+    <h2 class="m-0 whitespace-pre-line font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[72px] md:leading-[1.05]">
+      {page.teamHeading}
     </h2>
-    <p class="m-0 leading-[27px] text-dark">
-      A close-knit team, with the right collaborators around the table.
-      Strategy, design and digital working together from the start.
-    </p>
+    <p class="m-0 leading-[27px] text-dark">{page.teamIntroduction}</p>
   </div>
   <div class="grid w-full grid-cols-1 gap-8 md:grid-cols-3">
-    {team.map((person) => (
+    {page.teamMembers.map((person) => (
       <article class="flex flex-col gap-4 overflow-hidden py-8 md:gap-8">
-        <Image
+        <EditorialImage
           class="h-[358.078px] w-full rounded-md object-cover object-top md:h-[480px]"
-          src={person.portrait}
-          alt=""
+          image={person.portrait}
           width={1122}
           height={1402}
         />
@@ -47,7 +29,7 @@ const team = [
           {person.name}
         </h3>
         <p class="m-0 leading-5 text-primary uppercase">{person.role}</p>
-        <p class="m-0 leading-[27px] text-dark-grey">{person.bio}</p>
+        <p class="m-0 leading-[27px] text-dark-grey">{person.biography}</p>
       </article>
     ))}
   </div>

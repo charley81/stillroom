@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  ABOUT_PAGE_ID,
   CONTACT_PAGE_ID,
   filterSingletonActions,
   JOURNAL_PAGE_ID,
@@ -26,7 +27,7 @@ describe('Site Settings singleton behavior', () => {
     ).toEqual(['publish', 'discardChanges'])
   })
 
-  it('protects the Work, Services, Journal, and Contact singleton documents', () => {
+  it('protects the Work, Services, About, Journal, and Contact singleton documents', () => {
     const actions = [
       { action: 'publish' },
       { action: 'duplicate' },
@@ -43,6 +44,12 @@ describe('Site Settings singleton behavior', () => {
       filterSingletonActions(actions, {
         documentId: SERVICES_PAGE_ID,
         schemaType: 'servicesPage',
+      }).map((action) => action.action),
+    ).toEqual(['publish'])
+    expect(
+      filterSingletonActions(actions, {
+        documentId: ABOUT_PAGE_ID,
+        schemaType: 'aboutPage',
       }).map((action) => action.action),
     ).toEqual(['publish'])
     expect(
@@ -66,6 +73,7 @@ describe('Site Settings singleton behavior', () => {
       { templateId: 'servicesPage', schemaType: 'servicesPage' },
       { templateId: 'contactPage', schemaType: 'contactPage' },
       { templateId: 'journalPage', schemaType: 'journalPage' },
+      { templateId: 'aboutPage', schemaType: 'aboutPage' },
       { templateId: 'service', schemaType: 'service' },
     ]
 

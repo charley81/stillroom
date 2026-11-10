@@ -1,96 +1,79 @@
 ---
-import { Image } from 'astro:assets'
+import { stegaClean } from '@sanity/client/stega'
+import type { ClientLogo } from '../../sanity/content'
 
 interface Props {
+  logos?: ClientLogo[]
   variant?: 'strip' | 'proof'
 }
 
-const { variant = 'strip' } = Astro.props
+const { logos, variant = 'strip' } = Astro.props
 
-const clients = [
+const fallbackLogos: ClientLogo[] = [
   {
-    name: 'Orlo',
-    tagline: 'A quieter kind of stay',
-    symbol: '/figma-assets/orlo-house.svg',
-    symbolWidth: 44,
-    symbolHeight: 44,
-    containerClass: 'h-[92px]',
-    imageClass: 'h-11 w-11',
-    nameClass:
-      'h-[38px] font-orlo text-[25px] leading-none font-normal uppercase',
+    _id: 'client-logo-orlo-house',
+    clientName: 'Orlo House',
+    url: '/figma-assets/client-logos/orlo-house.svg',
+    mimeType: 'image/svg+xml',
   },
   {
-    name: 'Juniper',
-    tagline: 'Café & aperitivo',
-    symbol: '/figma-assets/juniper.svg',
-    symbolWidth: 44,
-    symbolHeight: 38,
-    containerClass: 'h-[89px]',
-    imageClass: 'h-[38px] w-11',
-    nameClass: 'h-[41px] font-juniper text-[34px] leading-none font-semibold',
+    _id: 'client-logo-juniper',
+    clientName: 'Juniper',
+    url: '/figma-assets/client-logos/juniper.svg',
+    mimeType: 'image/svg+xml',
   },
   {
-    name: 'Fieldwork',
-    tagline: 'Rooted in the everyday',
-    symbol: '/figma-assets/fieldwork.svg',
-    symbolWidth: 44,
-    symbolHeight: 44,
-    containerClass: 'h-[82px]',
-    imageClass: 'h-11 w-11',
-    nameClass:
-      'h-7 font-geometric text-[22px] leading-none font-bold tracking-[1.4px] uppercase',
+    _id: 'client-logo-fieldwork',
+    clientName: 'Fieldwork',
+    url: '/figma-assets/client-logos/fieldwork.svg',
+    mimeType: 'image/svg+xml',
   },
   {
-    name: 'The Table',
-    tagline: 'Pull up a chair',
-    symbol: '/figma-assets/long-table.svg',
-    symbolWidth: 44,
-    symbolHeight: 44,
-    containerClass: 'h-[81px]',
-    imageClass: 'h-11 w-11',
-    nameClass:
-      'h-[27px] font-long-table text-[22px] leading-none font-normal italic',
+    _id: 'client-logo-the-long-table',
+    clientName: 'The Long Table',
+    url: '/figma-assets/client-logos/the-long-table.svg',
+    mimeType: 'image/svg+xml',
   },
   {
-    name: 'Morrow',
-    tagline: 'Good things ahead',
-    symbol: '/figma-assets/morrow.svg',
-    symbolWidth: 44,
-    symbolHeight: 44,
-    containerClass: 'h-[95px]',
-    imageClass: 'h-11 w-11',
-    nameClass: 'h-[41px] font-geometric text-[32px] leading-none font-bold',
+    _id: 'client-logo-morrow',
+    clientName: 'Morrow',
+    url: '/figma-assets/client-logos/morrow.svg',
+    mimeType: 'image/svg+xml',
   },
 ]
 
+const renderedLogos = logos ?? fallbackLogos
+const mobileHeights = [
+  'h-[92px]',
+  'h-[89px]',
+  'h-[82px]',
+  'h-[81px]',
+  'h-[95px]',
+]
 const desktopHeight = variant === 'proof' ? 'md:h-[289px]' : 'md:h-[114px]'
 ---
 
 <div
   class="grid w-full grid-cols-1 gap-5 md:min-h-[114px] md:grid-cols-5"
-  aria-label="Concept hospitality brands"
+  aria-label="Client Logos"
 >
-  {clients.map((client) => (
+  {renderedLogos.map((logo, index) => (
     <div
       class:list={[
-        'flex min-h-0 flex-col items-center justify-start overflow-hidden text-dark md:justify-center',
+        'flex min-h-0 items-center justify-center overflow-hidden',
         desktopHeight,
-        client.containerClass,
+        mobileHeights[index] ?? 'h-[92px]',
       ]}
     >
-      <Image
-        class:list={['object-contain', client.imageClass]}
-        src={client.symbol}
-        alt=""
-        width={client.symbolWidth}
-        height={client.symbolHeight}
+      <img
+        class="h-full w-full object-contain md:h-[100px]"
+        src={stegaClean(logo.url)}
+        alt={stegaClean(logo.clientName)}
+        width="220"
+        height="100"
+        loading="lazy"
+        decoding="async"
       />
-      <strong class:list={['block text-dark normal-case', client.nameClass]}>
-        {client.name}
-      </strong>
-      <span class="font-body text-[8px] leading-none font-medium tracking-[2px] text-dark uppercase">
-        {client.tagline}
-      </span>
     </div>
   ))}
 </div>

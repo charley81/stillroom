@@ -1,6 +1,5 @@
 import { defineField, defineType } from 'sanity'
 import { PublishedSlugInput } from '../locked-slug-input'
-import { simplePortableText } from '../objects/simple-portable-text'
 import { approvedGalleryBlocks, uniqueReferences } from '../validation'
 
 export const workProject = defineType({
@@ -146,9 +145,8 @@ export const workProject = defineType({
     defineField({
       name: 'outcomeCopy',
       title: 'Outcome copy',
-      type: 'array',
+      type: 'constrainedRichText',
       group: 'outcome',
-      of: simplePortableText,
       validation: (rule) => rule.required().min(1),
     }),
     defineField({

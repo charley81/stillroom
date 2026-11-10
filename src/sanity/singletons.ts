@@ -1,5 +1,6 @@
 import type { StructureResolver } from 'sanity/structure'
 import {
+  ABOUT_PAGE_ID,
   CONTACT_PAGE_ID,
   JOURNAL_PAGE_ID,
   SERVICES_PAGE_ID,
@@ -8,6 +9,7 @@ import {
 } from './constants'
 
 export {
+  ABOUT_PAGE_ID,
   CONTACT_PAGE_ID,
   JOURNAL_PAGE_ID,
   SERVICES_PAGE_ID,
@@ -20,6 +22,7 @@ const SINGLETON_IDS = new Map([
   ['workPage', WORK_PAGE_ID],
   ['servicesPage', SERVICES_PAGE_ID],
   ['contactPage', CONTACT_PAGE_ID],
+  ['aboutPage', ABOUT_PAGE_ID],
   ['journalPage', JOURNAL_PAGE_ID],
 ])
 const BLOCKED_SINGLETON_ACTIONS = new Set(['delete', 'duplicate'])
@@ -106,6 +109,15 @@ export const structure: StructureResolver = (S) =>
                     .documentId(SERVICES_PAGE_ID),
                 ),
               S.listItem()
+                .title('About')
+                .schemaType('aboutPage')
+                .child(
+                  S.document()
+                    .title('About')
+                    .schemaType('aboutPage')
+                    .documentId(ABOUT_PAGE_ID),
+                ),
+              S.listItem()
                 .title('Journal')
                 .schemaType('journalPage')
                 .child(
@@ -154,6 +166,9 @@ export const structure: StructureResolver = (S) =>
         .child(
           S.list()
             .title('Reusable Content')
-            .items([S.documentTypeListItem('service').title('Services')]),
+            .items([
+              S.documentTypeListItem('service').title('Services'),
+              S.documentTypeListItem('clientLogo').title('Client Logos'),
+            ]),
         ),
     ])

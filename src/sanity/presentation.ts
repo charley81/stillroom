@@ -148,6 +148,17 @@ export const contactPageLocations = {
   locations: [{ title: 'Contact', href: '/contact' }],
 } satisfies DocumentLocationsState
 
+export const aboutPageLocations = {
+  locations: [{ title: 'About', href: '/about' }],
+} satisfies DocumentLocationsState
+
+export const clientLogoLocations = {
+  select: { clientName: 'clientName' },
+  resolve: (_document: { clientName?: string } | null) => ({
+    locations: [{ title: 'About', href: '/about' }],
+  }),
+} satisfies DocumentLocationResolverObject<'clientName'>
+
 interface ServiceLocationValue {
   title?: string
   workProjects?: Array<{ title?: string; slug?: string }>
@@ -202,6 +213,7 @@ export const PRESENTATION_OPTIONS = {
       { route: '/work', type: 'workPage' },
       { route: '/work/:slug', type: 'workProject' },
       { route: '/services', type: 'servicesPage' },
+      { route: '/about', type: 'aboutPage' },
       { route: '/journal', type: 'journalPage' },
       { route: '/journal/:slug', type: 'journalArticle' },
       { route: '/contact', type: 'contactPage' },
@@ -216,6 +228,8 @@ export const PRESENTATION_OPTIONS = {
       author: authorLocations,
       journalCategory: journalCategoryLocations,
       contactPage: contactPageLocations,
+      aboutPage: aboutPageLocations,
+      clientLogo: clientLogoLocations,
       service: serviceLocations,
     },
   },

@@ -1,5 +1,4 @@
 import { defineField, defineType } from 'sanity'
-import { simplePortableText } from './simple-portable-text'
 
 export const narrativeSection = defineType({
   name: 'narrativeSection',
@@ -16,8 +15,7 @@ export const narrativeSection = defineType({
     defineField({
       name: 'content',
       title: 'Copy',
-      type: 'array',
-      of: simplePortableText,
+      type: 'constrainedRichText',
       validation: (rule) => rule.required().min(1),
     }),
   ],

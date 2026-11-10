@@ -1,42 +1,49 @@
 ---
-import { Image } from 'astro:assets'
+import ClientProof from '../components/about/ClientProof.astro'
 import FounderStory from '../components/about/FounderStory.astro'
 import TeamOverview from '../components/about/TeamOverview.astro'
 import WorkingPrinciples from '../components/about/WorkingPrinciples.astro'
-import ClientLogoFonts from '../components/site/ClientLogoFonts.astro'
+import EditorialImage from '../components/content/EditorialImage.astro'
 import ProjectInvitation from '../components/site/ProjectInvitation.astro'
 import Layout from '../layouts/Layout.astro'
+import { getAboutPage } from '../sanity/content'
+import { PUBLIC_PREVIEW_STATE } from '../sanity/preview'
+
+const preview = Astro.locals.preview ?? PUBLIC_PREVIEW_STATE
+const page = await getAboutPage(preview)
+const title = page.seo?.metaTitle ?? `${page.heading} — Stillroom`
+const description =
+  page.seo?.metaDescription ??
+  page.teamIntroduction ??
+  'Stillroom is a small independent creative studio with plenty of soul.'
+const socialImageUrl = page.seo?.socialImageUrl ?? page.heroImage.url
 ---
 
-<Layout
-  title="About — Stillroom"
-  description="Stillroom is a small independent creative studio with plenty of soul."
->
-  <ClientLogoFonts slot="head" />
+<Layout title={title} description={description} socialImageUrl={socialImageUrl}>
   <section class="flex h-[260px] flex-col gap-16 overflow-hidden px-4 pt-4 pb-16 md:h-[1320px] md:px-8 md:pt-20 md:pb-16">
     <p class="m-0 font-body text-base leading-5 font-normal text-dark-grey uppercase">
       About Stillroom
     </p>
-    <h1 class="m-0 w-full font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[128px] md:leading-[1.05]">
-      Small team.
-      <br />
-      Plenty of soul.
+    <h1 class="m-0 w-full whitespace-pre-line font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[128px] md:leading-[1.05]">
+      {page.heading}
     </h1>
-    <Image
+    <EditorialImage
       class="hidden h-[760px] w-full max-w-none object-cover md:block"
-      src="/images/387-3526.webp"
-      alt="Stillroom table collage"
+      image={page.heroImage}
       width={1024}
       height={566}
       loading="eager"
       fetchpriority="high"
     />
   </section>
-  <FounderStory />
-  <TeamOverview />
-  <WorkingPrinciples />
+  <FounderStory page={page} />
+  <TeamOverview page={page} />
+  <WorkingPrinciples page={page} />
+  <ClientProof page={page} />
   <ProjectInvitation
-    eyebrow="Good people. Good projects. Let’s meet."
+    eyebrow={page.finalCtaEyebrow}
+    title={page.finalCtaHeading}
+    label={page.finalCtaLabel}
     variant="about"
   />
 </Layout>

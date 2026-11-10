@@ -7,5 +7,7 @@ export const SERVICES_PAGE_ID = 'servicesPage'
 export const SERVICES_PAGE_DRAFT_ID = `drafts.${SERVICES_PAGE_ID}`
 export const CONTACT_PAGE_ID = 'contactPage'
 export const CONTACT_PAGE_DRAFT_ID = `drafts.${CONTACT_PAGE_ID}`
+export const ABOUT_PAGE_ID = 'aboutPage'
+export const ABOUT_PAGE_DRAFT_ID = `drafts.${ABOUT_PAGE_ID}`
 export const JOURNAL_PAGE_ID = 'journalPage'
 export const JOURNAL_PAGE_DRAFT_ID = `drafts.${JOURNAL_PAGE_ID}`
