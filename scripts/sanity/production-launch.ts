@@ -1,10 +1,7 @@
-import { createClient } from '@sanity/client'
 import { execFile } from 'node:child_process'
 import { mkdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { promisify } from 'node:util'
-import { pathToFileURL } from 'node:url'
-import { SANITY_API_VERSION } from '../../src/sanity/constants'
 import { CONTENT_DRAFT_IDS, draftId } from '../../src/sanity/manifests/content'
 import {
   PUBLICATION_GROUPS,
@@ -13,6 +10,14 @@ import {
 import { compareCutoverDatasets } from './compare-datasets'
 import { exportDatasetBackup } from './export-dataset'
 import { validateCutoverDataset } from './validate-cutover'
+import {
+  preparePublishedDocument,
+  runProductionLaunchCommand,
+  type MigrationDocument,
+  type ProductionLaunchCommandEnvironment,
+} from './migration-runtime'
+
+export { preparePublishedDocument } from './migration-runtime'
 
 const execFileAsync = promisify(execFile)
 
@@ -24,11 +29,7 @@ export interface ProductionLaunchStep {
 export type ProductionPublishGroup = PublicationGroup
 export const PRODUCTION_PUBLISH_GROUPS = PUBLICATION_GROUPS
 
-interface DraftDocument {
-  _id: string
-  _type: string
-  [key: string]: unknown
-}
+type DraftDocument = MigrationDocument
 
 interface PublicationTransaction {
   createOrReplace: (document: DraftDocument) => PublicationTransaction
@@ -86,43 +87,6 @@ export async function writeDraftValidationFile({
   return path
 }
 
-function normalizePublishedValue(value: unknown): unknown {
-  if (Array.isArray(value)) return value.map(normalizePublishedValue)
-  if (!value || typeof value !== 'object') return value
-
-  const source = value as Record<string, unknown>
-  const entries = Object.entries(source)
-    .filter(
-      ([key]) =>
-        key !== '_rev' &&
-        key !== '_createdAt' &&
-        key !== '_updatedAt' &&
-        key !== '_weak' &&
-        key !== '_strengthenOnPublish',
-    )
-    .map(([key, child]) => {
-      if (key === '_id' && typeof child === 'string') {
-        return [key, child.replace(/^drafts\./, '')]
-      }
-      if (
-        key === '_ref' &&
-        typeof child === 'string' &&
-        source._type === 'reference'
-      ) {
-        return [key, child.replace(/^drafts\./, '')]
-      }
-      return [key, normalizePublishedValue(child)]
-    })
-
-  return Object.fromEntries(entries)
-}
-
-export function preparePublishedDocument(
-  document: DraftDocument,
-): DraftDocument {
-  return normalizePublishedValue(document) as DraftDocument
-}
-
 export async function publishDraftGroups(
   client: PublicationClient,
   groups: readonly ProductionPublishGroup[] = PRODUCTION_PUBLISH_GROUPS,
@@ -157,14 +121,6 @@ export async function publishDraftGroups(
   }
 }
 
-function loadLocalEnvironment() {
-  try {
-    process.loadEnvFile('.env')
-  } catch {
-    // CI and production commands provide environment variables directly.
-  }
-}
-
 async function validateSanityDocuments(token: string, archivePath?: string) {
   const sourceArguments = archivePath
     ? ['--file', archivePath]
@@ -193,36 +149,12 @@ async function validateSanityDocuments(token: string, archivePath?: string) {
   if (stderr.trim()) console.error(stderr.trim())
 }
 
-async function run() {
-  loadLocalEnvironment()
-
-  const projectId = process.env.PUBLIC_SANITY_PROJECT_ID
-  const writeToken =
-    process.env.SANITY_API_WRITE_TOKEN ?? process.env.SANITY_AUTH_TOKEN
-  const readToken = process.env.SANITY_API_READ_TOKEN ?? writeToken
-
-  if (!projectId || !writeToken || !readToken) {
-    throw new Error(
-      'PUBLIC_SANITY_PROJECT_ID plus Sanity read and write tokens are required.',
-    )
-  }
-  if (process.env.ALLOW_PRODUCTION_LAUNCH !== 'true') {
-    throw new Error(
-      'Production launch is blocked. Set ALLOW_PRODUCTION_LAUNCH=true explicitly.',
-    )
-  }
-
-  const createDatasetClient = (dataset: string, token: string) =>
-    createClient({
-      projectId,
-      dataset,
-      apiVersion: SANITY_API_VERSION,
-      token,
-      useCdn: false,
-    })
-  const developmentClient = createDatasetClient('development', readToken)
-  const productionReadClient = createDatasetClient('production', readToken)
-  const productionWriteClient = createDatasetClient('production', writeToken)
+async function launchProduction({
+  developmentClient,
+  productionReadClient,
+  productionWriteClient,
+  writeToken,
+}: ProductionLaunchCommandEnvironment) {
   let preMigrationBackup: Awaited<ReturnType<typeof exportDatasetBackup>>
   let prePublicationBackup: Awaited<ReturnType<typeof exportDatasetBackup>>
   let draftValidationFile: string
@@ -263,7 +195,7 @@ async function run() {
       name: 'draft-only validation dataset',
       run: async () => {
         draftValidationFile = await writeDraftValidationFile({
-          client: productionReadClient as unknown as ValidationFileClient,
+          client: productionReadClient,
         })
       },
     },
@@ -291,10 +223,7 @@ async function run() {
     },
     {
       name: 'dependency-ordered production publication',
-      run: () =>
-        publishDraftGroups(
-          productionWriteClient as unknown as PublicationClient,
-        ),
+      run: () => publishDraftGroups(productionWriteClient),
     },
     {
       name: 'published production schema validation',
@@ -337,9 +266,7 @@ async function run() {
   console.log(`Post-migration backup: ${postMigrationBackup!.archivePath}`)
 }
 
-if (
-  process.argv[1] &&
-  import.meta.url === pathToFileURL(process.argv[1]).href
-) {
-  await run()
-}
+await runProductionLaunchCommand({
+  moduleUrl: import.meta.url,
+  launch: launchProduction,
+})
