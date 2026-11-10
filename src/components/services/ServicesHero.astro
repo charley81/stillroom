@@ -35,6 +35,7 @@ const { page } = Astro.props
       image={page.heroImage}
       width={640}
       height={640}
+      sizes="(min-width: 1440px) 640px, (min-width: 768px) calc(50vw - 48px), 1px"
       loading="eager"
       fetchpriority="high"
     />

@@ -21,6 +21,7 @@ const { project } = Astro.props
           image={block.image}
           width={1376}
           height={860}
+          sizes="(min-width: 768px) calc(100vw - 64px), calc(100vw - 32px)"
         />
       ) : (
         <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
@@ -42,6 +43,7 @@ const { project } = Astro.props
             image={block.image}
             width={672}
             height={760}
+            sizes="(min-width: 768px) calc(50vw - 48px), calc(100vw - 32px)"
           />
         </div>
       ),

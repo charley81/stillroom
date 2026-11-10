@@ -3,7 +3,11 @@ export const EDITORIAL_IMAGE_PROJECTION = `
   alt,
   caption,
   "url": asset.asset->url,
-  "mobileUrl": mobileOverride.asset->url
+  "crop": asset.crop,
+  "hotspot": asset.hotspot,
+  "mobileUrl": mobileOverride.asset->url,
+  "mobileCrop": mobileOverride.crop,
+  "mobileHotspot": mobileOverride.hotspot
 `
 
 export const SEO_PROJECTION = `

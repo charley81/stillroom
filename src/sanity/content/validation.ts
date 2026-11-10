@@ -1,11 +1,29 @@
 import { MissingContentError } from './errors'
 
+export interface ContentImageCrop {
+  left: number
+  right: number
+  top: number
+  bottom: number
+}
+
+export interface ContentImageHotspot {
+  x: number
+  y: number
+  width: number
+  height: number
+}
+
 export interface ContentImage {
   decorative: boolean
   alt: string | null
   caption: string | null
   url: string
+  crop?: ContentImageCrop | null
+  hotspot?: ContentImageHotspot | null
   mobileUrl: string | null
+  mobileCrop?: ContentImageCrop | null
+  mobileHotspot?: ContentImageHotspot | null
 }
 
 export interface ClientLogo {

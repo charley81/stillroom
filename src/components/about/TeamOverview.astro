@@ -24,6 +24,7 @@ const { page } = Astro.props
           image={person.portrait}
           width={1122}
           height={1402}
+          sizes="(min-width: 768px) calc(33.333vw - 42.667px), calc(100vw - 32px)"
         />
         <h3 class="m-0 font-display text-[36px] leading-[1.05] font-normal text-dark uppercase">
           {person.name}
