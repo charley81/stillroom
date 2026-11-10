@@ -4,18 +4,21 @@ import { readFile } from 'node:fs/promises'
 import { basename, extname } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import type { HomePage as HomePageSchema } from '../../sanity.types'
+import { SANITY_API_VERSION } from '../../src/sanity/constants'
 import {
+  CLIENT_LOGO_IDS,
   HOME_PAGE_DRAFT_ID,
   HOME_PAGE_ID,
-  SANITY_API_VERSION,
-} from '../../src/sanity/constants'
-import { CLIENT_LOGO_IDS } from './migrate-about'
-import { JOURNAL_ARTICLE_IDS } from './migrate-journal'
-import { SERVICE_IDS } from './migrate-services-contact'
+  JOURNAL_ARTICLE_IDS,
+  SERVICE_IDS,
+  WORK_PROJECT_IDS,
+} from '../../src/sanity/manifests/content'
 import { migrationAssetPath } from './migration-assets'
-import { WORK_PROJECT_IDS } from './migrate-work'
 
-export { HOME_PAGE_DRAFT_ID, HOME_PAGE_ID }
+export {
+  HOME_PAGE_DRAFT_ID,
+  HOME_PAGE_ID,
+} from '../../src/sanity/manifests/content'
 
 interface AssetPaths {
   hero: string

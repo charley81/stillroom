@@ -4,31 +4,15 @@ import { mkdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { promisify } from 'node:util'
 import { pathToFileURL } from 'node:url'
+import { SANITY_API_VERSION } from '../../src/sanity/constants'
+import { CONTENT_DRAFT_IDS, draftId } from '../../src/sanity/manifests/content'
 import {
-  ABOUT_PAGE_ID,
-  CONTACT_PAGE_ID,
-  HOME_PAGE_ID,
-  JOURNAL_PAGE_ID,
-  SERVICES_PAGE_ID,
-  SITE_SETTINGS_ID,
-  WORK_PAGE_ID,
-  SANITY_API_VERSION,
-} from '../../src/sanity/constants'
+  PUBLICATION_GROUPS,
+  type PublicationGroup,
+} from '../../src/sanity/manifests/publication'
 import { compareCutoverDatasets } from './compare-datasets'
 import { exportDatasetBackup } from './export-dataset'
-import { CLIENT_LOGO_IDS } from './migrate-about'
-import { buildMigrationPlan, runMigrationPlan } from './migrate-all'
-import {
-  AUTHOR_IDS,
-  JOURNAL_ARTICLE_IDS,
-  JOURNAL_CATEGORY_IDS,
-} from './migrate-journal'
-import { SERVICE_IDS } from './migrate-services-contact'
-import { WORK_PROJECT_IDS } from './migrate-work'
-import {
-  EXPECTED_CUTOVER_DOCUMENTS,
-  validateCutoverDataset,
-} from './validate-cutover'
+import { validateCutoverDataset } from './validate-cutover'
 
 const execFileAsync = promisify(execFile)
 
@@ -37,38 +21,8 @@ export interface ProductionLaunchStep {
   run: () => Promise<unknown>
 }
 
-export interface ProductionPublishGroup {
-  name: string
-  ids: readonly string[]
-}
-
-export const PRODUCTION_PUBLISH_GROUPS = [
-  {
-    name: 'reusable referenced documents',
-    ids: [
-      ...SERVICE_IDS,
-      ...AUTHOR_IDS,
-      ...JOURNAL_CATEGORY_IDS,
-      ...CLIENT_LOGO_IDS,
-    ],
-  },
-  {
-    name: 'Work Projects and Journal Articles',
-    ids: [...WORK_PROJECT_IDS, ...JOURNAL_ARTICLE_IDS],
-  },
-  {
-    name: 'page singletons and Site Settings',
-    ids: [
-      HOME_PAGE_ID,
-      WORK_PAGE_ID,
-      SERVICES_PAGE_ID,
-      ABOUT_PAGE_ID,
-      JOURNAL_PAGE_ID,
-      CONTACT_PAGE_ID,
-      SITE_SETTINGS_ID,
-    ],
-  },
-] as const satisfies readonly ProductionPublishGroup[]
+export type ProductionPublishGroup = PublicationGroup
+export const PRODUCTION_PUBLISH_GROUPS = PUBLICATION_GROUPS
 
 interface DraftDocument {
   _id: string
@@ -116,7 +70,7 @@ export async function writeDraftValidationFile({
   now?: Date
 }) {
   await mkdir(directory, { recursive: true })
-  const draftIds = EXPECTED_CUTOVER_DOCUMENTS.map(({ id }) => `drafts.${id}`)
+  const draftIds = CONTENT_DRAFT_IDS
   const documents = await client.fetch(
     '*[_id in $draftIds || _type in ["sanity.imageAsset", "sanity.fileAsset"]]',
     { draftIds },
@@ -174,7 +128,7 @@ export async function publishDraftGroups(
   groups: readonly ProductionPublishGroup[] = PRODUCTION_PUBLISH_GROUPS,
 ) {
   for (const group of groups) {
-    const draftIds = group.ids.map((id) => `drafts.${id}`)
+    const draftIds = group.ids.map(draftId)
     const drafts = await client.fetch(
       '*[_id in $ids]',
       { ids: draftIds },
@@ -287,8 +241,13 @@ async function run() {
     },
     {
       name: 'deterministic production draft migration',
-      run: () =>
-        runMigrationPlan(buildMigrationPlan(productionWriteClient, false)),
+      run: async () => {
+        const { buildMigrationPlan, runMigrationPlan } =
+          await import('./migrate-all')
+        return runMigrationPlan(
+          buildMigrationPlan(productionWriteClient, false),
+        )
+      },
     },
     {
       name: 'pre-publication production export',

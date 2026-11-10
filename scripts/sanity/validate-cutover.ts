@@ -15,16 +15,16 @@ import {
   requireWorkPage,
   requireWorkProjectResult,
 } from '../../src/sanity/content/work'
+import { SANITY_API_VERSION } from '../../src/sanity/constants'
 import {
-  ABOUT_PAGE_ID,
-  CONTACT_PAGE_ID,
-  HOME_PAGE_ID,
-  JOURNAL_PAGE_ID,
-  SANITY_API_VERSION,
-  SERVICES_PAGE_ID,
-  SITE_SETTINGS_ID,
-  WORK_PAGE_ID,
-} from '../../src/sanity/constants'
+  CLIENT_LOGO_IDS,
+  CONTENT_DOCUMENTS,
+  JOURNAL_ARTICLE_IDS,
+  JOURNAL_ARTICLE_SLUGS,
+  WORK_PROJECT_IDS,
+  WORK_PROJECT_SLUGS,
+  draftId,
+} from '../../src/sanity/manifests/content'
 import { ABOUT_PAGE_QUERY } from '../../src/sanity/queries/about'
 import { HOME_PAGE_QUERY } from '../../src/sanity/queries/home'
 import {
@@ -40,35 +40,7 @@ import {
   WORK_PAGE_QUERY,
   WORK_PROJECT_QUERY,
 } from '../../src/sanity/queries/work'
-import { CLIENT_LOGO_IDS } from './migrate-about'
-import {
-  AUTHOR_IDS,
-  JOURNAL_ARTICLE_IDS,
-  JOURNAL_ARTICLE_SLUGS,
-  JOURNAL_CATEGORY_IDS,
-} from './migrate-journal'
-import { SERVICE_IDS } from './migrate-services-contact'
-import { WORK_PROJECT_IDS, WORK_PROJECT_SLUGS } from './migrate-work'
-
-const SINGLETONS = [
-  [SITE_SETTINGS_ID, 'siteSettings'],
-  [HOME_PAGE_ID, 'homePage'],
-  [WORK_PAGE_ID, 'workPage'],
-  [SERVICES_PAGE_ID, 'servicesPage'],
-  [ABOUT_PAGE_ID, 'aboutPage'],
-  [JOURNAL_PAGE_ID, 'journalPage'],
-  [CONTACT_PAGE_ID, 'contactPage'],
-] as const
-
-export const EXPECTED_CUTOVER_DOCUMENTS = [
-  ...SINGLETONS.map(([id, type]) => ({ id, type })),
-  ...SERVICE_IDS.map((id) => ({ id, type: 'service' })),
-  ...CLIENT_LOGO_IDS.map((id) => ({ id, type: 'clientLogo' })),
-  ...WORK_PROJECT_IDS.map((id) => ({ id, type: 'workProject' })),
-  ...AUTHOR_IDS.map((id) => ({ id, type: 'author' })),
-  ...JOURNAL_CATEGORY_IDS.map((id) => ({ id, type: 'journalCategory' })),
-  ...JOURNAL_ARTICLE_IDS.map((id) => ({ id, type: 'journalArticle' })),
-]
+export const EXPECTED_CUTOVER_DOCUMENTS = CONTENT_DOCUMENTS
 
 interface InventoryDocument {
   _id: string
@@ -81,10 +53,9 @@ export function assertCutoverInventory(
   documents: InventoryDocument[],
   perspective: CutoverPerspective = 'published',
 ) {
-  const expectedById = new Map(
+  const expectedById = new Map<string, string>(
     EXPECTED_CUTOVER_DOCUMENTS.map((document) => [document.id, document.type]),
   )
-  const expectedPrefix = perspective === 'drafts' ? 'drafts.' : ''
   const documentState = perspective === 'drafts' ? 'draft' : 'published'
   const selected = new Map(
     documents
@@ -98,7 +69,7 @@ export function assertCutoverInventory(
   const errors: string[] = []
 
   for (const { id, type } of EXPECTED_CUTOVER_DOCUMENTS) {
-    const expectedId = `${expectedPrefix}${id}`
+    const expectedId = perspective === 'drafts' ? draftId(id) : id
     const actualType = selected.get(expectedId)
     if (!actualType) {
       errors.push(`Missing ${documentState} document: ${expectedId}`)

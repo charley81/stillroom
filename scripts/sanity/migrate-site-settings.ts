@@ -4,14 +4,14 @@ import { readFile } from 'node:fs/promises'
 import { basename } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import type { SiteSettings as SiteSettingsSchema } from '../../sanity.types'
+import { SANITY_API_VERSION } from '../../src/sanity/constants'
 import {
-  SANITY_API_VERSION,
   SITE_SETTINGS_DRAFT_ID,
   SITE_SETTINGS_ID,
-} from '../../src/sanity/constants'
+} from '../../src/sanity/manifests/content'
 import { migrationAssetPath } from './migration-assets'
 
-export { SITE_SETTINGS_DRAFT_ID }
+export { SITE_SETTINGS_DRAFT_ID } from '../../src/sanity/manifests/content'
 export const SITE_SETTINGS_PUBLISHED_ID = SITE_SETTINGS_ID
 export const SITE_SETTINGS_SOCIAL_IMAGE_PATH = migrationAssetPath(
   'images/368-8150.webp',

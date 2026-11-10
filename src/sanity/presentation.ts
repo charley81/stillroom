@@ -3,6 +3,7 @@ import {
   type DocumentLocationsState,
   type PresentationPluginOptions,
 } from 'sanity/presentation'
+import { PUBLIC_ROUTE_PATTERNS, SITE_SETTINGS_ROUTES } from './manifests/routes'
 import { TRUSTED_PRESENTATION_ORIGINS } from './presentation-origins'
 
 export { TRUSTED_PRESENTATION_ORIGINS } from './presentation-origins'
@@ -251,17 +252,10 @@ export const PRESENTATION_OPTIONS = {
   resolve: {
     mainDocuments: [
       {
-        route: ['/', '/work', '/services', '/about', '/journal', '/contact'],
+        route: [...SITE_SETTINGS_ROUTES],
         type: 'siteSettings',
       },
-      { route: '/', type: 'homePage' },
-      { route: '/work', type: 'workPage' },
-      { route: '/work/:slug', type: 'workProject' },
-      { route: '/services', type: 'servicesPage' },
-      { route: '/about', type: 'aboutPage' },
-      { route: '/journal', type: 'journalPage' },
-      { route: '/journal/:slug', type: 'journalArticle' },
-      { route: '/contact', type: 'contactPage' },
+      ...PUBLIC_ROUTE_PATTERNS,
     ],
     locations: {
       siteSettings: siteSettingsLocations,

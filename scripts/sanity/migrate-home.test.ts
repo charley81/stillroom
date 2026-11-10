@@ -1,14 +1,16 @@
 import { createHash } from 'node:crypto'
 import { describe, expect, it, vi } from 'vitest'
-import { CLIENT_LOGO_IDS } from './migrate-about'
-import { JOURNAL_ARTICLE_IDS } from './migrate-journal'
+import {
+  CLIENT_LOGO_IDS,
+  JOURNAL_ARTICLE_IDS,
+  SERVICE_IDS,
+  WORK_PROJECT_IDS,
+} from '../../src/sanity/manifests/content'
 import {
   HOME_PAGE_DRAFT_ID,
   buildHomeDocument,
   migrateHome,
 } from './migrate-home'
-import { SERVICE_IDS } from './migrate-services-contact'
-import { WORK_PROJECT_IDS } from './migrate-work'
 
 const assetPaths = {
   hero: '/assets/home-hero.png',

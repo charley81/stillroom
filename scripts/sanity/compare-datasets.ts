@@ -2,7 +2,7 @@ import { createClient, type SanityClient } from '@sanity/client'
 import { isDeepStrictEqual } from 'node:util'
 import { pathToFileURL } from 'node:url'
 import { SANITY_API_VERSION } from '../../src/sanity/constants'
-import { EXPECTED_CUTOVER_DOCUMENTS } from './validate-cutover'
+import { CONTENT_DOCUMENTS, draftId } from '../../src/sanity/manifests/content'
 
 interface SanityDocument {
   _id: string
@@ -121,9 +121,9 @@ export async function compareCutoverDatasets({
   targetClient: SanityClient
   targetPerspective: 'drafts' | 'published'
 }) {
-  const publishedIds = EXPECTED_CUTOVER_DOCUMENTS.map(({ id }) => id)
+  const publishedIds = CONTENT_DOCUMENTS.map(({ id }) => id)
   const targetIds = publishedIds.map((id) =>
-    targetPerspective === 'drafts' ? `drafts.${id}` : id,
+    targetPerspective === 'drafts' ? draftId(id) : id,
   )
   const [source, target] = await Promise.all([
     fetchCanonicalDocuments({ client: sourceClient, ids: publishedIds }),

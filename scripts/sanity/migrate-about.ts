@@ -8,21 +8,19 @@ import type {
   ClientLogo as ClientLogoSchema,
   ConstrainedRichText,
 } from '../../sanity.types'
+import { SANITY_API_VERSION } from '../../src/sanity/constants'
 import {
   ABOUT_PAGE_DRAFT_ID,
-  ABOUT_PAGE_ID,
-  SANITY_API_VERSION,
-} from '../../src/sanity/constants'
+  CLIENT_LOGO_IDS,
+  draftId,
+} from '../../src/sanity/manifests/content'
 import { migrationAssetPath } from './migration-assets'
 
-export const CLIENT_LOGO_IDS = [
-  'client-logo-orlo-house',
-  'client-logo-juniper',
-  'client-logo-fieldwork',
-  'client-logo-the-long-table',
-  'client-logo-morrow',
-] as const
-export { ABOUT_PAGE_DRAFT_ID, ABOUT_PAGE_ID }
+export {
+  ABOUT_PAGE_DRAFT_ID,
+  ABOUT_PAGE_ID,
+  CLIENT_LOGO_IDS,
+} from '../../src/sanity/manifests/content'
 
 interface AssetPaths {
   hero: string
@@ -165,7 +163,7 @@ function richText(paragraphs: string[]): ConstrainedRichText {
 export function buildAboutDocuments(assets: UploadedAssets) {
   const clientLogos: ClientLogoDocument[] = CLIENT_LOGO_IDS.map(
     (id, index) => ({
-      _id: `drafts.${id}`,
+      _id: draftId(id),
       _type: 'clientLogo',
       clientName: clientNames[index],
       logo: logo(assets.clientLogos[index]),

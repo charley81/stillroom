@@ -4,12 +4,25 @@ import { readFileSync } from 'node:fs'
 import { readFile } from 'node:fs/promises'
 import { basename, extname } from 'node:path'
 import { pathToFileURL } from 'node:url'
+import { SANITY_API_VERSION } from '../../src/sanity/constants'
 import {
+  AUTHOR_IDS,
+  JOURNAL_ARTICLE_IDS,
+  JOURNAL_ARTICLE_SLUGS,
+  JOURNAL_CATEGORY_IDS,
+  JOURNAL_PAGE_DRAFT_ID,
+  draftId,
+} from '../../src/sanity/manifests/content'
+import { migrationAssetPath } from './migration-assets'
+
+export {
+  AUTHOR_IDS,
+  JOURNAL_ARTICLE_IDS,
+  JOURNAL_ARTICLE_SLUGS,
+  JOURNAL_CATEGORY_IDS,
   JOURNAL_PAGE_DRAFT_ID,
   JOURNAL_PAGE_ID,
-  SANITY_API_VERSION,
-} from '../../src/sanity/constants'
-import { migrationAssetPath } from './migration-assets'
+} from '../../src/sanity/manifests/content'
 
 interface SourceImage {
   src: string
@@ -85,30 +98,6 @@ interface MigrationClient {
   }
 }
 
-const SOURCE_SLUGS = [
-  'what-makes-a-place-stay-with-us',
-  'the-quiet-power-of-a-good-menu',
-  'the-everyday-ritual-reconsidered',
-  'a-welcome-begins-before-the-door',
-  'good-brands-have-good-ingredients',
-  'a-little-more-personality-please',
-  'made-for-good-company',
-] as const
-
-export const JOURNAL_ARTICLE_SLUGS = [...SOURCE_SLUGS]
-export const JOURNAL_ARTICLE_IDS = JOURNAL_ARTICLE_SLUGS.map(
-  (slug) => `journal-article-${slug}`,
-)
-export const AUTHOR_IDS = ['author-stillroom']
-export const JOURNAL_CATEGORY_IDS = [
-  'journal-category-culture',
-  'journal-category-design',
-  'journal-category-perspective',
-  'journal-category-process',
-  'journal-category-studio-notes',
-]
-export { JOURNAL_PAGE_DRAFT_ID, JOURNAL_PAGE_ID }
-
 const JOURNAL_PAGE_ARTWORK_PATH = '/images/387-3818.webp'
 
 function loadSourceArticle(slug: string): SourceArticle {
@@ -120,7 +109,7 @@ function loadSourceArticle(slug: string): SourceArticle {
   ) as SourceArticle
 }
 
-const sourceArticles = SOURCE_SLUGS.map(loadSourceArticle)
+const sourceArticles = JOURNAL_ARTICLE_SLUGS.map(loadSourceArticle)
 
 function slugify(value: string) {
   return value
@@ -183,11 +172,15 @@ function requiredAsset(assetIds: Record<string, string>, path: string) {
 
 export function buildJournalDocuments(assetIds: Record<string, string>) {
   const authorNames = [...new Set(sourceArticles.map(({ author }) => author))]
+  const authorIdsBySlug = new Map(
+    AUTHOR_IDS.map((id) => [id.replace(/^author-/, ''), id]),
+  )
   const authors = authorNames.map((name) => {
     const source = sourceArticles.find((article) => article.author === name)!
-    const id = `author-${slugify(name)}`
+    const id = authorIdsBySlug.get(slugify(name))
+    if (!id) throw new Error(`Missing manifest Author ID for ${name}.`)
     return {
-      _id: `drafts.${id}`,
+      _id: draftId(id),
       _type: 'author' as const,
       name,
       biography: source.authorBio,
@@ -197,10 +190,19 @@ export function buildJournalDocuments(assetIds: Record<string, string>) {
   const categoryTitles = [
     ...new Set(sourceArticles.map(({ category }) => category)),
   ]
+  const categoryIdsBySlug = new Map(
+    JOURNAL_CATEGORY_IDS.map((id) => [
+      id.replace(/^journal-category-/, ''),
+      id,
+    ]),
+  )
   const categories = categoryTitles.map((title) => {
     const slug = slugify(title)
+    const id = categoryIdsBySlug.get(slug)
+    if (!id)
+      throw new Error(`Missing manifest Journal Category ID for ${title}.`)
     return {
-      _id: `drafts.journal-category-${slug}`,
+      _id: draftId(id),
       _type: 'journalCategory' as const,
       title,
       slug: { _type: 'slug' as const, current: slug },
@@ -210,8 +212,13 @@ export function buildJournalDocuments(assetIds: Record<string, string>) {
   const articles = sourceArticles.map((source, index) => {
     const slug = JOURNAL_ARTICLE_SLUGS[index]
     const id = JOURNAL_ARTICLE_IDS[index]
-    const categoryId = `journal-category-${slugify(source.category)}`
-    const authorId = `author-${slugify(source.author)}`
+    const categoryId = categoryIdsBySlug.get(slugify(source.category))
+    const authorId = authorIdsBySlug.get(slugify(source.author))
+    if (!categoryId || !authorId) {
+      throw new Error(
+        `Missing manifest references for Journal Article ${slug}.`,
+      )
+    }
     const body: JournalArticleBodyDocument[] = []
     source.body.forEach((block, bodyIndex) => {
       if (block.type === 'image') return
@@ -233,7 +240,7 @@ export function buildJournalDocuments(assetIds: Record<string, string>) {
     })
 
     return {
-      _id: `drafts.${id}`,
+      _id: draftId(id),
       _type: 'journalArticle' as const,
       title: source.title,
       slug: { _type: 'slug' as const, current: slug },
