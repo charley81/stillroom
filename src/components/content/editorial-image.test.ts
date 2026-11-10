@@ -33,13 +33,17 @@ describe('EditorialImage', () => {
 
     expect(html).toContain('sizes="(min-width: 768px) 800px, 100vw"')
     expect(html).toContain('srcset="')
-    expect(html).toContain('rect=240,80,1920,1440')
     expect(html).toContain(
-      'w=320&amp;h=240&amp;q=82&amp;fit=crop&amp;auto=format 320w',
+      'src="/.netlify/images?url=https%3A%2F%2Fcdn.sanity.io',
+    )
+    expect(html).toContain('rect%3D240%2C80%2C1920%2C1440')
+    expect(html).toContain(
+      'w%3D320%26h%3D240%26q%3D82%26fit%3Dcrop%26auto%3Dformat 320w',
     )
     expect(html).toContain(
-      'w=800&amp;h=600&amp;q=82&amp;fit=crop&amp;auto=format 800w',
+      'w%3D800%26h%3D600%26q%3D82%26fit%3Dcrop%26auto%3Dformat 800w',
     )
+    expect(html).not.toContain('src="https://cdn.sanity.io')
     expect(html).toContain('alt="A carefully cropped dining room"')
     expect(html).toContain('width="800"')
     expect(html).toContain('height="600"')
@@ -61,8 +65,9 @@ describe('EditorialImage', () => {
 
     expect(html).toContain('<source media="(max-width: 760px)"')
     expect(html).toContain('mobile456-1200x1600.jpg')
-    expect(html).toContain('rect=0,160,1200,900')
-    expect(html).toContain('auto=format')
+    expect(html).toContain('rect%3D0%2C160%2C1200%2C900')
+    expect(html).toContain('auto%3Dformat')
+    expect(html).not.toContain('src="https://cdn.sanity.io')
     expect(html).toContain('sizes="100vw"')
   })
 
@@ -89,7 +94,7 @@ describe('EditorialImage', () => {
 })
 
 describe('ClientLogos', () => {
-  it('serves SVG Client Logos directly without raster transformations', async () => {
+  it('serves SVG Client Logos through the first-party image CDN without explicit raster transformations', async () => {
     const container = await AstroContainer.create()
     const html = await container.renderToString(ClientLogos, {
       props: {
@@ -105,8 +110,9 @@ describe('ClientLogos', () => {
     })
 
     expect(html).toContain(
-      'src="https://cdn.sanity.io/files/h2h3psnm/development/logo.svg"',
+      'src="/.netlify/images?url=https%3A%2F%2Fcdn.sanity.io%2Ffiles%2Fh2h3psnm%2Fdevelopment%2Flogo.svg"',
     )
+    expect(html).not.toContain('src="https://cdn.sanity.io')
     expect(html).toContain('alt="Client One"')
     expect(html).not.toContain('srcset=')
     expect(html).not.toContain('auto=format')

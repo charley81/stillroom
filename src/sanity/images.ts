@@ -5,13 +5,15 @@ import type {
 } from './content/validation'
 
 /**
- * Editorial photographs use a high-but-compressed quality of 82. Sanity's
- * `auto=format` then selects AVIF or WebP when the requesting browser supports
- * them while retaining the source format as a fallback.
+ * Editorial photographs use a high-but-compressed quality of 82. Sanity crops
+ * each responsive source, then Netlify Image CDN serves it from the site's
+ * origin and negotiates the final browser format.
  */
 export const EDITORIAL_IMAGE_QUALITY = 82
 
 const RESPONSIVE_WIDTHS = [320, 480, 640, 768, 960, 1200, 1440, 1920, 2400]
+const SANITY_ASSET_HOSTNAME = 'cdn.sanity.io'
+const NETLIFY_IMAGE_ENDPOINT = '/.netlify/images'
 
 export interface ResponsiveImageSource {
   url: string
@@ -31,7 +33,7 @@ function parseSanityImageLocation(url: string): SanityImageLocation | null {
     const [, resource, projectId, dataset, filename] =
       parsed.pathname.split('/')
     if (
-      parsed.hostname !== 'cdn.sanity.io' ||
+      parsed.hostname !== SANITY_ASSET_HOSTNAME ||
       resource !== 'images' ||
       !projectId ||
       !dataset ||
@@ -48,6 +50,18 @@ function parseSanityImageLocation(url: string): SanityImageLocation | null {
     }
   } catch {
     return null
+  }
+}
+
+export function createFirstPartySanityAssetUrl(url: string) {
+  try {
+    const parsed = new URL(url)
+    if (parsed.hostname !== SANITY_ASSET_HOSTNAME) return url
+
+    const query = new URLSearchParams({ url: parsed.href })
+    return `${NETLIFY_IMAGE_ENDPOINT}?${query}`
+  } catch {
+    return url
   }
 }
 
@@ -92,7 +106,7 @@ function transformedUrl({
 
   image = fit === 'crop' ? image.height(height).fit('crop') : image.fit('max')
 
-  return image.url()
+  return createFirstPartySanityAssetUrl(image.url())
 }
 
 export function createResponsiveSanityImage({
@@ -108,7 +122,8 @@ export function createResponsiveSanityImage({
 }) {
   const location = parseSanityImageLocation(source.url)
   if (!location) {
-    return { src: source.url, srcset: source.url }
+    const url = createFirstPartySanityAssetUrl(source.url)
+    return { src: url, srcset: url }
   }
 
   const widths = responsiveWidths(width, location.intrinsicWidth)

@@ -245,7 +245,10 @@ describe('Journal routes', () => {
     expect(html).toContain(
       '<meta name="description" content="Published standfirst."',
     )
-    expect(html).toContain('https://cdn.sanity.io/journal.jpg')
+    expect(html).toContain(
+      'https://stillroom-app.netlify.app/.netlify/images?url=https%3A%2F%2Fcdn.sanity.io%2Fjournal.jpg',
+    )
+    expect(html).not.toContain('src="https://cdn.sanity.io')
   })
 
   it('previews an unpublished Journal Article without exposing it publicly', async () => {

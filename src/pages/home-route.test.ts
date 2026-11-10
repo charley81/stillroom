@@ -153,8 +153,12 @@ describe('Home route', () => {
       '<meta name="description" content="Published Home SEO description.">',
     )
     expect(html).toContain(
-      '<meta property="og:image" content="https://cdn.sanity.io/home.jpg">',
+      '<meta property="og:image" content="https://stillroom-app.netlify.app/.netlify/images?url=https%3A%2F%2Fcdn.sanity.io%2Fhome.jpg">',
     )
+    expect(html).toContain(
+      '<meta name="twitter:image" content="https://stillroom-app.netlify.app/.netlify/images?url=https%3A%2F%2Fcdn.sanity.io%2Fhome.jpg">',
+    )
+    expect(html).not.toContain('src="https://cdn.sanity.io')
     expect(html).toContain(
       '<link rel="canonical" href="https://stillroom-app.netlify.app/">',
     )

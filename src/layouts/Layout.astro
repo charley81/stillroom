@@ -5,6 +5,7 @@ import { Font } from 'astro:assets'
 import Footer from '../components/site/Footer.astro'
 import Header from '../components/site/Header.astro'
 import type { SiteSettings } from '../sanity/content/site-settings'
+import { createFirstPartySanityAssetUrl } from '../sanity/images'
 import { PUBLIC_PREVIEW_STATE } from '../sanity/preview'
 import { resolveRuntimeSiteOrigin } from '../site-origin'
 import '../styles/global.css'
@@ -32,7 +33,10 @@ const siteOrigin = resolveRuntimeSiteOrigin(import.meta.env)
 const pathname = Astro.url.pathname.replace(/\/+$/, '') || '/'
 const cleanTitle = stegaClean(title)
 const cleanDescription = stegaClean(description)
-const cleanSocialImageUrl = stegaClean(socialImageUrl)
+const cleanSocialImageUrl = new URL(
+  createFirstPartySanityAssetUrl(stegaClean(socialImageUrl)),
+  siteOrigin,
+).href
 const cleanStudioName = stegaClean(settings.studioName)
 const canonicalUrl = new URL(pathname, siteOrigin).href
 const robots =

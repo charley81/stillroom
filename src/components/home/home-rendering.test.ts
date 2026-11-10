@@ -91,7 +91,10 @@ describe('Home rendering', () => {
     expect(html).toContain('href="/contact"')
     expect(html).toContain('Published secondary action')
     expect(html).toContain('href="/work"')
-    expect(html).toContain('src="https://cdn.sanity.io/published.webp"')
+    expect(html).toContain(
+      'src="/.netlify/images?url=https%3A%2F%2Fcdn.sanity.io%2Fpublished.webp"',
+    )
+    expect(html).not.toContain('src="https://cdn.sanity.io')
   })
 
   it('renders referenced Work Projects and Services without duplicate card content', async () => {

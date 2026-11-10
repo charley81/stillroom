@@ -23,6 +23,9 @@ export default defineConfig({
   site: siteOrigin,
   output: 'server',
   adapter: netlify(),
+  image: {
+    domains: ['cdn.sanity.io'],
+  },
   session: false,
   integrations: [
     sanity({

@@ -1,6 +1,7 @@
 ---
 import { stegaClean } from '@sanity/client/stega'
 import type { ClientLogo } from '../../sanity/content/validation'
+import { createFirstPartySanityAssetUrl } from '../../sanity/images'
 
 interface Props {
   logos: ClientLogo[]
@@ -32,7 +33,7 @@ const desktopHeight = variant === 'proof' ? 'md:h-[289px]' : 'md:h-[114px]'
     >
       <img
         class="h-full w-full object-contain md:h-[100px]"
-        src={stegaClean(logo.url)}
+        src={createFirstPartySanityAssetUrl(stegaClean(logo.url))}
         alt={stegaClean(logo.clientName)}
         width="220"
         height="100"
