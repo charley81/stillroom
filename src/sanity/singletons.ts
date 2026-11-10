@@ -1,13 +1,5 @@
 import type { StructureResolver } from 'sanity/structure'
-import {
-  ABOUT_PAGE_ID,
-  CONTACT_PAGE_ID,
-  HOME_PAGE_ID,
-  JOURNAL_PAGE_ID,
-  SERVICES_PAGE_ID,
-  SITE_SETTINGS_ID,
-  WORK_PAGE_ID,
-} from './constants'
+import { SINGLETON_DEFINITIONS } from './manifests/content'
 
 export {
   ABOUT_PAGE_ID,
@@ -17,17 +9,11 @@ export {
   SERVICES_PAGE_ID,
   SITE_SETTINGS_ID,
   WORK_PAGE_ID,
-}
+} from './manifests/content'
 
-const SINGLETON_IDS = new Map([
-  ['siteSettings', SITE_SETTINGS_ID],
-  ['homePage', HOME_PAGE_ID],
-  ['workPage', WORK_PAGE_ID],
-  ['servicesPage', SERVICES_PAGE_ID],
-  ['contactPage', CONTACT_PAGE_ID],
-  ['aboutPage', ABOUT_PAGE_ID],
-  ['journalPage', JOURNAL_PAGE_ID],
-])
+const SINGLETON_IDS = new Map<string, string>(
+  SINGLETON_DEFINITIONS.map(({ id, type }) => [type, id]),
+)
 const BLOCKED_SINGLETON_ACTIONS = new Set(['delete', 'duplicate'])
 
 interface ActionLike {
@@ -66,8 +52,20 @@ export function filterSingletonTemplates<T extends TemplateLike>(
   return templates.filter((template) => !SINGLETON_IDS.has(template.templateId))
 }
 
-export const structure: StructureResolver = (S) =>
-  S.list()
+export const structure: StructureResolver = (S) => {
+  const siteSettings = SINGLETON_DEFINITIONS[0]
+  const pageSingletons = SINGLETON_DEFINITIONS.slice(1)
+  const singletonListItem = ({
+    id,
+    title,
+    type,
+  }: (typeof SINGLETON_DEFINITIONS)[number]) =>
+    S.listItem()
+      .title(title)
+      .schemaType(type)
+      .child(S.document().title(title).schemaType(type).documentId(id))
+
+  return S.list()
     .title('Content')
     .items([
       S.listItem()
@@ -75,79 +73,12 @@ export const structure: StructureResolver = (S) =>
         .child(
           S.list()
             .title('Global')
-            .items([
-              S.listItem()
-                .title('Site Settings')
-                .schemaType('siteSettings')
-                .child(
-                  S.document()
-                    .title('Site Settings')
-                    .schemaType('siteSettings')
-                    .documentId(SITE_SETTINGS_ID),
-                ),
-            ]),
+            .items([singletonListItem(siteSettings)]),
         ),
       S.listItem()
         .title('Pages')
         .child(
-          S.list()
-            .title('Pages')
-            .items([
-              S.listItem()
-                .title('Home')
-                .schemaType('homePage')
-                .child(
-                  S.document()
-                    .title('Home')
-                    .schemaType('homePage')
-                    .documentId(HOME_PAGE_ID),
-                ),
-              S.listItem()
-                .title('Work')
-                .schemaType('workPage')
-                .child(
-                  S.document()
-                    .title('Work')
-                    .schemaType('workPage')
-                    .documentId(WORK_PAGE_ID),
-                ),
-              S.listItem()
-                .title('Services')
-                .schemaType('servicesPage')
-                .child(
-                  S.document()
-                    .title('Services')
-                    .schemaType('servicesPage')
-                    .documentId(SERVICES_PAGE_ID),
-                ),
-              S.listItem()
-                .title('About')
-                .schemaType('aboutPage')
-                .child(
-                  S.document()
-                    .title('About')
-                    .schemaType('aboutPage')
-                    .documentId(ABOUT_PAGE_ID),
-                ),
-              S.listItem()
-                .title('Journal')
-                .schemaType('journalPage')
-                .child(
-                  S.document()
-                    .title('Journal')
-                    .schemaType('journalPage')
-                    .documentId(JOURNAL_PAGE_ID),
-                ),
-              S.listItem()
-                .title('Contact')
-                .schemaType('contactPage')
-                .child(
-                  S.document()
-                    .title('Contact')
-                    .schemaType('contactPage')
-                    .documentId(CONTACT_PAGE_ID),
-                ),
-            ]),
+          S.list().title('Pages').items(pageSingletons.map(singletonListItem)),
         ),
       S.listItem()
         .title('Work')
@@ -184,3 +115,4 @@ export const structure: StructureResolver = (S) =>
             ]),
         ),
     ])
+}

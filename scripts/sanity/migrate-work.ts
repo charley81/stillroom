@@ -4,13 +4,22 @@ import { readFileSync } from 'node:fs'
 import { readFile } from 'node:fs/promises'
 import { basename, extname } from 'node:path'
 import { pathToFileURL } from 'node:url'
+import { SANITY_API_VERSION } from '../../src/sanity/constants'
 import {
-  SANITY_API_VERSION,
+  SERVICE_IDS,
+  WORK_PAGE_DRAFT_ID,
+  WORK_PROJECT_IDS,
+  WORK_PROJECT_SLUGS,
+  draftId,
+} from '../../src/sanity/manifests/content'
+import { migrationAssetPath } from './migration-assets'
+
+export {
   WORK_PAGE_DRAFT_ID,
   WORK_PAGE_ID,
-} from '../../src/sanity/constants'
-import { migrationAssetPath } from './migration-assets'
-import { SERVICE_IDS } from './migrate-services-contact'
+  WORK_PROJECT_IDS,
+  WORK_PROJECT_SLUGS,
+} from '../../src/sanity/manifests/content'
 
 interface SourceImage {
   src: string
@@ -69,21 +78,6 @@ interface MigrationClient {
   }
 }
 
-const SOURCE_SLUGS = [
-  'the-good-table',
-  'orlo-house',
-  'juniper',
-  'fieldwork',
-  'the-long-table',
-  'morrow',
-] as const
-
-export const WORK_PROJECT_SLUGS = [...SOURCE_SLUGS]
-export const WORK_PROJECT_IDS = WORK_PROJECT_SLUGS.map(
-  (slug) => `work-project-${slug}`,
-)
-export { WORK_PAGE_DRAFT_ID, WORK_PAGE_ID }
-
 const WORK_PAGE_HERO_PATH = '/images/381-1857.webp'
 
 function loadSourceProject(slug: string): SourceProject {
@@ -95,7 +89,7 @@ function loadSourceProject(slug: string): SourceProject {
   ) as SourceProject
 }
 
-const sourceProjects = SOURCE_SLUGS.map(loadSourceProject)
+const sourceProjects = WORK_PROJECT_SLUGS.map(loadSourceProject)
 
 const serviceAliases = new Map<string, string>([
   ['brand strategy', SERVICE_IDS[0]],
@@ -174,7 +168,7 @@ export function buildWorkDocuments(assetIds: Record<string, string>) {
     })
 
     return {
-      _id: `drafts.${id}`,
+      _id: draftId(id),
       _type: 'workProject' as const,
       title: source.title,
       slug: { _type: 'slug' as const, current: slug },

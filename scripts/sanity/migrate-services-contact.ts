@@ -8,29 +8,22 @@ import type {
   Service as ServiceSchema,
   ServicesPage as ServicesPageSchema,
 } from '../../sanity.types'
+import { SANITY_API_VERSION } from '../../src/sanity/constants'
 import {
   CONTACT_PAGE_DRAFT_ID,
-  CONTACT_PAGE_ID,
-  SANITY_API_VERSION,
   SERVICES_PAGE_DRAFT_ID,
-  SERVICES_PAGE_ID,
-} from '../../src/sanity/constants'
+  SERVICE_IDS,
+  draftId,
+} from '../../src/sanity/manifests/content'
 import { migrationAssetPath } from './migration-assets'
 
-// Custom IDs must stay dot-free so published documents remain visible to
-// unauthenticated public Sanity queries.
-export const SERVICE_IDS = [
-  'service-brand-strategy',
-  'service-visual-identity',
-  'service-digital-design-development',
-  'service-campaign-content-direction',
-] as const
 export {
   CONTACT_PAGE_DRAFT_ID,
   CONTACT_PAGE_ID,
   SERVICES_PAGE_DRAFT_ID,
   SERVICES_PAGE_ID,
-}
+  SERVICE_IDS,
+} from '../../src/sanity/manifests/content'
 
 interface AssetPaths {
   hero: string
@@ -173,7 +166,7 @@ function socialImage(assetId: string) {
 
 export function buildServicesContactDocuments(assets: UploadedAssets) {
   const services: ServiceDocument[] = serviceContent.map((content, index) => ({
-    _id: `drafts.${content.id}`,
+    _id: draftId(content.id),
     _type: 'service',
     title: content.title,
     shortSummary: content.shortSummary,

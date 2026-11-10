@@ -1,7 +1,6 @@
 import { mkdir } from 'node:fs/promises'
 import puppeteer from 'puppeteer-core'
-import { JOURNAL_ARTICLE_SLUGS } from './sanity/migrate-journal'
-import { WORK_PROJECT_SLUGS } from './sanity/migrate-work'
+import { ROUTE_VERIFICATION_CASES } from '../src/sanity/manifests/routes'
 import { validatePublicPage, validateStudioResponse } from './site-verification'
 
 const baseUrl = process.env.SITE_URL ?? 'http://localhost:4321'
@@ -9,24 +8,13 @@ const canonicalOrigin =
   process.env.CANONICAL_ORIGIN ?? 'https://stillroom-app.netlify.app'
 const screenshotDirectory =
   process.env.SCREENSHOT_DIRECTORY ?? '.sanity/screenshots'
-const routes = [
-  '/',
-  '/services',
-  '/work',
-  ...WORK_PROJECT_SLUGS.map((slug) => `/work/${slug}`),
-  '/about',
-  '/journal',
-  ...JOURNAL_ARTICLE_SLUGS.map((slug) => `/journal/${slug}`),
-  '/contact',
-  '/cutover-404-check',
-  '/work/cutover-404-check',
-  '/journal/cutover-404-check',
-]
-const notFoundRoutes = new Set([
-  '/cutover-404-check',
-  '/work/cutover-404-check',
-  '/journal/cutover-404-check',
-])
+const routes = ROUTE_VERIFICATION_CASES.map(({ route }) => route)
+const expectedStatuses = new Map(
+  ROUTE_VERIFICATION_CASES.map(({ route, expectedStatus }) => [
+    route,
+    expectedStatus,
+  ]),
+)
 const scenarios = [
   {
     name: 'desktop',
@@ -209,11 +197,12 @@ try {
           route,
           viewport: scenario.name,
           status: response?.status(),
-          expectedStatus: notFoundRoutes.has(route) ? 404 : 200,
+          expectedStatus: expectedStatuses.get(route)!,
           canonical: result.canonical,
-          expectedCanonical: notFoundRoutes.has(route)
-            ? undefined
-            : new URL(route, canonicalOrigin).href,
+          expectedCanonical:
+            expectedStatuses.get(route) === 404
+              ? undefined
+              : new URL(route, canonicalOrigin).href,
           title: result.title,
           description: result.description,
           h1Count: result.h1Count,
