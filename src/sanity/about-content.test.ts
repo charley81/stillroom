@@ -1,10 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
-import {
-  MissingContentError,
-  createContent,
-  requireAboutPage,
-  type AboutPage,
-} from './content'
+import { createContent } from './content/client'
+import { MissingContentError } from './content/errors'
+import { requireAboutPage, type AboutPage } from './content/about'
 import { ABOUT_PAGE_QUERY } from './queries/about'
 
 const image = {

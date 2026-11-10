@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest'
+import { MissingContentError } from './content/errors'
 import {
   JournalArticleNotFoundError,
-  MissingContentError,
   requireJournalArticleResult,
   requireJournalPage,
-} from './content'
+} from './content/journal'
 
 const image = {
   decorative: false,

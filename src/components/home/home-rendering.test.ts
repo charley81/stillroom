@@ -1,6 +1,6 @@
 import { experimental_AstroContainer as AstroContainer } from 'astro/container'
 import { describe, expect, it } from 'vitest'
-import type { HomePage } from '../../sanity/content'
+import type { HomePage } from '../../sanity/content/home'
 import HomeHero from './HomeHero.astro'
 import JournalHighlights from './JournalHighlights.astro'
 import ProcessOverview from './ProcessOverview.astro'

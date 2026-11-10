@@ -1,10 +1,10 @@
 import { experimental_AstroContainer as AstroContainer } from 'astro/container'
 import { describe, expect, it, vi } from 'vitest'
+import { createContent } from '../../sanity/content/client'
 import {
-  createContent,
   requireServicesPage,
   type ServicesPage,
-} from '../../sanity/content'
+} from '../../sanity/content/services-contact'
 import { SERVICES_PAGE_QUERY } from '../../sanity/queries/services-contact'
 import ContactInquiry from '../contact/ContactInquiry.astro'
 import HospitalityFocus from './HospitalityFocus.astro'
