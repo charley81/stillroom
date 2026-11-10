@@ -1,7 +1,7 @@
 import { createClient } from '@sanity/client'
 import { createHash } from 'node:crypto'
 import { readFile } from 'node:fs/promises'
-import { basename, extname, resolve } from 'node:path'
+import { basename, extname } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import type { HomePage as HomePageSchema } from '../../sanity.types'
 import {
@@ -12,6 +12,7 @@ import {
 import { CLIENT_LOGO_IDS } from './migrate-about'
 import { JOURNAL_ARTICLE_IDS } from './migrate-journal'
 import { SERVICE_IDS } from './migrate-services-contact'
+import { migrationAssetPath } from './migration-assets'
 import { WORK_PROJECT_IDS } from './migrate-work'
 
 export { HOME_PAGE_DRAFT_ID, HOME_PAGE_ID }
@@ -19,6 +20,11 @@ export { HOME_PAGE_DRAFT_ID, HOME_PAGE_ID }
 interface AssetPaths {
   hero: string
   studio: string
+}
+
+export const HOME_ASSET_PATHS: AssetPaths = {
+  hero: migrationAssetPath('figma-assets/hospitality-hero.png'),
+  studio: migrationAssetPath('images/368-8334.webp'),
 }
 
 interface UploadedAssets {
@@ -318,10 +324,7 @@ async function run() {
   await migrateHome({
     client: client as unknown as MigrationClient,
     publish,
-    assetPaths: {
-      hero: resolve('public/figma-assets/hospitality-hero.png'),
-      studio: resolve('public/images/368-8334.webp'),
-    },
+    assetPaths: HOME_ASSET_PATHS,
   })
 
   console.log(

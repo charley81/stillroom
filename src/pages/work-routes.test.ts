@@ -137,6 +137,12 @@ describe('Work routes', () => {
     })
 
     expect(published).toContain('Published Work heading')
+    expect(published).toContain(
+      '<meta name="description" content="Stillroom description">',
+    )
+    expect(published).toContain(
+      '<link rel="canonical" href="https://stillroom-app.netlify.app/work">',
+    )
     expect(published.indexOf('The Good Table')).toBeLessThan(
       published.indexOf('Orlo House'),
     )
@@ -180,6 +186,9 @@ describe('Work routes', () => {
     })
 
     expect(response.status).toBe(404)
-    expect(await response.text()).toContain('Page not found')
+    const html = await response.text()
+    expect(html).toContain('Page not found')
+    expect(html).toContain('<meta name="robots" content="noindex, nofollow">')
+    expect(html).not.toContain('<link rel="canonical"')
   })
 })

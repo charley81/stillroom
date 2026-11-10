@@ -9,9 +9,7 @@ import { PUBLIC_PREVIEW_STATE } from '../../sanity/preview'
 const preview = Astro.locals.preview ?? PUBLIC_PREVIEW_STATE
 const page = await getWorkPage(preview)
 const title = page.seo?.metaTitle ?? `${page.heading} — Stillroom`
-const description =
-  page.seo?.metaDescription ??
-  'Selected hospitality branding and digital work by Stillroom.'
+const description = page.seo?.metaDescription ?? undefined
 const socialImageUrl = page.seo?.socialImageUrl ?? page.heroArtwork.url
 ---
 

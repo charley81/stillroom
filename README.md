@@ -7,11 +7,13 @@ Responsive Astro implementation of the approved Figma `final` designs.
 ```sh
 pnpm install
 pnpm sanity:dataset:ensure
-pnpm sanity:migrate:publish
+pnpm sanity:migrate:all:publish
+pnpm sanity:cutover:check
 pnpm dev
 pnpm test
 pnpm check
 pnpm build
+pnpm verify:site # with the background dev server running
 ```
 
 ## Routes
@@ -37,7 +39,13 @@ Presentation enables draft preview through `/api/preview/enable`; `/api/preview/
 
 Sanity source is organized under `src/sanity/`, with generated schema and query types in `sanity.types.ts`. Regenerate them with `pnpm sanity:typegen`.
 
-Home, Work Projects, Services, About, Contact, and the complete Journal journey load from Sanity at request time. Migrate the Home singleton as a development draft with `pnpm sanity:migrate:home`; publish it explicitly with `pnpm sanity:migrate:home:publish` only after review.
+Home, Work Projects, Services, About, Contact, and the complete Journal journey load from Sanity at request time. No public route has a local editorial-content fallback. The JSON files under `scripts/sanity/source/` and source assets under `scripts/sanity/assets/` are deterministic migration inputs only and are never served or imported by the website runtime. `public/` contains only fixed interface and brand assets.
+
+Run `pnpm sanity:migrate:all` to recreate development drafts or `pnpm sanity:migrate:all:publish` to rerun and publish the complete development dataset. Both commands are repeatable and reuse uploaded assets by content hash. `pnpm sanity:cutover:check` validates every document against the schema, verifies the exact migrated document and route inventory, exercises every page-shaped query, and checks generated Sanity types for staleness.
+
+Create a rollback-ready development export with `pnpm sanity:dataset:export`. The archive is written to `.sanity/backups/development.tar.gz` and intentionally ignored by Git.
+
+With the background dev server running, `pnpm verify:site` renders every public route at desktop and mobile viewports, checks response status, canonical URLs, internal links, image loading, and horizontal overflow, and writes full-page screenshots to `.sanity/screenshots/` for Figma comparison.
 
 ## Structure
 

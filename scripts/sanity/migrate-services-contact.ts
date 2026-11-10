@@ -1,7 +1,7 @@
 import { createClient } from '@sanity/client'
 import { createHash } from 'node:crypto'
 import { readFile } from 'node:fs/promises'
-import { basename, extname, resolve } from 'node:path'
+import { basename, extname } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import type {
   ContactPage as ContactPageSchema,
@@ -15,6 +15,7 @@ import {
   SERVICES_PAGE_DRAFT_ID,
   SERVICES_PAGE_ID,
 } from '../../src/sanity/constants'
+import { migrationAssetPath } from './migration-assets'
 
 // Custom IDs must stay dot-free so published documents remain visible to
 // unauthenticated public Sanity queries.
@@ -36,6 +37,18 @@ interface AssetPaths {
   hospitality: string
   contact: string
   services: [string, string, string, string]
+}
+
+export const SERVICES_CONTACT_ASSET_PATHS: AssetPaths = {
+  hero: migrationAssetPath('images/375-1387.webp'),
+  hospitality: migrationAssetPath('images/375-1425.webp'),
+  contact: migrationAssetPath('images/382-3276.webp'),
+  services: [
+    migrationAssetPath('figma-assets/service-brand.jpg'),
+    migrationAssetPath('figma-assets/service-identity.jpg'),
+    migrationAssetPath('figma-assets/service-digital.jpg'),
+    migrationAssetPath('figma-assets/service-campaign.jpg'),
+  ],
 }
 
 interface UploadedAssets {
@@ -417,17 +430,7 @@ async function run() {
   await migrateServicesContact({
     client: client as unknown as MigrationClient,
     publish,
-    assetPaths: {
-      hero: resolve('public/images/375-1387.webp'),
-      hospitality: resolve('public/images/375-1425.webp'),
-      contact: resolve('public/images/382-3276.webp'),
-      services: [
-        resolve('public/figma-assets/service-brand.jpg'),
-        resolve('public/figma-assets/service-identity.jpg'),
-        resolve('public/figma-assets/service-digital.jpg'),
-        resolve('public/figma-assets/service-campaign.jpg'),
-      ],
-    },
+    assetPaths: SERVICES_CONTACT_ASSET_PATHS,
   })
 
   console.log(

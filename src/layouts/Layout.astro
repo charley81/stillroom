@@ -13,6 +13,7 @@ interface Props {
   description?: string
   socialImageUrl?: string
   showFooter?: boolean
+  noindex?: boolean
 }
 
 const preview = Astro.locals.preview ?? PUBLIC_PREVIEW_STATE
@@ -22,13 +23,31 @@ const {
   description = settings.defaultSeoDescription,
   socialImageUrl = settings.defaultSocialImage.url,
   showFooter = true,
+  noindex = false,
 } = Astro.props
 
+const SITE_ORIGIN = 'https://stillroom-app.netlify.app'
 const pathname = Astro.url.pathname.replace(/\/+$/, '') || '/'
 const cleanTitle = stegaClean(title)
 const cleanDescription = stegaClean(description)
 const cleanSocialImageUrl = stegaClean(socialImageUrl)
 const cleanStudioName = stegaClean(settings.studioName)
+const canonicalUrl = new URL(pathname, SITE_ORIGIN).href
+const robots =
+  noindex || preview.enabled ? 'noindex, nofollow' : 'index, follow'
+const structuredData = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: cleanTitle,
+  description: cleanDescription,
+  url: canonicalUrl,
+  image: cleanSocialImageUrl,
+  isPartOf: {
+    '@type': 'WebSite',
+    name: cleanStudioName,
+    url: `${SITE_ORIGIN}/`,
+  },
+}).replace(/</g, '\\u003c')
 const exitPreviewHref = `/api/preview/exit?redirect=${encodeURIComponent(pathname)}`
 ---
 
@@ -38,10 +57,21 @@ const exitPreviewHref = `/api/preview/exit?redirect=${encodeURIComponent(pathnam
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={cleanDescription} />
+    <meta name="robots" content={robots} />
+    {!noindex && <link rel="canonical" href={canonicalUrl} />}
+    <meta property="og:type" content="website" />
     <meta property="og:title" content={cleanTitle} />
     <meta property="og:description" content={cleanDescription} />
     <meta property="og:image" content={cleanSocialImageUrl} />
+    <meta property="og:url" content={canonicalUrl} />
     <meta property="og:site_name" content={cleanStudioName} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={cleanTitle} />
+    <meta name="twitter:description" content={cleanDescription} />
+    <meta name="twitter:image" content={cleanSocialImageUrl} />
+    {!noindex && (
+      <script type="application/ld+json" set:html={structuredData} />
+    )}
     <meta name="theme-color" content="#fff7eb" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
