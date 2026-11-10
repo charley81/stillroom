@@ -10,9 +10,9 @@ interface Props {
 const { page } = Astro.props
 ---
 
-<section class="grid h-[889.598px] w-full grid-cols-1 items-center gap-16 overflow-hidden px-4 py-16 md:h-[716px] md:grid-cols-2 md:px-8 md:py-32">
+<section class="grid min-h-[889.598px] w-full grid-cols-1 items-center gap-16 px-4 py-16 md:min-h-[716px] md:grid-cols-2 md:px-8 md:py-32">
   <EditorialImage
-    class="h-[228.598px] w-full object-cover md:h-[460px] md:w-[656px]"
+    class="h-[228.598px] w-full object-cover md:h-[460px] md:max-w-[656px]"
     image={page.founderImage}
     width={656}
     height={460}

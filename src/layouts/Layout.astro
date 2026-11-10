@@ -88,10 +88,7 @@ const exitPreviewHref = `/api/preview/exit?redirect=${encodeURIComponent(pathnam
   </head>
   <body class="m-0 bg-light font-body text-base leading-[1.55] text-dark">
     <Header settings={settings} pathname={pathname} />
-    <main
-      id="main-content"
-      class:list={{ 'overflow-hidden': pathname !== '/' }}
-    >
+    <main id="main-content">
       <slot />
     </main>
     {showFooter && <Footer settings={settings} isHome={pathname === '/'} />}

@@ -67,10 +67,7 @@ export const aboutPage = defineType({
     {
       ...requiredText('teamHeading', 'Team heading', 2),
       group: 'team',
-      validation: (rule) => [
-        rule.required(),
-        rule.max(100).warning('Long headings may not fit the team layout.'),
-      ],
+      validation: (rule) => rule.required(),
     },
     { ...requiredText('teamIntroduction', 'Team introduction'), group: 'team' },
     defineField({

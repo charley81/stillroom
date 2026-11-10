@@ -16,7 +16,7 @@ const firstSectorLine = sectorLabels.slice(0, sectorBreak).join(' / ')
 const secondSectorLine = sectorLabels.slice(sectorBreak).join(' / ')
 ---
 
-<section class="flex h-[927.81px] flex-col gap-8 overflow-hidden px-4 py-16 md:h-[913px] md:px-8 md:py-32">
+<section class="flex min-h-[927.81px] flex-col gap-8 px-4 py-16 md:min-h-[913px] md:px-8 md:py-32">
   <div class="flex w-full max-w-none flex-col gap-8 p-0">
     <p class="m-0 font-body text-base leading-[16.2px] font-black text-dark-grey uppercase">
       Made for hospitality
@@ -25,7 +25,7 @@ const secondSectorLine = sectorLabels.slice(sectorBreak).join(' / ')
       {page.hospitalityHeading}
     </h2>
   </div>
-  <div class="grid h-auto w-full max-w-none grid-cols-1 gap-16 md:h-[416px] md:grid-cols-[640px_672px]">
+  <div class="grid min-h-0 w-full max-w-none grid-cols-1 gap-16 md:min-h-[416px] md:grid-cols-[minmax(0,20fr)_minmax(0,21fr)] xl:grid-cols-[640px_672px]">
     <div class="flex flex-col justify-center gap-8">
       <h3 class="m-0 font-display text-[36px] leading-[1.05] font-normal text-dark uppercase">
         {firstSectorLine}
@@ -36,7 +36,7 @@ const secondSectorLine = sectorLabels.slice(sectorBreak).join(' / ')
           </>
         )}
       </h3>
-      <p class="m-0 w-full text-base leading-[27px] text-dark-grey md:w-[608px]">
+      <p class="m-0 w-full max-w-[608px] text-base leading-[27px] text-dark-grey">
         Our point of view / {page.hospitalityPointOfView}
       </p>
       <a
@@ -47,7 +47,7 @@ const secondSectorLine = sectorLabels.slice(sectorBreak).join(' / ')
       </a>
     </div>
     <EditorialImage
-      class="h-[201.81px] w-full rounded-md object-cover md:h-[416px] md:w-[672px]"
+      class="h-[201.81px] w-full rounded-md object-cover md:h-[416px] md:max-w-[672px]"
       image={page.hospitalityImage}
       width={672}
       height={416}

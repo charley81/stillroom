@@ -10,6 +10,7 @@ export interface PublicPageSnapshot {
   h1Count: number
   missingAltCount: number
   unlabeledControlCount: number
+  clippedTextCount: number
   documentWidth: number
   viewportWidth: number
   links: string[]
@@ -55,6 +56,11 @@ export function validatePublicPage(snapshot: PublicPageSnapshot) {
   if (snapshot.unlabeledControlCount > 0) {
     errors.push(
       `${label}: ${snapshot.unlabeledControlCount} unlabeled form control`,
+    )
+  }
+  if (snapshot.clippedTextCount > 0) {
+    errors.push(
+      `${label}: ${snapshot.clippedTextCount} clipped text containers`,
     )
   }
   if (snapshot.documentWidth > snapshot.viewportWidth) {

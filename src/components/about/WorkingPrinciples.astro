@@ -8,7 +8,7 @@ interface Props {
 const { page } = Astro.props
 ---
 
-<section class="relative isolate flex h-[1341px] flex-col gap-8 overflow-hidden bg-primary px-4 py-16 text-light after:absolute after:inset-0 after:-z-10 after:bg-dark after:opacity-[0.64] after:content-[''] md:h-[1104px] md:gap-16 md:px-8 md:py-32">
+<section class="relative isolate flex min-h-[1341px] flex-col gap-8 bg-primary px-4 py-16 text-light after:absolute after:inset-0 after:-z-10 after:bg-dark after:opacity-[0.64] after:content-[''] md:min-h-[1104px] md:gap-16 md:px-8 md:py-32">
   <p class="m-0 font-body text-base leading-5 font-normal text-light uppercase">
     What we believe
   </p>
@@ -17,7 +17,7 @@ const { page } = Astro.props
   </h2>
   <div class="flex w-full flex-col gap-8 md:gap-16">
     {page.principles.map((principle, index) => (
-      <article class="grid h-auto min-h-0 grid-cols-1 gap-8 bg-transparent py-8 text-light md:h-[140px] md:grid-cols-[144px_464px_704px]">
+      <article class="grid min-h-0 grid-cols-1 gap-8 bg-transparent py-8 text-light md:min-h-[140px] md:grid-cols-[1fr_3.2fr_4.9fr] xl:grid-cols-[144px_464px_704px]">
         <p class="m-0 self-center font-display text-[36px] leading-[1.05] font-normal uppercase">
           {String(index + 1).padStart(2, '0')}
         </p>

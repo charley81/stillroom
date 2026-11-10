@@ -9,7 +9,7 @@ interface Props {
 const { page } = Astro.props
 ---
 
-<section class="flex h-[1603px] flex-col gap-8 overflow-hidden px-4 py-16 md:h-[724px] md:px-8 md:py-32">
+<section class="flex min-h-[1603px] flex-col gap-8 px-4 py-16 md:min-h-[724px] md:px-8 md:py-32">
   <p class="m-0 font-body text-base leading-[16.2px] font-black text-dark-grey uppercase">
     <span class="hidden md:inline">How we work</span>
     <span class="inline md:hidden">How we work</span>
@@ -25,9 +25,9 @@ const { page } = Astro.props
       {page.processCtaLabel}
     </a>
   </div>
-  <div class="grid h-[1292px] w-full grid-cols-1 gap-8 md:h-[315px] md:grid-cols-4">
+  <div class="grid min-h-[1292px] w-full grid-cols-1 gap-8 md:min-h-[315px] md:grid-cols-4">
     {page.processSteps.map((step, index) => (
-      <article class="flex h-[299px] min-h-0 flex-col items-center gap-8 rounded-md border border-light-grey p-4 text-center md:h-auto">
+      <article class="flex min-h-[299px] flex-col items-center gap-8 rounded-md border border-light-grey p-4 text-center">
         <Image
           class="size-24 object-contain md:size-28"
           src={`/figma-assets/number-${index + 1}.png`}

@@ -10,8 +10,8 @@ interface Props {
 const { page } = Astro.props
 ---
 
-<section class="h-[477px] overflow-hidden bg-primary px-4 py-16 text-light md:h-[896px] md:px-16 md:py-32">
-  <div class="grid h-auto w-full grid-cols-1 gap-8 md:h-[640px] md:grid-cols-2">
+<section class="min-h-[477px] bg-primary px-4 py-16 text-light md:min-h-[896px] md:px-16 md:py-32">
+  <div class="grid min-h-0 w-full grid-cols-1 gap-8 md:min-h-[640px] md:grid-cols-2">
     <div class="flex flex-col justify-center gap-8">
       <p class="m-0 font-body text-base leading-5 font-normal text-light uppercase">
         Services / Stillroom
@@ -19,7 +19,7 @@ const { page } = Astro.props
       <h1 class="m-0 whitespace-pre-line font-display text-5xl leading-12 font-normal uppercase md:text-[128px] md:leading-[1.05]">
         {page.heroHeading}
       </h1>
-      <p class="m-0 w-full text-base leading-[27px] text-light md:w-[544px]">
+      <p class="m-0 w-full max-w-[544px] text-base leading-[27px] text-light">
         {page.heroIntroduction}
       </p>
       <Button
@@ -31,7 +31,7 @@ const { page } = Astro.props
       </Button>
     </div>
     <EditorialImage
-      class="hidden size-[640px] rounded-full border-8 border-light object-cover md:block"
+      class="hidden aspect-square h-auto w-full max-w-[640px] self-center justify-self-center rounded-full border-8 border-light object-cover md:block"
       image={page.heroImage}
       width={640}
       height={640}

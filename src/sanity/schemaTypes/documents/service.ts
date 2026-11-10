@@ -17,12 +17,7 @@ export const service = defineType({
       title: 'Short summary',
       type: 'text',
       rows: 3,
-      validation: (rule) => [
-        rule.required(),
-        rule
-          .max(180)
-          .warning('Long summaries may not fit compact Service placements.'),
-      ],
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'description',

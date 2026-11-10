@@ -68,8 +68,9 @@ describe('Sanity-backed shared shell', () => {
     expect(html).toContain('https://linkedin.com/company/stillroom')
     expect(html).toContain('© Stillroom Studio 2032')
     expect(html).toContain('Independent by nature.')
-    expect(html).toContain('h-[1118px]')
-    expect(html).toContain('md:h-[591px]')
+    expect(html).toContain('min-h-[1118px]')
+    expect(html).toContain('md:min-h-[591px]')
+    expect(html).not.toContain('overflow-hidden')
   })
 
   it('keeps the shorter approved desktop footer on Home', async () => {
@@ -78,7 +79,7 @@ describe('Sanity-backed shared shell', () => {
       props: { settings, currentYear: 2032, isHome: true },
     })
 
-    expect(html).toContain('md:h-[530px]')
-    expect(html).not.toContain('md:h-[591px]')
+    expect(html).toContain('md:min-h-[530px]')
+    expect(html).not.toContain('md:min-h-[591px]')
   })
 })

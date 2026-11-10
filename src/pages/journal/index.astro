@@ -15,17 +15,17 @@ const socialImageUrl =
 ---
 
 <Layout title={title} description={description} socialImageUrl={socialImageUrl}>
-  <section class="flex h-[362px] flex-col gap-8 overflow-hidden px-4 pt-4 pb-16 md:h-[658px] md:px-8 md:pt-32 md:pb-20">
+  <section class="flex min-h-[362px] flex-col gap-8 px-4 pt-4 pb-16 md:min-h-[658px] md:px-8 md:pt-32 md:pb-20">
     <div class="w-full max-w-none p-0">
       <p class="m-0 font-body text-base leading-[16.2px] font-black text-dark-grey uppercase">
         Journal / Notes from Stillroom
       </p>
     </div>
-    <div class="grid h-auto w-full max-w-none grid-cols-1 gap-8 md:h-[393px] md:grid-cols-2 md:gap-[clamp(32px,8.889vw,128px)]">
+    <div class="grid min-h-0 w-full max-w-none grid-cols-1 gap-8 md:min-h-[393px] md:grid-cols-2 md:gap-[clamp(32px,8.889vw,128px)]">
       <h1 class="m-0 font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[clamp(72px,8.889vw,128px)] md:leading-[1.05]">
         {page.heading}
       </h1>
-      <div class="flex h-auto flex-col pb-4 md:h-[393px]">
+      <div class="flex min-h-0 flex-col pb-4 md:min-h-[393px]">
         <div class="mx-auto flex w-full max-w-[624px] flex-col gap-8">
           <div class="hidden min-h-0 md:block">
             <EditorialImage
@@ -47,7 +47,7 @@ const socialImageUrl =
 
   <FeaturedArticle article={page.featuredJournalArticle} />
 
-  <section class="flex h-[3582px] flex-col gap-16 overflow-hidden px-4 py-16 md:h-[2516px] md:px-8 md:py-32">
+  <section class="flex min-h-[3582px] flex-col gap-16 px-4 py-16 md:min-h-[2516px] md:px-8 md:py-32">
     <h2 class="m-0 font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[72px] md:leading-[1.05]">
       Fresh from the notebook.
     </h2>

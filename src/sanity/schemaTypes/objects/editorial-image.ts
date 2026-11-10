@@ -42,10 +42,6 @@ export const editorialImage = defineType({
       title: 'Caption',
       type: 'text',
       rows: 2,
-      validation: (rule) =>
-        rule
-          .max(180)
-          .warning('Long captions may not fit the approved layouts.'),
     }),
     defineField({
       name: 'mobileOverride',

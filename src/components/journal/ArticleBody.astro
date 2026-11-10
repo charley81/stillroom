@@ -20,7 +20,7 @@ const lastSectionIndex = article.body.reduce(
 {article.body.map((block, index) => {
   if (block._type === 'journalArticlePullQuote') {
     return (
-      <section class="flex flex-col gap-10 overflow-hidden bg-primary px-4 py-16 text-light md:min-h-[620px] md:p-32">
+      <section class="flex flex-col gap-10 bg-primary px-4 py-16 text-light md:min-h-[620px] md:p-32">
         {block.label && (
           <p class="m-0 font-body text-base leading-5 font-normal uppercase">
             {block.label}
@@ -37,7 +37,7 @@ const lastSectionIndex = article.body.reduce(
   return (
     <section
       class:list={[
-        'grid w-full grid-cols-1 gap-8 overflow-hidden px-4 py-16 md:grid-cols-[320px_720px] md:px-8 md:py-32',
+        'grid w-full grid-cols-1 gap-8 px-4 py-16 md:grid-cols-[minmax(0,4fr)_minmax(0,9fr)] md:px-8 md:py-32 xl:grid-cols-[320px_720px]',
         sectionNumber === 0 && 'min-h-[1533px] md:min-h-[1150px]',
         sectionNumber === 1 && 'min-h-[1409px] md:min-h-[1188px]',
       ]}
@@ -45,7 +45,7 @@ const lastSectionIndex = article.body.reduce(
       <p class="m-0 font-body text-base leading-5 font-normal text-primary uppercase">
         {block.label}
       </p>
-      <div class="flex w-full flex-col gap-8 md:w-[720px]">
+      <div class="flex w-full min-w-0 flex-col gap-8 md:max-w-[720px]">
         <PortableText
           value={block.content}
           paragraphClass="m-0 text-base leading-[27px] text-dark-grey"

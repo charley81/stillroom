@@ -21,7 +21,7 @@ const socialImageUrl = page.seo?.socialImageUrl ?? page.heroImage.url
 
 <Layout title={title} description={description} socialImageUrl={socialImageUrl}>
   <HomeHero page={page} />
-  <section class="flex h-[694px] flex-col gap-8 px-4 py-16 md:h-[417px] md:px-8 md:py-32">
+  <section class="flex min-h-[694px] flex-col gap-8 px-4 py-16 md:min-h-[417px] md:px-8 md:py-32">
     <p class="m-0 font-body text-base leading-[14.85px] font-black text-dark-grey uppercase">
       <span class="hidden md:inline">
         Explorations in hospitality / Concept brands
@@ -32,7 +32,7 @@ const socialImageUrl = page.seo?.socialImageUrl ?? page.heroImage.url
   </section>
   <SelectedConcepts page={page} />
   <ServicesOverview page={page} />
-  <section class="flex h-[369px] flex-col gap-8 px-4 py-16 md:h-[505px] md:px-8 md:py-32">
+  <section class="flex min-h-[369px] flex-col gap-8 px-4 py-16 md:min-h-[505px] md:px-8 md:py-32">
     <p class="m-0 font-body text-base leading-[16.2px] font-black text-dark-grey uppercase">
       Made for the world of hospitality
     </p>
@@ -43,7 +43,7 @@ const socialImageUrl = page.seo?.socialImageUrl ?? page.heroImage.url
     </h2>
   </section>
   <StudioIntro page={page} />
-  <section class="relative isolate flex h-[440px] flex-col gap-8 overflow-hidden bg-primary bg-[length:1440px_1002px] bg-left-top bg-no-repeat px-4 py-16 text-light after:absolute after:inset-0 after:-z-10 after:bg-dark after:opacity-[0.64] after:content-[''] md:h-[506px] md:px-8 md:py-32">
+  <section class="relative isolate flex min-h-[440px] flex-col gap-8 bg-primary bg-[length:1440px_1002px] bg-left-top bg-no-repeat px-4 py-16 text-light after:absolute after:inset-0 after:-z-10 after:bg-dark after:opacity-[0.64] after:content-[''] md:min-h-[506px] md:px-8 md:py-32">
     <p class="m-0 font-body text-base leading-[16.2px] font-black text-light uppercase">
       Our point of view
     </p>

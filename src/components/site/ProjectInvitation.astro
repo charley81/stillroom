@@ -16,15 +16,15 @@ const {
 } = Astro.props
 
 const heights = {
-  default: 'h-[329px] md:h-[526px]',
-  work: 'h-[350px] md:h-[536px]',
-  about: 'h-[313px] md:h-[526px]',
+  default: 'min-h-[329px] md:min-h-[526px]',
+  work: 'min-h-[350px] md:min-h-[536px]',
+  about: 'min-h-[313px] md:min-h-[526px]',
 }
 ---
 
 <section
   class:list={[
-    "relative isolate flex flex-col items-stretch gap-8 overflow-hidden bg-primary bg-[length:1440px_1002px] bg-left-top bg-no-repeat px-4 py-16 text-light after:absolute after:inset-0 after:-z-10 after:bg-dark after:opacity-[0.64] after:content-[''] md:px-8 md:py-32",
+    "relative isolate flex flex-col items-stretch gap-8 bg-primary bg-[length:1440px_1002px] bg-left-top bg-no-repeat px-4 py-16 text-light after:absolute after:inset-0 after:-z-10 after:bg-dark after:opacity-[0.64] after:content-[''] md:px-8 md:py-32",
     heights[variant],
   ]}
 >

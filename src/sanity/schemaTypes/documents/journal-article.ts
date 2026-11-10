@@ -64,10 +64,7 @@ export const journalArticle = defineType({
       type: 'text',
       rows: 3,
       group: 'identity',
-      validation: (rule) => [
-        rule.required(),
-        rule.max(220).warning('Long standfirsts may not fit article cards.'),
-      ],
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'readingTime',

@@ -9,7 +9,7 @@ interface Props {
 const { page } = Astro.props
 ---
 
-<section class="flex h-[2298.233px] flex-col gap-8 overflow-hidden px-4 py-16 md:h-[1175px] md:gap-16 md:px-8 md:py-32">
+<section class="flex min-h-[2298.233px] flex-col gap-8 px-4 py-16 md:min-h-[1175px] md:gap-16 md:px-8 md:py-32">
   <div class="grid w-full grid-cols-1 gap-4 md:grid-cols-2 md:gap-16">
     <h2 class="m-0 whitespace-pre-line font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[72px] md:leading-[1.05]">
       {page.teamHeading}
@@ -18,7 +18,7 @@ const { page } = Astro.props
   </div>
   <div class="grid w-full grid-cols-1 gap-8 md:grid-cols-3">
     {page.teamMembers.map((person) => (
-      <article class="flex flex-col gap-4 overflow-hidden py-8 md:gap-8">
+      <article class="flex flex-col gap-4 py-8 md:gap-8">
         <EditorialImage
           class="h-[358.078px] w-full rounded-md object-cover object-top md:h-[480px]"
           image={person.portrait}
