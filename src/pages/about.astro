@@ -35,6 +35,7 @@ const socialImageUrl = page.seo?.socialImageUrl ?? page.heroImage.url
       image={page.heroImage}
       width={1024}
       height={566}
+      sizes="(min-width: 768px) calc(100vw - 64px), 1px"
       loading="eager"
       fetchpriority="high"
     />

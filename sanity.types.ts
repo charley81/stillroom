@@ -665,7 +665,7 @@ export type AllSanitySchemaTypes =
 
 // Source: src/sanity/queries/about.ts
 // Variable: ABOUT_PAGE_QUERY
-// Query: *[_type == "aboutPage" && _id == "aboutPage"][0]{    _id,    heading,    heroImage{        decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url    },    founderHeading,    founderStory,    founderName,    founderRole,    founderImage{        decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url    },    teamHeading,    teamIntroduction,    teamMembers[]{      _key,      _type,      name,      role,      biography,      portrait{          decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url      }    },    principles[]{      _key,      _type,      title,      description    },    principlesHeading,    clientProofHeading,    clientProofCopy,    clientLogos[]->{      _id,      clientName,      "url": logo.asset->url,      "mimeType": logo.asset->mimeType    },    clientProofCtaLabel,    finalCtaEyebrow,    finalCtaHeading,    finalCtaLabel,    seo{        metaTitle,  metaDescription,  "socialImageUrl": socialImage.asset->url    }  }
+// Query: *[_type == "aboutPage" && _id == "aboutPage"][0]{    _id,    heading,    heroImage{        decorative,  alt,  caption,  "url": asset.asset->url,  "crop": asset.crop,  "hotspot": asset.hotspot,  "mobileUrl": mobileOverride.asset->url,  "mobileCrop": mobileOverride.crop,  "mobileHotspot": mobileOverride.hotspot    },    founderHeading,    founderStory,    founderName,    founderRole,    founderImage{        decorative,  alt,  caption,  "url": asset.asset->url,  "crop": asset.crop,  "hotspot": asset.hotspot,  "mobileUrl": mobileOverride.asset->url,  "mobileCrop": mobileOverride.crop,  "mobileHotspot": mobileOverride.hotspot    },    teamHeading,    teamIntroduction,    teamMembers[]{      _key,      _type,      name,      role,      biography,      portrait{          decorative,  alt,  caption,  "url": asset.asset->url,  "crop": asset.crop,  "hotspot": asset.hotspot,  "mobileUrl": mobileOverride.asset->url,  "mobileCrop": mobileOverride.crop,  "mobileHotspot": mobileOverride.hotspot      }    },    principles[]{      _key,      _type,      title,      description    },    principlesHeading,    clientProofHeading,    clientProofCopy,    clientLogos[]->{      _id,      clientName,      "url": logo.asset->url,      "mimeType": logo.asset->mimeType    },    clientProofCtaLabel,    finalCtaEyebrow,    finalCtaHeading,    finalCtaLabel,    seo{        metaTitle,  metaDescription,  "socialImageUrl": socialImage.asset->url    }  }
 export type ABOUT_PAGE_QUERY_RESULT = {
   _id: 'aboutPage'
   heading: string
@@ -674,7 +674,11 @@ export type ABOUT_PAGE_QUERY_RESULT = {
     alt: string | null
     caption: string | null
     url: string | null
+    crop: SanityImageCrop | null
+    hotspot: SanityImageHotspot | null
     mobileUrl: string | null
+    mobileCrop: SanityImageCrop | null
+    mobileHotspot: SanityImageHotspot | null
   }
   founderHeading: string
   founderStory: ConstrainedRichText
@@ -685,7 +689,11 @@ export type ABOUT_PAGE_QUERY_RESULT = {
     alt: string | null
     caption: string | null
     url: string | null
+    crop: SanityImageCrop | null
+    hotspot: SanityImageHotspot | null
     mobileUrl: string | null
+    mobileCrop: SanityImageCrop | null
+    mobileHotspot: SanityImageHotspot | null
   }
   teamHeading: string
   teamIntroduction: string
@@ -700,7 +708,11 @@ export type ABOUT_PAGE_QUERY_RESULT = {
       alt: string | null
       caption: string | null
       url: string | null
+      crop: SanityImageCrop | null
+      hotspot: SanityImageHotspot | null
       mobileUrl: string | null
+      mobileCrop: SanityImageCrop | null
+      mobileHotspot: SanityImageHotspot | null
     }
   }>
   principles: Array<{
@@ -731,7 +743,7 @@ export type ABOUT_PAGE_QUERY_RESULT = {
 
 // Source: src/sanity/queries/home.ts
 // Variable: HOME_PAGE_QUERY
-// Query: *[_type == "homePage" && _id == "homePage"][0]{    _id,    heroHeading,    heroImage{        decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url    },    heroPrimaryCtaLabel,    heroSecondaryCtaLabel,    clientLogos[]->{      _id,      clientName,      "url": logo.asset->url,      "mimeType": logo.asset->mimeType    },    featuredWorkHeading,    featuredWorkProjects[]->{        _id,  title,  "slug": slug.current,  sectorLabel,  cardSummary,  cardImage{      decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url  },  services[]->{      _id,  title  },  positioningStatement    },    featuredWorkCtaLabel,    featuredServices[]->{      _id,      title,      shortSummary    },    sectorLabels,    studioHeading,    studioIntroduction,    studioImage{        decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url    },    studioCtaLabel,    pointOfViewHeading,    pointOfViewCopy,    processHeading,    processSteps[]{      _key,      _type,      title,      description    },    processCtaLabel,    journalHeading,    featuredJournalArticles[]->{        _id,  title,  "slug": slug.current,  category->{      _id,  title,  "slug": slug.current  },  publicationDate,  standfirst,  readingTime,  heroImage{      decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url  }    },    journalCtaLabel,    finalCtaEyebrow,    finalCtaHeading,    finalCtaLabel,    seo{        metaTitle,  metaDescription,  "socialImageUrl": socialImage.asset->url    }  }
+// Query: *[_type == "homePage" && _id == "homePage"][0]{    _id,    heroHeading,    heroImage{        decorative,  alt,  caption,  "url": asset.asset->url,  "crop": asset.crop,  "hotspot": asset.hotspot,  "mobileUrl": mobileOverride.asset->url,  "mobileCrop": mobileOverride.crop,  "mobileHotspot": mobileOverride.hotspot    },    heroPrimaryCtaLabel,    heroSecondaryCtaLabel,    clientLogos[]->{      _id,      clientName,      "url": logo.asset->url,      "mimeType": logo.asset->mimeType    },    featuredWorkHeading,    featuredWorkProjects[]->{        _id,  title,  "slug": slug.current,  sectorLabel,  cardSummary,  cardImage{      decorative,  alt,  caption,  "url": asset.asset->url,  "crop": asset.crop,  "hotspot": asset.hotspot,  "mobileUrl": mobileOverride.asset->url,  "mobileCrop": mobileOverride.crop,  "mobileHotspot": mobileOverride.hotspot  },  services[]->{      _id,  title  },  positioningStatement    },    featuredWorkCtaLabel,    featuredServices[]->{      _id,      title,      shortSummary    },    sectorLabels,    studioHeading,    studioIntroduction,    studioImage{        decorative,  alt,  caption,  "url": asset.asset->url,  "crop": asset.crop,  "hotspot": asset.hotspot,  "mobileUrl": mobileOverride.asset->url,  "mobileCrop": mobileOverride.crop,  "mobileHotspot": mobileOverride.hotspot    },    studioCtaLabel,    pointOfViewHeading,    pointOfViewCopy,    processHeading,    processSteps[]{      _key,      _type,      title,      description    },    processCtaLabel,    journalHeading,    featuredJournalArticles[]->{        _id,  title,  "slug": slug.current,  category->{      _id,  title,  "slug": slug.current  },  publicationDate,  standfirst,  readingTime,  heroImage{      decorative,  alt,  caption,  "url": asset.asset->url,  "crop": asset.crop,  "hotspot": asset.hotspot,  "mobileUrl": mobileOverride.asset->url,  "mobileCrop": mobileOverride.crop,  "mobileHotspot": mobileOverride.hotspot  }    },    journalCtaLabel,    finalCtaEyebrow,    finalCtaHeading,    finalCtaLabel,    seo{        metaTitle,  metaDescription,  "socialImageUrl": socialImage.asset->url    }  }
 export type HOME_PAGE_QUERY_RESULT = {
   _id: 'homePage'
   heroHeading: string
@@ -740,7 +752,11 @@ export type HOME_PAGE_QUERY_RESULT = {
     alt: string | null
     caption: string | null
     url: string | null
+    crop: SanityImageCrop | null
+    hotspot: SanityImageHotspot | null
     mobileUrl: string | null
+    mobileCrop: SanityImageCrop | null
+    mobileHotspot: SanityImageHotspot | null
   }
   heroPrimaryCtaLabel: string
   heroSecondaryCtaLabel: string
@@ -762,7 +778,11 @@ export type HOME_PAGE_QUERY_RESULT = {
       alt: string | null
       caption: string | null
       url: string | null
+      crop: SanityImageCrop | null
+      hotspot: SanityImageHotspot | null
       mobileUrl: string | null
+      mobileCrop: SanityImageCrop | null
+      mobileHotspot: SanityImageHotspot | null
     }
     services: Array<{
       _id: string
@@ -784,7 +804,11 @@ export type HOME_PAGE_QUERY_RESULT = {
     alt: string | null
     caption: string | null
     url: string | null
+    crop: SanityImageCrop | null
+    hotspot: SanityImageHotspot | null
     mobileUrl: string | null
+    mobileCrop: SanityImageCrop | null
+    mobileHotspot: SanityImageHotspot | null
   }
   studioCtaLabel: string
   pointOfViewHeading: string
@@ -815,7 +839,11 @@ export type HOME_PAGE_QUERY_RESULT = {
       alt: string | null
       caption: string | null
       url: string | null
+      crop: SanityImageCrop | null
+      hotspot: SanityImageHotspot | null
       mobileUrl: string | null
+      mobileCrop: SanityImageCrop | null
+      mobileHotspot: SanityImageHotspot | null
     }
   }>
   journalCtaLabel: string
@@ -831,7 +859,7 @@ export type HOME_PAGE_QUERY_RESULT = {
 
 // Source: src/sanity/queries/journal.ts
 // Variable: JOURNAL_PAGE_QUERY
-// Query: {    "page": *[_type == "journalPage" && _id == "journalPage"][0]{      _id,      heading,      introduction,      introductionArtwork{          decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url      },      featuredJournalArticle->{          _id,  title,  "slug": slug.current,  category->{      _id,  title,  "slug": slug.current  },  publicationDate,  standfirst,  readingTime,  heroImage{      decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url  }      },      seo{          metaTitle,  metaDescription,  "socialImageUrl": socialImage.asset->url      }    },    "articles": *[      _type == "journalArticle" &&      !(_id in [        *[_type == "journalPage" && _id == "journalPage"][0].featuredJournalArticle._ref,        "drafts." + *[_type == "journalPage" && _id == "journalPage"][0].featuredJournalArticle._ref      ])    ] | order(publicationDate desc){        _id,  title,  "slug": slug.current,  category->{      _id,  title,  "slug": slug.current  },  publicationDate,  standfirst,  readingTime,  heroImage{      decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url  }    }  }
+// Query: {    "page": *[_type == "journalPage" && _id == "journalPage"][0]{      _id,      heading,      introduction,      introductionArtwork{          decorative,  alt,  caption,  "url": asset.asset->url,  "crop": asset.crop,  "hotspot": asset.hotspot,  "mobileUrl": mobileOverride.asset->url,  "mobileCrop": mobileOverride.crop,  "mobileHotspot": mobileOverride.hotspot      },      featuredJournalArticle->{          _id,  title,  "slug": slug.current,  category->{      _id,  title,  "slug": slug.current  },  publicationDate,  standfirst,  readingTime,  heroImage{      decorative,  alt,  caption,  "url": asset.asset->url,  "crop": asset.crop,  "hotspot": asset.hotspot,  "mobileUrl": mobileOverride.asset->url,  "mobileCrop": mobileOverride.crop,  "mobileHotspot": mobileOverride.hotspot  }      },      seo{          metaTitle,  metaDescription,  "socialImageUrl": socialImage.asset->url      }    },    "articles": *[      _type == "journalArticle" &&      !(_id in [        *[_type == "journalPage" && _id == "journalPage"][0].featuredJournalArticle._ref,        "drafts." + *[_type == "journalPage" && _id == "journalPage"][0].featuredJournalArticle._ref      ])    ] | order(publicationDate desc){        _id,  title,  "slug": slug.current,  category->{      _id,  title,  "slug": slug.current  },  publicationDate,  standfirst,  readingTime,  heroImage{      decorative,  alt,  caption,  "url": asset.asset->url,  "crop": asset.crop,  "hotspot": asset.hotspot,  "mobileUrl": mobileOverride.asset->url,  "mobileCrop": mobileOverride.crop,  "mobileHotspot": mobileOverride.hotspot  }    }  }
 export type JOURNAL_PAGE_QUERY_RESULT = {
   page: {
     _id: 'journalPage'
@@ -842,7 +870,11 @@ export type JOURNAL_PAGE_QUERY_RESULT = {
       alt: string | null
       caption: string | null
       url: string | null
+      crop: SanityImageCrop | null
+      hotspot: SanityImageHotspot | null
       mobileUrl: string | null
+      mobileCrop: SanityImageCrop | null
+      mobileHotspot: SanityImageHotspot | null
     }
     featuredJournalArticle: {
       _id: string
@@ -861,7 +893,11 @@ export type JOURNAL_PAGE_QUERY_RESULT = {
         alt: string | null
         caption: string | null
         url: string | null
+        crop: SanityImageCrop | null
+        hotspot: SanityImageHotspot | null
         mobileUrl: string | null
+        mobileCrop: SanityImageCrop | null
+        mobileHotspot: SanityImageHotspot | null
       }
     }
     seo: {
@@ -887,14 +923,18 @@ export type JOURNAL_PAGE_QUERY_RESULT = {
       alt: string | null
       caption: string | null
       url: string | null
+      crop: SanityImageCrop | null
+      hotspot: SanityImageHotspot | null
       mobileUrl: string | null
+      mobileCrop: SanityImageCrop | null
+      mobileHotspot: SanityImageHotspot | null
     }
   }>
 }
 
 // Source: src/sanity/queries/journal.ts
 // Variable: JOURNAL_ARTICLE_QUERY
-// Query: {    "article": *[_type == "journalArticle" && slug.current == $slug][0]{        _id,  title,  "slug": slug.current,  category->{      _id,  title,  "slug": slug.current  },  publicationDate,  standfirst,  readingTime,  heroImage{      decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url  },      author->{          _id,  name,  biography      },      body[]{        _key,        _type,        _type == "journalArticleSection" => {          label,          content        },        _type == "journalArticlePullQuote" => {          label,          quote        }      },      relatedJournalArticles[]->{          _id,  title,  "slug": slug.current,  category->{      _id,  title,  "slug": slug.current  },  publicationDate,  standfirst,  readingTime,  heroImage{      decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url  }      },      seo{          metaTitle,  metaDescription,  "socialImageUrl": socialImage.asset->url      }    }  }
+// Query: {    "article": *[_type == "journalArticle" && slug.current == $slug][0]{        _id,  title,  "slug": slug.current,  category->{      _id,  title,  "slug": slug.current  },  publicationDate,  standfirst,  readingTime,  heroImage{      decorative,  alt,  caption,  "url": asset.asset->url,  "crop": asset.crop,  "hotspot": asset.hotspot,  "mobileUrl": mobileOverride.asset->url,  "mobileCrop": mobileOverride.crop,  "mobileHotspot": mobileOverride.hotspot  },      author->{          _id,  name,  biography      },      body[]{        _key,        _type,        _type == "journalArticleSection" => {          label,          content        },        _type == "journalArticlePullQuote" => {          label,          quote        }      },      relatedJournalArticles[]->{          _id,  title,  "slug": slug.current,  category->{      _id,  title,  "slug": slug.current  },  publicationDate,  standfirst,  readingTime,  heroImage{      decorative,  alt,  caption,  "url": asset.asset->url,  "crop": asset.crop,  "hotspot": asset.hotspot,  "mobileUrl": mobileOverride.asset->url,  "mobileCrop": mobileOverride.crop,  "mobileHotspot": mobileOverride.hotspot  }      },      seo{          metaTitle,  metaDescription,  "socialImageUrl": socialImage.asset->url      }    }  }
 export type JOURNAL_ARTICLE_QUERY_RESULT = {
   article: {
     _id: string
@@ -913,7 +953,11 @@ export type JOURNAL_ARTICLE_QUERY_RESULT = {
       alt: string | null
       caption: string | null
       url: string | null
+      crop: SanityImageCrop | null
+      hotspot: SanityImageHotspot | null
       mobileUrl: string | null
+      mobileCrop: SanityImageCrop | null
+      mobileHotspot: SanityImageHotspot | null
     }
     author: {
       _id: string
@@ -968,7 +1012,11 @@ export type JOURNAL_ARTICLE_QUERY_RESULT = {
         alt: string | null
         caption: string | null
         url: string | null
+        crop: SanityImageCrop | null
+        hotspot: SanityImageHotspot | null
         mobileUrl: string | null
+        mobileCrop: SanityImageCrop | null
+        mobileHotspot: SanityImageHotspot | null
       }
     }>
     seo: {
@@ -981,7 +1029,7 @@ export type JOURNAL_ARTICLE_QUERY_RESULT = {
 
 // Source: src/sanity/queries/services-contact.ts
 // Variable: SERVICES_PAGE_QUERY
-// Query: *[_type == "servicesPage" && _id == "servicesPage"][0]{    _id,    heroHeading,    heroIntroduction,    heroImage{        decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url    },    heroCtaLabel,    services[]->{      _id,      title,      shortSummary,      description,      image{          decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url      },      deliverables    },    processHeading,    processSteps[]{      _key,      title,      description    },    hospitalityHeading,    hospitalitySectorLabels,    hospitalityPointOfView,    hospitalityImage{        decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url    },    hospitalityCtaLabel,    finalStatementEyebrow,    finalStatementHeading,    seo{        metaTitle,  metaDescription,  "socialImageUrl": socialImage.asset->url    }  }
+// Query: *[_type == "servicesPage" && _id == "servicesPage"][0]{    _id,    heroHeading,    heroIntroduction,    heroImage{        decorative,  alt,  caption,  "url": asset.asset->url,  "crop": asset.crop,  "hotspot": asset.hotspot,  "mobileUrl": mobileOverride.asset->url,  "mobileCrop": mobileOverride.crop,  "mobileHotspot": mobileOverride.hotspot    },    heroCtaLabel,    services[]->{      _id,      title,      shortSummary,      description,      image{          decorative,  alt,  caption,  "url": asset.asset->url,  "crop": asset.crop,  "hotspot": asset.hotspot,  "mobileUrl": mobileOverride.asset->url,  "mobileCrop": mobileOverride.crop,  "mobileHotspot": mobileOverride.hotspot      },      deliverables    },    processHeading,    processSteps[]{      _key,      title,      description    },    hospitalityHeading,    hospitalitySectorLabels,    hospitalityPointOfView,    hospitalityImage{        decorative,  alt,  caption,  "url": asset.asset->url,  "crop": asset.crop,  "hotspot": asset.hotspot,  "mobileUrl": mobileOverride.asset->url,  "mobileCrop": mobileOverride.crop,  "mobileHotspot": mobileOverride.hotspot    },    hospitalityCtaLabel,    finalStatementEyebrow,    finalStatementHeading,    seo{        metaTitle,  metaDescription,  "socialImageUrl": socialImage.asset->url    }  }
 export type SERVICES_PAGE_QUERY_RESULT = {
   _id: 'servicesPage'
   heroHeading: string
@@ -991,7 +1039,11 @@ export type SERVICES_PAGE_QUERY_RESULT = {
     alt: string | null
     caption: string | null
     url: string | null
+    crop: SanityImageCrop | null
+    hotspot: SanityImageHotspot | null
     mobileUrl: string | null
+    mobileCrop: SanityImageCrop | null
+    mobileHotspot: SanityImageHotspot | null
   }
   heroCtaLabel: string
   services: Array<{
@@ -1004,7 +1056,11 @@ export type SERVICES_PAGE_QUERY_RESULT = {
       alt: string | null
       caption: string | null
       url: string | null
+      crop: SanityImageCrop | null
+      hotspot: SanityImageHotspot | null
       mobileUrl: string | null
+      mobileCrop: SanityImageCrop | null
+      mobileHotspot: SanityImageHotspot | null
     }
     deliverables: Array<string>
   }>
@@ -1022,7 +1078,11 @@ export type SERVICES_PAGE_QUERY_RESULT = {
     alt: string | null
     caption: string | null
     url: string | null
+    crop: SanityImageCrop | null
+    hotspot: SanityImageHotspot | null
     mobileUrl: string | null
+    mobileCrop: SanityImageCrop | null
+    mobileHotspot: SanityImageHotspot | null
   }
   hospitalityCtaLabel: string
   finalStatementEyebrow: string
@@ -1036,7 +1096,7 @@ export type SERVICES_PAGE_QUERY_RESULT = {
 
 // Source: src/sanity/queries/services-contact.ts
 // Variable: CONTACT_PAGE_QUERY
-// Query: {    "page": *[_type == "contactPage" && _id == "contactPage"][0]{      _id,      heading,      introduction,      supportingImage{          decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url      },      supportingStatement,      seo{          metaTitle,  metaDescription,  "socialImageUrl": socialImage.asset->url      }    },    "services": *[_type == "servicesPage" && _id == "servicesPage"][0].services[]->{      _id,      title    }  }
+// Query: {    "page": *[_type == "contactPage" && _id == "contactPage"][0]{      _id,      heading,      introduction,      supportingImage{          decorative,  alt,  caption,  "url": asset.asset->url,  "crop": asset.crop,  "hotspot": asset.hotspot,  "mobileUrl": mobileOverride.asset->url,  "mobileCrop": mobileOverride.crop,  "mobileHotspot": mobileOverride.hotspot      },      supportingStatement,      seo{          metaTitle,  metaDescription,  "socialImageUrl": socialImage.asset->url      }    },    "services": *[_type == "servicesPage" && _id == "servicesPage"][0].services[]->{      _id,      title    }  }
 export type CONTACT_PAGE_QUERY_RESULT = {
   page: {
     _id: 'contactPage'
@@ -1047,7 +1107,11 @@ export type CONTACT_PAGE_QUERY_RESULT = {
       alt: string | null
       caption: string | null
       url: string | null
+      crop: SanityImageCrop | null
+      hotspot: SanityImageHotspot | null
       mobileUrl: string | null
+      mobileCrop: SanityImageCrop | null
+      mobileHotspot: SanityImageHotspot | null
     }
     supportingStatement: string
     seo: {
@@ -1096,7 +1160,7 @@ export type SITE_SETTINGS_QUERY_RESULT = {
 
 // Source: src/sanity/queries/work.ts
 // Variable: WORK_PAGE_QUERY
-// Query: *[_type == "workPage" && _id == "workPage"][0]{      _id,  heading,  heroArtwork{      decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url  },  workProjects[]->{      _id,  title,  "slug": slug.current,  sectorLabel,  cardSummary,  cardImage{      decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url  },  services[]->{      _id,  title  },  positioningStatement  },  finalCtaEyebrow,  finalCtaHeading,  finalCtaLabel,  seo{      metaTitle,  metaDescription,  "socialImageUrl": socialImage.asset->url  }  }
+// Query: *[_type == "workPage" && _id == "workPage"][0]{      _id,  heading,  heroArtwork{      decorative,  alt,  caption,  "url": asset.asset->url,  "crop": asset.crop,  "hotspot": asset.hotspot,  "mobileUrl": mobileOverride.asset->url,  "mobileCrop": mobileOverride.crop,  "mobileHotspot": mobileOverride.hotspot  },  workProjects[]->{      _id,  title,  "slug": slug.current,  sectorLabel,  cardSummary,  cardImage{      decorative,  alt,  caption,  "url": asset.asset->url,  "crop": asset.crop,  "hotspot": asset.hotspot,  "mobileUrl": mobileOverride.asset->url,  "mobileCrop": mobileOverride.crop,  "mobileHotspot": mobileOverride.hotspot  },  services[]->{      _id,  title  },  positioningStatement  },  finalCtaEyebrow,  finalCtaHeading,  finalCtaLabel,  seo{      metaTitle,  metaDescription,  "socialImageUrl": socialImage.asset->url  }  }
 export type WORK_PAGE_QUERY_RESULT = {
   _id: 'workPage'
   heading: string
@@ -1105,7 +1169,11 @@ export type WORK_PAGE_QUERY_RESULT = {
     alt: string | null
     caption: string | null
     url: string | null
+    crop: SanityImageCrop | null
+    hotspot: SanityImageHotspot | null
     mobileUrl: string | null
+    mobileCrop: SanityImageCrop | null
+    mobileHotspot: SanityImageHotspot | null
   }
   workProjects: Array<{
     _id: string
@@ -1118,7 +1186,11 @@ export type WORK_PAGE_QUERY_RESULT = {
       alt: string | null
       caption: string | null
       url: string | null
+      crop: SanityImageCrop | null
+      hotspot: SanityImageHotspot | null
       mobileUrl: string | null
+      mobileCrop: SanityImageCrop | null
+      mobileHotspot: SanityImageHotspot | null
     }
     services: Array<{
       _id: string
@@ -1138,7 +1210,7 @@ export type WORK_PAGE_QUERY_RESULT = {
 
 // Source: src/sanity/queries/work.ts
 // Variable: WORK_PROJECT_QUERY
-// Query: {    "page": *[_type == "workPage" && _id == "workPage"][0]{        _id,  heading,  heroArtwork{      decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url  },  workProjects[]->{      _id,  title,  "slug": slug.current,  sectorLabel,  cardSummary,  cardImage{      decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url  },  services[]->{      _id,  title  },  positioningStatement  },  finalCtaEyebrow,  finalCtaHeading,  finalCtaLabel,  seo{      metaTitle,  metaDescription,  "socialImageUrl": socialImage.asset->url  }    },    "project": *[_type == "workProject" && slug.current == $slug][0]{        _id,  title,  "slug": slug.current,  sectorLabel,  cardSummary,  cardImage{      decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url  },  services[]->{      _id,  title  },  positioningStatement,      introduction,      heroArtwork{          decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url      },      heroPhotograph{          decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url      },      challenge{        heading,        content      },      contribution{        heading,        content      },      galleryHeading,      gallery[]{        _key,        _type,        _type == "workProjectGalleryImage" => {          image{              decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url          }        },        _type == "workProjectGalleryBrandPanel" => {          title,          statement,          label,          image{              decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url          }        }      },      outcomeHeading,      outcomeCopy,      seo{          metaTitle,  metaDescription,  "socialImageUrl": socialImage.asset->url      }    }  }
+// Query: {    "page": *[_type == "workPage" && _id == "workPage"][0]{        _id,  heading,  heroArtwork{      decorative,  alt,  caption,  "url": asset.asset->url,  "crop": asset.crop,  "hotspot": asset.hotspot,  "mobileUrl": mobileOverride.asset->url,  "mobileCrop": mobileOverride.crop,  "mobileHotspot": mobileOverride.hotspot  },  workProjects[]->{      _id,  title,  "slug": slug.current,  sectorLabel,  cardSummary,  cardImage{      decorative,  alt,  caption,  "url": asset.asset->url,  "crop": asset.crop,  "hotspot": asset.hotspot,  "mobileUrl": mobileOverride.asset->url,  "mobileCrop": mobileOverride.crop,  "mobileHotspot": mobileOverride.hotspot  },  services[]->{      _id,  title  },  positioningStatement  },  finalCtaEyebrow,  finalCtaHeading,  finalCtaLabel,  seo{      metaTitle,  metaDescription,  "socialImageUrl": socialImage.asset->url  }    },    "project": *[_type == "workProject" && slug.current == $slug][0]{        _id,  title,  "slug": slug.current,  sectorLabel,  cardSummary,  cardImage{      decorative,  alt,  caption,  "url": asset.asset->url,  "crop": asset.crop,  "hotspot": asset.hotspot,  "mobileUrl": mobileOverride.asset->url,  "mobileCrop": mobileOverride.crop,  "mobileHotspot": mobileOverride.hotspot  },  services[]->{      _id,  title  },  positioningStatement,      introduction,      heroArtwork{          decorative,  alt,  caption,  "url": asset.asset->url,  "crop": asset.crop,  "hotspot": asset.hotspot,  "mobileUrl": mobileOverride.asset->url,  "mobileCrop": mobileOverride.crop,  "mobileHotspot": mobileOverride.hotspot      },      heroPhotograph{          decorative,  alt,  caption,  "url": asset.asset->url,  "crop": asset.crop,  "hotspot": asset.hotspot,  "mobileUrl": mobileOverride.asset->url,  "mobileCrop": mobileOverride.crop,  "mobileHotspot": mobileOverride.hotspot      },      challenge{        heading,        content      },      contribution{        heading,        content      },      galleryHeading,      gallery[]{        _key,        _type,        _type == "workProjectGalleryImage" => {          image{              decorative,  alt,  caption,  "url": asset.asset->url,  "crop": asset.crop,  "hotspot": asset.hotspot,  "mobileUrl": mobileOverride.asset->url,  "mobileCrop": mobileOverride.crop,  "mobileHotspot": mobileOverride.hotspot          }        },        _type == "workProjectGalleryBrandPanel" => {          title,          statement,          label,          image{              decorative,  alt,  caption,  "url": asset.asset->url,  "crop": asset.crop,  "hotspot": asset.hotspot,  "mobileUrl": mobileOverride.asset->url,  "mobileCrop": mobileOverride.crop,  "mobileHotspot": mobileOverride.hotspot          }        }      },      outcomeHeading,      outcomeCopy,      seo{          metaTitle,  metaDescription,  "socialImageUrl": socialImage.asset->url      }    }  }
 export type WORK_PROJECT_QUERY_RESULT = {
   page: {
     _id: 'workPage'
@@ -1148,7 +1220,11 @@ export type WORK_PROJECT_QUERY_RESULT = {
       alt: string | null
       caption: string | null
       url: string | null
+      crop: SanityImageCrop | null
+      hotspot: SanityImageHotspot | null
       mobileUrl: string | null
+      mobileCrop: SanityImageCrop | null
+      mobileHotspot: SanityImageHotspot | null
     }
     workProjects: Array<{
       _id: string
@@ -1161,7 +1237,11 @@ export type WORK_PROJECT_QUERY_RESULT = {
         alt: string | null
         caption: string | null
         url: string | null
+        crop: SanityImageCrop | null
+        hotspot: SanityImageHotspot | null
         mobileUrl: string | null
+        mobileCrop: SanityImageCrop | null
+        mobileHotspot: SanityImageHotspot | null
       }
       services: Array<{
         _id: string
@@ -1189,7 +1269,11 @@ export type WORK_PROJECT_QUERY_RESULT = {
       alt: string | null
       caption: string | null
       url: string | null
+      crop: SanityImageCrop | null
+      hotspot: SanityImageHotspot | null
       mobileUrl: string | null
+      mobileCrop: SanityImageCrop | null
+      mobileHotspot: SanityImageHotspot | null
     }
     services: Array<{
       _id: string
@@ -1202,14 +1286,22 @@ export type WORK_PROJECT_QUERY_RESULT = {
       alt: string | null
       caption: string | null
       url: string | null
+      crop: SanityImageCrop | null
+      hotspot: SanityImageHotspot | null
       mobileUrl: string | null
+      mobileCrop: SanityImageCrop | null
+      mobileHotspot: SanityImageHotspot | null
     }
     heroPhotograph: {
       decorative: boolean
       alt: string | null
       caption: string | null
       url: string | null
+      crop: SanityImageCrop | null
+      hotspot: SanityImageHotspot | null
       mobileUrl: string | null
+      mobileCrop: SanityImageCrop | null
+      mobileHotspot: SanityImageHotspot | null
     }
     challenge: {
       heading: string
@@ -1232,7 +1324,11 @@ export type WORK_PROJECT_QUERY_RESULT = {
             alt: string | null
             caption: string | null
             url: string | null
+            crop: SanityImageCrop | null
+            hotspot: SanityImageHotspot | null
             mobileUrl: string | null
+            mobileCrop: SanityImageCrop | null
+            mobileHotspot: SanityImageHotspot | null
           }
         }
       | {
@@ -1243,7 +1339,11 @@ export type WORK_PROJECT_QUERY_RESULT = {
             alt: string | null
             caption: string | null
             url: string | null
+            crop: SanityImageCrop | null
+            hotspot: SanityImageHotspot | null
             mobileUrl: string | null
+            mobileCrop: SanityImageCrop | null
+            mobileHotspot: SanityImageHotspot | null
           }
         }
     >
@@ -1260,15 +1360,15 @@ export type WORK_PROJECT_QUERY_RESULT = {
 // Query TypeMap
 declare global {
   interface SanityQueries {
-    '\n  *[_type == "aboutPage" && _id == "aboutPage"][0]{\n    _id,\n    heading,\n    heroImage{\n      \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n    },\n    founderHeading,\n    founderStory,\n    founderName,\n    founderRole,\n    founderImage{\n      \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n    },\n    teamHeading,\n    teamIntroduction,\n    teamMembers[]{\n      _key,\n      _type,\n      name,\n      role,\n      biography,\n      portrait{\n        \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n      }\n    },\n    principles[]{\n      _key,\n      _type,\n      title,\n      description\n    },\n    principlesHeading,\n    clientProofHeading,\n    clientProofCopy,\n    clientLogos[]->{\n      _id,\n      clientName,\n      "url": logo.asset->url,\n      "mimeType": logo.asset->mimeType\n    },\n    clientProofCtaLabel,\n    finalCtaEyebrow,\n    finalCtaHeading,\n    finalCtaLabel,\n    seo{\n      \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n    }\n  }\n': ABOUT_PAGE_QUERY_RESULT
-    '\n  *[_type == "homePage" && _id == "homePage"][0]{\n    _id,\n    heroHeading,\n    heroImage{\n      \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n    },\n    heroPrimaryCtaLabel,\n    heroSecondaryCtaLabel,\n    clientLogos[]->{\n      _id,\n      clientName,\n      "url": logo.asset->url,\n      "mimeType": logo.asset->mimeType\n    },\n    featuredWorkHeading,\n    featuredWorkProjects[]->{\n      \n  _id,\n  title,\n  "slug": slug.current,\n  sectorLabel,\n  cardSummary,\n  cardImage{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n  },\n  services[]->{\n    \n  _id,\n  title\n\n  },\n  positioningStatement\n\n    },\n    featuredWorkCtaLabel,\n    featuredServices[]->{\n      _id,\n      title,\n      shortSummary\n    },\n    sectorLabels,\n    studioHeading,\n    studioIntroduction,\n    studioImage{\n      \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n    },\n    studioCtaLabel,\n    pointOfViewHeading,\n    pointOfViewCopy,\n    processHeading,\n    processSteps[]{\n      _key,\n      _type,\n      title,\n      description\n    },\n    processCtaLabel,\n    journalHeading,\n    featuredJournalArticles[]->{\n      \n  _id,\n  title,\n  "slug": slug.current,\n  category->{\n    \n  _id,\n  title,\n  "slug": slug.current\n\n  },\n  publicationDate,\n  standfirst,\n  readingTime,\n  heroImage{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n  }\n\n    },\n    journalCtaLabel,\n    finalCtaEyebrow,\n    finalCtaHeading,\n    finalCtaLabel,\n    seo{\n      \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n    }\n  }\n': HOME_PAGE_QUERY_RESULT
-    '\n  {\n    "page": *[_type == "journalPage" && _id == "journalPage"][0]{\n      _id,\n      heading,\n      introduction,\n      introductionArtwork{\n        \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n      },\n      featuredJournalArticle->{\n        \n  _id,\n  title,\n  "slug": slug.current,\n  category->{\n    \n  _id,\n  title,\n  "slug": slug.current\n\n  },\n  publicationDate,\n  standfirst,\n  readingTime,\n  heroImage{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n  }\n\n      },\n      seo{\n        \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n      }\n    },\n    "articles": *[\n      _type == "journalArticle" &&\n      !(_id in [\n        *[_type == "journalPage" && _id == "journalPage"][0].featuredJournalArticle._ref,\n        "drafts." + *[_type == "journalPage" && _id == "journalPage"][0].featuredJournalArticle._ref\n      ])\n    ] | order(publicationDate desc){\n      \n  _id,\n  title,\n  "slug": slug.current,\n  category->{\n    \n  _id,\n  title,\n  "slug": slug.current\n\n  },\n  publicationDate,\n  standfirst,\n  readingTime,\n  heroImage{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n  }\n\n    }\n  }\n': JOURNAL_PAGE_QUERY_RESULT
-    '\n  {\n    "article": *[_type == "journalArticle" && slug.current == $slug][0]{\n      \n  _id,\n  title,\n  "slug": slug.current,\n  category->{\n    \n  _id,\n  title,\n  "slug": slug.current\n\n  },\n  publicationDate,\n  standfirst,\n  readingTime,\n  heroImage{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n  }\n,\n      author->{\n        \n  _id,\n  name,\n  biography\n\n      },\n      body[]{\n        _key,\n        _type,\n        _type == "journalArticleSection" => {\n          label,\n          content\n        },\n        _type == "journalArticlePullQuote" => {\n          label,\n          quote\n        }\n      },\n      relatedJournalArticles[]->{\n        \n  _id,\n  title,\n  "slug": slug.current,\n  category->{\n    \n  _id,\n  title,\n  "slug": slug.current\n\n  },\n  publicationDate,\n  standfirst,\n  readingTime,\n  heroImage{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n  }\n\n      },\n      seo{\n        \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n      }\n    }\n  }\n': JOURNAL_ARTICLE_QUERY_RESULT
-    '\n  *[_type == "servicesPage" && _id == "servicesPage"][0]{\n    _id,\n    heroHeading,\n    heroIntroduction,\n    heroImage{\n      \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n    },\n    heroCtaLabel,\n    services[]->{\n      _id,\n      title,\n      shortSummary,\n      description,\n      image{\n        \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n      },\n      deliverables\n    },\n    processHeading,\n    processSteps[]{\n      _key,\n      title,\n      description\n    },\n    hospitalityHeading,\n    hospitalitySectorLabels,\n    hospitalityPointOfView,\n    hospitalityImage{\n      \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n    },\n    hospitalityCtaLabel,\n    finalStatementEyebrow,\n    finalStatementHeading,\n    seo{\n      \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n    }\n  }\n': SERVICES_PAGE_QUERY_RESULT
-    '\n  {\n    "page": *[_type == "contactPage" && _id == "contactPage"][0]{\n      _id,\n      heading,\n      introduction,\n      supportingImage{\n        \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n      },\n      supportingStatement,\n      seo{\n        \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n      }\n    },\n    "services": *[_type == "servicesPage" && _id == "servicesPage"][0].services[]->{\n      _id,\n      title\n    }\n  }\n': CONTACT_PAGE_QUERY_RESULT
+    '\n  *[_type == "aboutPage" && _id == "aboutPage"][0]{\n    _id,\n    heading,\n    heroImage{\n      \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "crop": asset.crop,\n  "hotspot": asset.hotspot,\n  "mobileUrl": mobileOverride.asset->url,\n  "mobileCrop": mobileOverride.crop,\n  "mobileHotspot": mobileOverride.hotspot\n\n    },\n    founderHeading,\n    founderStory,\n    founderName,\n    founderRole,\n    founderImage{\n      \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "crop": asset.crop,\n  "hotspot": asset.hotspot,\n  "mobileUrl": mobileOverride.asset->url,\n  "mobileCrop": mobileOverride.crop,\n  "mobileHotspot": mobileOverride.hotspot\n\n    },\n    teamHeading,\n    teamIntroduction,\n    teamMembers[]{\n      _key,\n      _type,\n      name,\n      role,\n      biography,\n      portrait{\n        \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "crop": asset.crop,\n  "hotspot": asset.hotspot,\n  "mobileUrl": mobileOverride.asset->url,\n  "mobileCrop": mobileOverride.crop,\n  "mobileHotspot": mobileOverride.hotspot\n\n      }\n    },\n    principles[]{\n      _key,\n      _type,\n      title,\n      description\n    },\n    principlesHeading,\n    clientProofHeading,\n    clientProofCopy,\n    clientLogos[]->{\n      _id,\n      clientName,\n      "url": logo.asset->url,\n      "mimeType": logo.asset->mimeType\n    },\n    clientProofCtaLabel,\n    finalCtaEyebrow,\n    finalCtaHeading,\n    finalCtaLabel,\n    seo{\n      \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n    }\n  }\n': ABOUT_PAGE_QUERY_RESULT
+    '\n  *[_type == "homePage" && _id == "homePage"][0]{\n    _id,\n    heroHeading,\n    heroImage{\n      \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "crop": asset.crop,\n  "hotspot": asset.hotspot,\n  "mobileUrl": mobileOverride.asset->url,\n  "mobileCrop": mobileOverride.crop,\n  "mobileHotspot": mobileOverride.hotspot\n\n    },\n    heroPrimaryCtaLabel,\n    heroSecondaryCtaLabel,\n    clientLogos[]->{\n      _id,\n      clientName,\n      "url": logo.asset->url,\n      "mimeType": logo.asset->mimeType\n    },\n    featuredWorkHeading,\n    featuredWorkProjects[]->{\n      \n  _id,\n  title,\n  "slug": slug.current,\n  sectorLabel,\n  cardSummary,\n  cardImage{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "crop": asset.crop,\n  "hotspot": asset.hotspot,\n  "mobileUrl": mobileOverride.asset->url,\n  "mobileCrop": mobileOverride.crop,\n  "mobileHotspot": mobileOverride.hotspot\n\n  },\n  services[]->{\n    \n  _id,\n  title\n\n  },\n  positioningStatement\n\n    },\n    featuredWorkCtaLabel,\n    featuredServices[]->{\n      _id,\n      title,\n      shortSummary\n    },\n    sectorLabels,\n    studioHeading,\n    studioIntroduction,\n    studioImage{\n      \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "crop": asset.crop,\n  "hotspot": asset.hotspot,\n  "mobileUrl": mobileOverride.asset->url,\n  "mobileCrop": mobileOverride.crop,\n  "mobileHotspot": mobileOverride.hotspot\n\n    },\n    studioCtaLabel,\n    pointOfViewHeading,\n    pointOfViewCopy,\n    processHeading,\n    processSteps[]{\n      _key,\n      _type,\n      title,\n      description\n    },\n    processCtaLabel,\n    journalHeading,\n    featuredJournalArticles[]->{\n      \n  _id,\n  title,\n  "slug": slug.current,\n  category->{\n    \n  _id,\n  title,\n  "slug": slug.current\n\n  },\n  publicationDate,\n  standfirst,\n  readingTime,\n  heroImage{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "crop": asset.crop,\n  "hotspot": asset.hotspot,\n  "mobileUrl": mobileOverride.asset->url,\n  "mobileCrop": mobileOverride.crop,\n  "mobileHotspot": mobileOverride.hotspot\n\n  }\n\n    },\n    journalCtaLabel,\n    finalCtaEyebrow,\n    finalCtaHeading,\n    finalCtaLabel,\n    seo{\n      \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n    }\n  }\n': HOME_PAGE_QUERY_RESULT
+    '\n  {\n    "page": *[_type == "journalPage" && _id == "journalPage"][0]{\n      _id,\n      heading,\n      introduction,\n      introductionArtwork{\n        \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "crop": asset.crop,\n  "hotspot": asset.hotspot,\n  "mobileUrl": mobileOverride.asset->url,\n  "mobileCrop": mobileOverride.crop,\n  "mobileHotspot": mobileOverride.hotspot\n\n      },\n      featuredJournalArticle->{\n        \n  _id,\n  title,\n  "slug": slug.current,\n  category->{\n    \n  _id,\n  title,\n  "slug": slug.current\n\n  },\n  publicationDate,\n  standfirst,\n  readingTime,\n  heroImage{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "crop": asset.crop,\n  "hotspot": asset.hotspot,\n  "mobileUrl": mobileOverride.asset->url,\n  "mobileCrop": mobileOverride.crop,\n  "mobileHotspot": mobileOverride.hotspot\n\n  }\n\n      },\n      seo{\n        \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n      }\n    },\n    "articles": *[\n      _type == "journalArticle" &&\n      !(_id in [\n        *[_type == "journalPage" && _id == "journalPage"][0].featuredJournalArticle._ref,\n        "drafts." + *[_type == "journalPage" && _id == "journalPage"][0].featuredJournalArticle._ref\n      ])\n    ] | order(publicationDate desc){\n      \n  _id,\n  title,\n  "slug": slug.current,\n  category->{\n    \n  _id,\n  title,\n  "slug": slug.current\n\n  },\n  publicationDate,\n  standfirst,\n  readingTime,\n  heroImage{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "crop": asset.crop,\n  "hotspot": asset.hotspot,\n  "mobileUrl": mobileOverride.asset->url,\n  "mobileCrop": mobileOverride.crop,\n  "mobileHotspot": mobileOverride.hotspot\n\n  }\n\n    }\n  }\n': JOURNAL_PAGE_QUERY_RESULT
+    '\n  {\n    "article": *[_type == "journalArticle" && slug.current == $slug][0]{\n      \n  _id,\n  title,\n  "slug": slug.current,\n  category->{\n    \n  _id,\n  title,\n  "slug": slug.current\n\n  },\n  publicationDate,\n  standfirst,\n  readingTime,\n  heroImage{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "crop": asset.crop,\n  "hotspot": asset.hotspot,\n  "mobileUrl": mobileOverride.asset->url,\n  "mobileCrop": mobileOverride.crop,\n  "mobileHotspot": mobileOverride.hotspot\n\n  }\n,\n      author->{\n        \n  _id,\n  name,\n  biography\n\n      },\n      body[]{\n        _key,\n        _type,\n        _type == "journalArticleSection" => {\n          label,\n          content\n        },\n        _type == "journalArticlePullQuote" => {\n          label,\n          quote\n        }\n      },\n      relatedJournalArticles[]->{\n        \n  _id,\n  title,\n  "slug": slug.current,\n  category->{\n    \n  _id,\n  title,\n  "slug": slug.current\n\n  },\n  publicationDate,\n  standfirst,\n  readingTime,\n  heroImage{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "crop": asset.crop,\n  "hotspot": asset.hotspot,\n  "mobileUrl": mobileOverride.asset->url,\n  "mobileCrop": mobileOverride.crop,\n  "mobileHotspot": mobileOverride.hotspot\n\n  }\n\n      },\n      seo{\n        \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n      }\n    }\n  }\n': JOURNAL_ARTICLE_QUERY_RESULT
+    '\n  *[_type == "servicesPage" && _id == "servicesPage"][0]{\n    _id,\n    heroHeading,\n    heroIntroduction,\n    heroImage{\n      \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "crop": asset.crop,\n  "hotspot": asset.hotspot,\n  "mobileUrl": mobileOverride.asset->url,\n  "mobileCrop": mobileOverride.crop,\n  "mobileHotspot": mobileOverride.hotspot\n\n    },\n    heroCtaLabel,\n    services[]->{\n      _id,\n      title,\n      shortSummary,\n      description,\n      image{\n        \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "crop": asset.crop,\n  "hotspot": asset.hotspot,\n  "mobileUrl": mobileOverride.asset->url,\n  "mobileCrop": mobileOverride.crop,\n  "mobileHotspot": mobileOverride.hotspot\n\n      },\n      deliverables\n    },\n    processHeading,\n    processSteps[]{\n      _key,\n      title,\n      description\n    },\n    hospitalityHeading,\n    hospitalitySectorLabels,\n    hospitalityPointOfView,\n    hospitalityImage{\n      \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "crop": asset.crop,\n  "hotspot": asset.hotspot,\n  "mobileUrl": mobileOverride.asset->url,\n  "mobileCrop": mobileOverride.crop,\n  "mobileHotspot": mobileOverride.hotspot\n\n    },\n    hospitalityCtaLabel,\n    finalStatementEyebrow,\n    finalStatementHeading,\n    seo{\n      \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n    }\n  }\n': SERVICES_PAGE_QUERY_RESULT
+    '\n  {\n    "page": *[_type == "contactPage" && _id == "contactPage"][0]{\n      _id,\n      heading,\n      introduction,\n      supportingImage{\n        \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "crop": asset.crop,\n  "hotspot": asset.hotspot,\n  "mobileUrl": mobileOverride.asset->url,\n  "mobileCrop": mobileOverride.crop,\n  "mobileHotspot": mobileOverride.hotspot\n\n      },\n      supportingStatement,\n      seo{\n        \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n      }\n    },\n    "services": *[_type == "servicesPage" && _id == "servicesPage"][0].services[]->{\n      _id,\n      title\n    }\n  }\n': CONTACT_PAGE_QUERY_RESULT
     '\n  *[_type == "siteSettings" && _id == "siteSettings"][0]{\n    _id,\n    studioName,\n    registeredMarkText,\n    homeLabel,\n    workLabel,\n    servicesLabel,\n    aboutLabel,\n    journalLabel,\n    contactLabel,\n    headerCtaLabel,\n    emailAddress,\n    socialLinks[]{\n      _key,\n      platform,\n      url\n    },\n    newsletterHeading,\n    newsletterDescription,\n    footerTagline,\n    defaultSeoTitle,\n    defaultSeoDescription,\n    defaultSocialImage{\n      decorative,\n      alt,\n      "url": asset.asset->url\n    }\n  }\n': SITE_SETTINGS_QUERY_RESULT
-    '\n  *[_type == "workPage" && _id == "workPage"][0]{\n    \n  _id,\n  heading,\n  heroArtwork{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n  },\n  workProjects[]->{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  sectorLabel,\n  cardSummary,\n  cardImage{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n  },\n  services[]->{\n    \n  _id,\n  title\n\n  },\n  positioningStatement\n\n  },\n  finalCtaEyebrow,\n  finalCtaHeading,\n  finalCtaLabel,\n  seo{\n    \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n  }\n\n  }\n': WORK_PAGE_QUERY_RESULT
-    '\n  {\n    "page": *[_type == "workPage" && _id == "workPage"][0]{\n      \n  _id,\n  heading,\n  heroArtwork{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n  },\n  workProjects[]->{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  sectorLabel,\n  cardSummary,\n  cardImage{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n  },\n  services[]->{\n    \n  _id,\n  title\n\n  },\n  positioningStatement\n\n  },\n  finalCtaEyebrow,\n  finalCtaHeading,\n  finalCtaLabel,\n  seo{\n    \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n  }\n\n    },\n    "project": *[_type == "workProject" && slug.current == $slug][0]{\n      \n  _id,\n  title,\n  "slug": slug.current,\n  sectorLabel,\n  cardSummary,\n  cardImage{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n  },\n  services[]->{\n    \n  _id,\n  title\n\n  },\n  positioningStatement\n,\n      introduction,\n      heroArtwork{\n        \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n      },\n      heroPhotograph{\n        \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n      },\n      challenge{\n        heading,\n        content\n      },\n      contribution{\n        heading,\n        content\n      },\n      galleryHeading,\n      gallery[]{\n        _key,\n        _type,\n        _type == "workProjectGalleryImage" => {\n          image{\n            \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n          }\n        },\n        _type == "workProjectGalleryBrandPanel" => {\n          title,\n          statement,\n          label,\n          image{\n            \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n          }\n        }\n      },\n      outcomeHeading,\n      outcomeCopy,\n      seo{\n        \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n      }\n    }\n  }\n': WORK_PROJECT_QUERY_RESULT
+    '\n  *[_type == "workPage" && _id == "workPage"][0]{\n    \n  _id,\n  heading,\n  heroArtwork{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "crop": asset.crop,\n  "hotspot": asset.hotspot,\n  "mobileUrl": mobileOverride.asset->url,\n  "mobileCrop": mobileOverride.crop,\n  "mobileHotspot": mobileOverride.hotspot\n\n  },\n  workProjects[]->{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  sectorLabel,\n  cardSummary,\n  cardImage{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "crop": asset.crop,\n  "hotspot": asset.hotspot,\n  "mobileUrl": mobileOverride.asset->url,\n  "mobileCrop": mobileOverride.crop,\n  "mobileHotspot": mobileOverride.hotspot\n\n  },\n  services[]->{\n    \n  _id,\n  title\n\n  },\n  positioningStatement\n\n  },\n  finalCtaEyebrow,\n  finalCtaHeading,\n  finalCtaLabel,\n  seo{\n    \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n  }\n\n  }\n': WORK_PAGE_QUERY_RESULT
+    '\n  {\n    "page": *[_type == "workPage" && _id == "workPage"][0]{\n      \n  _id,\n  heading,\n  heroArtwork{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "crop": asset.crop,\n  "hotspot": asset.hotspot,\n  "mobileUrl": mobileOverride.asset->url,\n  "mobileCrop": mobileOverride.crop,\n  "mobileHotspot": mobileOverride.hotspot\n\n  },\n  workProjects[]->{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  sectorLabel,\n  cardSummary,\n  cardImage{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "crop": asset.crop,\n  "hotspot": asset.hotspot,\n  "mobileUrl": mobileOverride.asset->url,\n  "mobileCrop": mobileOverride.crop,\n  "mobileHotspot": mobileOverride.hotspot\n\n  },\n  services[]->{\n    \n  _id,\n  title\n\n  },\n  positioningStatement\n\n  },\n  finalCtaEyebrow,\n  finalCtaHeading,\n  finalCtaLabel,\n  seo{\n    \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n  }\n\n    },\n    "project": *[_type == "workProject" && slug.current == $slug][0]{\n      \n  _id,\n  title,\n  "slug": slug.current,\n  sectorLabel,\n  cardSummary,\n  cardImage{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "crop": asset.crop,\n  "hotspot": asset.hotspot,\n  "mobileUrl": mobileOverride.asset->url,\n  "mobileCrop": mobileOverride.crop,\n  "mobileHotspot": mobileOverride.hotspot\n\n  },\n  services[]->{\n    \n  _id,\n  title\n\n  },\n  positioningStatement\n,\n      introduction,\n      heroArtwork{\n        \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "crop": asset.crop,\n  "hotspot": asset.hotspot,\n  "mobileUrl": mobileOverride.asset->url,\n  "mobileCrop": mobileOverride.crop,\n  "mobileHotspot": mobileOverride.hotspot\n\n      },\n      heroPhotograph{\n        \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "crop": asset.crop,\n  "hotspot": asset.hotspot,\n  "mobileUrl": mobileOverride.asset->url,\n  "mobileCrop": mobileOverride.crop,\n  "mobileHotspot": mobileOverride.hotspot\n\n      },\n      challenge{\n        heading,\n        content\n      },\n      contribution{\n        heading,\n        content\n      },\n      galleryHeading,\n      gallery[]{\n        _key,\n        _type,\n        _type == "workProjectGalleryImage" => {\n          image{\n            \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "crop": asset.crop,\n  "hotspot": asset.hotspot,\n  "mobileUrl": mobileOverride.asset->url,\n  "mobileCrop": mobileOverride.crop,\n  "mobileHotspot": mobileOverride.hotspot\n\n          }\n        },\n        _type == "workProjectGalleryBrandPanel" => {\n          title,\n          statement,\n          label,\n          image{\n            \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "crop": asset.crop,\n  "hotspot": asset.hotspot,\n  "mobileUrl": mobileOverride.asset->url,\n  "mobileCrop": mobileOverride.crop,\n  "mobileHotspot": mobileOverride.hotspot\n\n          }\n        }\n      },\n      outcomeHeading,\n      outcomeCopy,\n      seo{\n        \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n      }\n    }\n  }\n': WORK_PROJECT_QUERY_RESULT
   }
 }
 // Lets @sanity/client releases that predate the global registry read it too

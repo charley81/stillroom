@@ -1,11 +1,14 @@
 ---
 import { stegaClean } from '@sanity/client/stega'
 import type { ContentImage } from '../../sanity/content/validation'
+import { createResponsiveSanityImage } from '../../sanity/images'
 
 interface Props {
   image: ContentImage
   width: number
   height: number
+  sizes?: string
+  fit?: 'crop' | 'max'
   class?: string
   loading?: 'eager' | 'lazy'
   fetchpriority?: 'high' | 'low' | 'auto'
@@ -15,20 +18,50 @@ const {
   image,
   width,
   height,
+  sizes = '100vw',
+  fit = 'crop',
   class: className,
   loading = 'lazy',
   fetchpriority,
 } = Astro.props
-const src = stegaClean(image.url)
-const mobileSrc = image.mobileUrl ? stegaClean(image.mobileUrl) : null
+const desktopImage = createResponsiveSanityImage({
+  source: {
+    url: stegaClean(image.url),
+    crop: image.crop,
+    hotspot: image.hotspot,
+  },
+  width,
+  height,
+  fit,
+})
+const mobileImage = image.mobileUrl
+  ? createResponsiveSanityImage({
+      source: {
+        url: stegaClean(image.mobileUrl),
+        crop: image.mobileCrop,
+        hotspot: image.mobileHotspot,
+      },
+      width,
+      height,
+      fit,
+    })
+  : null
 const alt = image.decorative ? '' : stegaClean(image.alt ?? '')
 ---
 
 <picture class="contents">
-  {mobileSrc && <source media="(max-width: 760px)" srcset={mobileSrc} />}
+  {mobileImage && (
+    <source
+      media="(max-width: 760px)"
+      srcset={mobileImage.srcset}
+      sizes={sizes}
+    />
+  )}
   <img
     class={className}
-    src={src}
+    src={desktopImage.src}
+    srcset={desktopImage.srcset}
+    sizes={sizes}
     alt={alt}
     width={width}
     height={height}

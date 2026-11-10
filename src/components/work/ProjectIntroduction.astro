@@ -35,6 +35,8 @@ const { project } = Astro.props
       image={project.heroArtwork}
       width={668}
       height={454}
+      sizes="(min-width: 768px) calc(50vw - 48px), calc(100vw - 32px)"
+      fit="max"
       loading="eager"
       fetchpriority="high"
     />

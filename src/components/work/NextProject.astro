@@ -23,6 +23,7 @@ const displayNumber = String(projectNumber).padStart(2, '0')
       image={{ ...project.cardImage, decorative: true, alt: null }}
       width={704}
       height={497}
+      sizes="(min-width: 768px) calc(50vw - 16px), 100vw"
     />
   </a>
   <div class="flex min-h-[379px] flex-col justify-center gap-8 px-4 py-16 md:min-h-[497px] md:px-0 md:py-32">
