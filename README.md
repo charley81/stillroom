@@ -11,6 +11,7 @@ pnpm sanity:migrate:all:publish
 pnpm sanity:cutover:check
 pnpm dev
 pnpm test
+pnpm test:browser # with the background dev server running
 pnpm check
 pnpm build
 pnpm verify:site # with the background dev server running
@@ -49,7 +50,7 @@ Create a rollback-ready development export with `pnpm sanity:dataset:export`. Th
 
 Production launch is guarded by `ALLOW_PRODUCTION_LAUNCH=true` and runs pre-migration export, draft migration and validation, development parity comparison, dependency-ordered publication, published validation, and post-migration export. See [`docs/production-launch-runbook.md`](docs/production-launch-runbook.md) for the exact command, launch record, and tested Netlify and Sanity rollback procedures.
 
-With the background dev server running, `pnpm verify:site` renders every public route at desktop and mobile viewports, checks response status, canonical URLs, internal links, image loading, accessibility basics, Studio indexing, and horizontal overflow, and writes full-page screenshots to `.sanity/screenshots/` for Figma comparison. `pnpm verify:production` runs the same checks against `PUBLIC_SITE_ORIGIN` or its documented fallback.
+With the background dev server running, `pnpm test:browser` exercises the mobile navigation modal in Chrome at a mobile viewport, including focus containment, dismissal, focus restoration, scroll locking, inert background content, and destination navigation. `pnpm verify:site` renders every public route at desktop and mobile viewports, checks response status, canonical URLs, internal links, image loading, accessibility basics, Studio indexing, and horizontal overflow, and writes full-page screenshots to `.sanity/screenshots/` for Figma comparison. `pnpm verify:production` runs the same checks against `PUBLIC_SITE_ORIGIN` or its documented fallback.
 
 ## Structure
 

@@ -2,6 +2,10 @@ import { mkdir } from 'node:fs/promises'
 import puppeteer from 'puppeteer-core'
 import { ROUTE_VERIFICATION_CASES } from '../src/sanity/manifests/routes'
 import { LOCAL_DEVELOPMENT_ORIGIN, resolveSiteOrigin } from '../src/site-origin'
+import {
+  MOBILE_VIEWPORT,
+  resolveChromeExecutablePath,
+} from './browser-configuration'
 import { validatePublicPage, validateStudioResponse } from './site-verification'
 
 try {
@@ -36,13 +40,7 @@ const scenarios = [
   },
   {
     name: 'mobile',
-    viewport: {
-      width: 390,
-      height: 844,
-      deviceScaleFactor: 1,
-      isMobile: true,
-      hasTouch: true,
-    },
+    viewport: MOBILE_VIEWPORT,
   },
   {
     name: 'desktop-text-125-stress',
@@ -55,9 +53,7 @@ const scenarios = [
 await mkdir(screenshotDirectory, { recursive: true })
 
 const browser = await puppeteer.launch({
-  executablePath:
-    process.env.CHROME_PATH ??
-    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+  executablePath: resolveChromeExecutablePath(),
   headless: true,
 })
 

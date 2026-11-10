@@ -61,9 +61,10 @@ const isActive = (href: string) =>
     type="button"
     aria-expanded="false"
     aria-controls="mobile-menu"
+    aria-haspopup="dialog"
+    aria-label="Open menu"
     data-menu-open
   >
-    <span class="sr-only">Open menu</span>
     <Image
       class="size-6"
       src="/figma-assets/menu.svg"
@@ -77,6 +78,9 @@ const isActive = (href: string) =>
 <div
   class="fixed inset-0 z-50 overflow-y-auto bg-dark px-4 py-8 text-light"
   id="mobile-menu"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Site navigation"
   hidden
   data-mobile-menu
 >
@@ -116,24 +120,7 @@ const isActive = (href: string) =>
 </div>
 
 <script>
-  const openButton =
-    document.querySelector<HTMLButtonElement>('[data-menu-open]')
-  const closeButton =
-    document.querySelector<HTMLButtonElement>('[data-menu-close]')
-  const menu = document.querySelector<HTMLElement>('[data-mobile-menu]')
+  import { setupMobileNavigation } from './mobile-navigation'
 
-  function setMenu(open: boolean) {
-    if (!openButton || !menu) return
-    openButton.setAttribute('aria-expanded', String(open))
-    menu.hidden = !open
-    document.body.classList.toggle('overflow-hidden', open)
-    if (open) closeButton?.focus()
-    else openButton.focus()
-  }
-
-  openButton?.addEventListener('click', () => setMenu(true))
-  closeButton?.addEventListener('click', () => setMenu(false))
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && menu && !menu.hidden) setMenu(false)
-  })
+  setupMobileNavigation()
 </script>
