@@ -98,13 +98,16 @@ describe('About rendering', () => {
     expect(principles).toContain('Care published description.')
   })
 
-  it('renders accessible SVG Client Logo assets directly without raster transformation parameters', async () => {
+  it('renders accessible SVG Client Logo assets through the first-party CDN without explicit raster transformation parameters', async () => {
     const container = await AstroContainer.create()
     const html = await container.renderToString(ClientLogos, {
       props: { logos: page.clientLogos, variant: 'proof' },
     })
 
-    expect(html).toContain('src="https://cdn.sanity.io/0.svg"')
+    expect(html).toContain(
+      'src="/.netlify/images?url=https%3A%2F%2Fcdn.sanity.io%2F0.svg"',
+    )
+    expect(html).not.toContain('src="https://cdn.sanity.io')
     expect(html).toContain('alt="Orlo House"')
     expect(html).not.toContain('?w=')
     expect(html).not.toContain('<strong')
