@@ -6,32 +6,33 @@ import ProjectIntroduction from '../../components/work/ProjectIntroduction.astro
 import ProjectNarrative from '../../components/work/ProjectNarrative.astro'
 import ProjectOutcome from '../../components/work/ProjectOutcome.astro'
 import Layout from '../../layouts/Layout.astro'
-import {
-  getWorkProjectPage,
-  WorkProjectNotFoundError,
-} from '../../sanity/content'
-import { PUBLIC_PREVIEW_STATE } from '../../sanity/preview'
+import { WorkProjectNotFoundError } from '../../sanity/content'
 
 const slug = Astro.params.slug
 if (!slug) return Astro.rewrite('/404')
 
-const preview = Astro.locals.preview ?? PUBLIC_PREVIEW_STATE
-let content
+let pageContent
 try {
-  content = await getWorkProjectPage(slug, preview)
+  pageContent = await Astro.locals.content.loadWorkProjectPage(slug)
 } catch (error) {
   if (error instanceof WorkProjectNotFoundError) {
     return Astro.rewrite('/404')
   }
   throw error
 }
+const { content, siteSettings } = pageContent
 const { project, nextProject, nextProjectNumber } = content
 const title = project.seo?.metaTitle ?? `${project.title} — Stillroom`
 const description = project.seo?.metaDescription ?? project.cardSummary
 const socialImageUrl = project.seo?.socialImageUrl ?? project.cardImage.url
 ---
 
-<Layout title={title} description={description} socialImageUrl={socialImageUrl}>
+<Layout
+  settings={siteSettings}
+  title={title}
+  description={description}
+  socialImageUrl={socialImageUrl}
+>
   <ProjectIntroduction project={project} />
 
   <EditorialImage

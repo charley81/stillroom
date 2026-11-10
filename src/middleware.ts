@@ -1,4 +1,5 @@
 import { defineMiddleware } from 'astro:middleware'
+import { createContentRequest } from './sanity/content'
 import { isTrustedPresentationOrigin } from './sanity/presentation-origins'
 import {
   PREVIEW_COOKIE_NAME,
@@ -23,6 +24,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
         import.meta.env.SANITY_PREVIEW_SESSION_SECRET,
       )
     : PUBLIC_PREVIEW_STATE
+  context.locals.content = createContentRequest(context.locals.preview)
 
   const response = await next()
 

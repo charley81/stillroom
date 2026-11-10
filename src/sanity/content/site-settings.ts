@@ -1,7 +1,6 @@
 import type { SITE_SETTINGS_QUERY_RESULT } from '../../../sanity.types'
-import { PUBLIC_PREVIEW_STATE, type PreviewState } from '../preview'
 import { SITE_SETTINGS_QUERY } from '../queries/site-settings'
-import { loadContentQuery } from './client'
+import type { ContentQueryClient } from './client'
 import { MissingContentError } from './errors'
 
 type GeneratedSiteSettings = NonNullable<SITE_SETTINGS_QUERY_RESULT>
@@ -92,9 +91,9 @@ export function requireSiteSettings(value: unknown): SiteSettings {
   return value as SiteSettings
 }
 
-export async function getSiteSettings(
-  preview: PreviewState = PUBLIC_PREVIEW_STATE,
+export async function loadSiteSettings(
+  content: ContentQueryClient,
 ): Promise<SiteSettings> {
-  const { data } = await loadContentQuery(SITE_SETTINGS_QUERY, preview)
+  const { data } = await content.loadQuery(SITE_SETTINGS_QUERY)
   return requireSiteSettings(data)
 }

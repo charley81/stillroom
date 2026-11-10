@@ -1,6 +1,7 @@
 import reactRenderer from '@astrojs/react/server.js'
 import { experimental_AstroContainer as AstroContainer } from 'astro/container'
 import { describe, expect, it, vi } from 'vitest'
+import { createContentRequestStub } from '../sanity/content/request.test-support'
 import ContactRoute from './contact.astro'
 import ServicesRoute from './services.astro'
 
@@ -86,19 +87,22 @@ const fixtures = vi.hoisted(() => {
   return { contactPage, servicesPage, siteSettings }
 })
 
-vi.mock('../sanity/content', () => ({
-  getSiteSettings: vi.fn(async () => fixtures.siteSettings),
-  getServicesPage: vi.fn(async (preview) =>
-    preview.enabled
-      ? { ...fixtures.servicesPage, heroHeading: 'Draft Services' }
-      : fixtures.servicesPage,
-  ),
-  getContactPage: vi.fn(async (preview) =>
-    preview.enabled
-      ? { ...fixtures.contactPage, heading: 'Draft Contact' }
-      : fixtures.contactPage,
-  ),
-}))
+function createRouteContent(preview: { enabled: boolean }) {
+  return createContentRequestStub({
+    loadServicesPage: vi.fn(async () => ({
+      content: preview.enabled
+        ? { ...fixtures.servicesPage, heroHeading: 'Draft Services' }
+        : fixtures.servicesPage,
+      siteSettings: fixtures.siteSettings,
+    })),
+    loadContactPage: vi.fn(async () => ({
+      content: preview.enabled
+        ? { ...fixtures.contactPage, heading: 'Draft Contact' }
+        : fixtures.contactPage,
+      siteSettings: fixtures.siteSettings,
+    })),
+  })
+}
 
 async function createContainer() {
   const container = await AstroContainer.create()
@@ -113,17 +117,22 @@ async function createContainer() {
 describe('Services and Contact routes', () => {
   it('renders published content without preview controls', async () => {
     const container = await createContainer()
+    const published = { enabled: false, perspective: 'published' } as const
+    const servicesContent = createRouteContent(published)
+    const contactContent = createRouteContent(published)
     const services = await container.renderToString(ServicesRoute, {
       partial: false,
       request: new Request('https://stillroom.test/services'),
-      locals: { preview: { enabled: false, perspective: 'published' } },
+      locals: { preview: published, content: servicesContent },
     })
     const contact = await container.renderToString(ContactRoute, {
       partial: false,
       request: new Request('https://stillroom.test/contact'),
-      locals: { preview: { enabled: false, perspective: 'published' } },
+      locals: { preview: published, content: contactContent },
     })
 
+    expect(servicesContent.loadServicesPage).toHaveBeenCalledTimes(1)
+    expect(contactContent.loadContactPage).toHaveBeenCalledTimes(1)
     expect(services).toContain('Published Services')
     expect(contact).toContain('Published Contact')
     expect(services).not.toContain('Exit preview')
@@ -136,12 +145,12 @@ describe('Services and Contact routes', () => {
     const services = await container.renderToString(ServicesRoute, {
       partial: false,
       request: new Request('https://stillroom.test/services'),
-      locals: { preview },
+      locals: { preview, content: createRouteContent(preview) },
     })
     const contact = await container.renderToString(ContactRoute, {
       partial: false,
       request: new Request('https://stillroom.test/contact'),
-      locals: { preview },
+      locals: { preview, content: createRouteContent(preview) },
     })
 
     expect(services).toContain('Draft Services')

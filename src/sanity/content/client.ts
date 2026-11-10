@@ -32,11 +32,18 @@ export interface ContentQueryResult<Data> {
   sourceMap: unknown
 }
 
+export interface ContentQueryClient {
+  loadQuery<const Query extends string>(
+    query: Query,
+    params?: ClientParams<Query>,
+  ): Promise<ContentQueryResult<ClientReturn<Query, unknown>>>
+}
+
 export function createContent(
   config: SanityEnvironmentConfig,
   request: ContentRequestOptions = {},
   createClient: CreateClient = createSanityClient,
-) {
+): ContentQueryClient {
   const preview = request.preview ?? PUBLIC_PREVIEW_STATE
   if (preview.enabled && !request.readToken) {
     throw new Error(
@@ -77,7 +84,7 @@ export function createContent(
   }
 }
 
-function createRequestContent(preview: PreviewState) {
+export function createRuntimeContent(preview: PreviewState) {
   return createContent(
     resolveSanityEnvironment({
       PUBLIC_SANITY_PROJECT_ID: import.meta.env.PUBLIC_SANITY_PROJECT_ID,
@@ -91,12 +98,4 @@ function createRequestContent(preview: PreviewState) {
         : undefined,
     },
   )
-}
-
-export async function loadContentQuery<const Query extends string>(
-  query: Query,
-  preview: PreviewState = PUBLIC_PREVIEW_STATE,
-  params?: ClientParams<Query>,
-): Promise<ContentQueryResult<ClientReturn<Query, unknown>>> {
-  return createRequestContent(preview).loadQuery(query, params)
 }

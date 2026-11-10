@@ -1,6 +1,7 @@
 import reactRenderer from '@astrojs/react/server.js'
 import { experimental_AstroContainer as AstroContainer } from 'astro/container'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { createContentRequestStub } from '../sanity/content/request.test-support'
 import HomeRoute from './index.astro'
 
 const fixtures = vi.hoisted(() => {
@@ -105,15 +106,6 @@ const fixtures = vi.hoisted(() => {
   return { homePage, siteSettings }
 })
 
-vi.mock('../sanity/content', () => ({
-  getSiteSettings: vi.fn(async () => fixtures.siteSettings),
-  getHomePage: vi.fn(async (preview) =>
-    preview.enabled
-      ? { ...fixtures.homePage, heroHeading: 'Draft Home' }
-      : fixtures.homePage,
-  ),
-}))
-
 afterEach(() => {
   vi.unstubAllEnvs()
 })
@@ -128,15 +120,31 @@ async function createContainer() {
   return container
 }
 
+function createHomeContent(preview: { enabled: boolean }) {
+  return createContentRequestStub({
+    loadHomePage: vi.fn(async () => ({
+      content: preview.enabled
+        ? { ...fixtures.homePage, heroHeading: 'Draft Home' }
+        : fixtures.homePage,
+      siteSettings: fixtures.siteSettings,
+    })),
+  })
+}
+
 describe('Home route', () => {
   it('renders published Sanity content without preview controls and uses visible-content SEO fallbacks', async () => {
     const container = await createContainer()
+    const content = createHomeContent({ enabled: false })
     const html = await container.renderToString(HomeRoute, {
       partial: false,
       request: new Request('https://stillroom.test/'),
-      locals: { preview: { enabled: false, perspective: 'published' } },
+      locals: {
+        preview: { enabled: false, perspective: 'published' },
+        content,
+      },
     })
 
+    expect(content.loadHomePage).toHaveBeenCalledTimes(1)
     expect(html).toContain('Published Home')
     expect(html).toContain('Published point of view copy.')
     expect(html).toContain('Published final action')
@@ -164,7 +172,10 @@ describe('Home route', () => {
     const html = await container.renderToString(HomeRoute, {
       partial: false,
       request: new Request('https://deploy-preview.example/'),
-      locals: { preview: { enabled: false, perspective: 'published' } },
+      locals: {
+        preview: { enabled: false, perspective: 'published' },
+        content: createHomeContent({ enabled: false }),
+      },
     })
 
     expect(html).toContain(
@@ -181,7 +192,10 @@ describe('Home route', () => {
     const html = await container.renderToString(HomeRoute, {
       partial: false,
       request: new Request('https://stillroom.test/'),
-      locals: { preview: { enabled: true, perspective: 'drafts' } },
+      locals: {
+        preview: { enabled: true, perspective: 'drafts' },
+        content: createHomeContent({ enabled: true }),
+      },
     })
 
     expect(html).toContain('Draft Home')

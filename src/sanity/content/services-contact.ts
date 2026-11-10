@@ -3,12 +3,11 @@ import type {
   CONTACT_PAGE_QUERY_RESULT,
   SERVICES_PAGE_QUERY_RESULT,
 } from '../../../sanity.types'
-import { PUBLIC_PREVIEW_STATE, type PreviewState } from '../preview'
 import {
   CONTACT_PAGE_QUERY,
   SERVICES_PAGE_QUERY,
 } from '../queries/services-contact'
-import { loadContentQuery } from './client'
+import type { ContentQueryClient } from './client'
 import { MissingContentError } from './errors'
 import {
   hasUniqueStrings,
@@ -190,16 +189,16 @@ export function requireContactPage(value: unknown): ContactPage {
   return { ...page, serviceOptions } as ContactPage
 }
 
-export async function getServicesPage(
-  preview: PreviewState = PUBLIC_PREVIEW_STATE,
+export async function loadServicesPage(
+  content: ContentQueryClient,
 ): Promise<ServicesPage> {
-  const { data } = await loadContentQuery(SERVICES_PAGE_QUERY, preview)
+  const { data } = await content.loadQuery(SERVICES_PAGE_QUERY)
   return requireServicesPage(data)
 }
 
-export async function getContactPage(
-  preview: PreviewState = PUBLIC_PREVIEW_STATE,
+export async function loadContactPage(
+  content: ContentQueryClient,
 ): Promise<ContactPage> {
-  const { data } = await loadContentQuery(CONTACT_PAGE_QUERY, preview)
+  const { data } = await content.loadQuery(CONTACT_PAGE_QUERY)
   return requireContactPage(data)
 }

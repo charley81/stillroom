@@ -4,12 +4,13 @@ import { VisualEditing } from '@sanity/astro/visual-editing'
 import { Font } from 'astro:assets'
 import Footer from '../components/site/Footer.astro'
 import Header from '../components/site/Header.astro'
-import { getSiteSettings } from '../sanity/content'
+import type { SiteSettings } from '../sanity/content/site-settings'
 import { PUBLIC_PREVIEW_STATE } from '../sanity/preview'
 import { resolveRuntimeSiteOrigin } from '../site-origin'
 import '../styles/global.css'
 
 interface Props {
+  settings: SiteSettings
   title?: string
   description?: string
   socialImageUrl?: string
@@ -18,8 +19,8 @@ interface Props {
 }
 
 const preview = Astro.locals.preview ?? PUBLIC_PREVIEW_STATE
-const settings = await getSiteSettings(preview)
 const {
+  settings,
   title = settings.defaultSeoTitle,
   description = settings.defaultSeoDescription,
   socialImageUrl = settings.defaultSocialImage.url,

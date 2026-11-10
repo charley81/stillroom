@@ -3,17 +3,20 @@ import EditorialImage from '../../components/content/EditorialImage.astro'
 import ProjectInvitation from '../../components/site/ProjectInvitation.astro'
 import ProjectsListing from '../../components/work/ProjectsListing.astro'
 import Layout from '../../layouts/Layout.astro'
-import { getWorkPage } from '../../sanity/content'
-import { PUBLIC_PREVIEW_STATE } from '../../sanity/preview'
 
-const preview = Astro.locals.preview ?? PUBLIC_PREVIEW_STATE
-const page = await getWorkPage(preview)
+const { content: page, siteSettings } =
+  await Astro.locals.content.loadWorkPage()
 const title = page.seo?.metaTitle ?? `${page.heading} — Stillroom`
 const description = page.seo?.metaDescription ?? undefined
 const socialImageUrl = page.seo?.socialImageUrl ?? page.heroArtwork.url
 ---
 
-<Layout title={title} description={description} socialImageUrl={socialImageUrl}>
+<Layout
+  settings={siteSettings}
+  title={title}
+  description={description}
+  socialImageUrl={socialImageUrl}
+>
   <section class="flex min-h-[517.262px] flex-col gap-8 px-4 pt-4 pb-16 md:min-h-[833px] md:px-8 md:py-32">
     <div class="w-full max-w-none p-0">
       <p class="m-0 font-body text-base leading-[16.2px] font-black text-dark-grey uppercase">

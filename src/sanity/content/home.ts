@@ -1,7 +1,6 @@
 import type { HOME_PAGE_QUERY_RESULT } from '../../../sanity.types'
-import { PUBLIC_PREVIEW_STATE, type PreviewState } from '../preview'
 import { HOME_PAGE_QUERY } from '../queries/home'
-import { loadContentQuery } from './client'
+import type { ContentQueryClient } from './client'
 import { MissingContentError } from './errors'
 import { requireJournalArticleCard, type JournalArticleCard } from './journal'
 import {
@@ -160,9 +159,9 @@ export function requireHomePage(value: unknown): HomePage {
   return value as HomePage
 }
 
-export async function getHomePage(
-  preview: PreviewState = PUBLIC_PREVIEW_STATE,
+export async function loadHomePage(
+  content: ContentQueryClient,
 ): Promise<HomePage> {
-  const { data } = await loadContentQuery(HOME_PAGE_QUERY, preview)
+  const { data } = await content.loadQuery(HOME_PAGE_QUERY)
   return requireHomePage(data)
 }
