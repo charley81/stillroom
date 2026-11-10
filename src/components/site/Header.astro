@@ -26,7 +26,7 @@ const isActive = (href: string) =>
   pathname === href || pathname.startsWith(`${href}/`)
 ---
 
-<header class="relative z-20 grid min-h-[108px] grid-cols-[1fr_auto] items-center px-4 py-8 md:min-h-[120px] md:grid-cols-[auto_minmax(0,1fr)_auto] md:gap-4 md:px-8">
+<header class="relative z-20 flex min-h-[108px] items-center justify-between gap-4 px-4 py-8 md:min-h-[120px] md:px-8">
   <a
     class="min-w-0 [overflow-wrap:anywhere] font-display text-[36px] leading-[36px] font-normal tracking-normal text-dark lowercase"
     href="/"
@@ -36,7 +36,7 @@ const isActive = (href: string) =>
     {hasRegisteredMark && <span class="text-primary">®</span>}
   </a>
   <nav
-    class="hidden w-full max-w-[550px] items-center justify-center gap-[clamp(0.5rem,2vw,4rem)] md:flex"
+    class="hidden min-w-0 max-w-[550px] flex-1 items-center justify-center gap-[clamp(0.5rem,2vw,4rem)] md:flex"
     aria-label="Primary navigation"
   >
     {links.map((link) => (
@@ -51,7 +51,7 @@ const isActive = (href: string) =>
       </a>
     ))}
   </nav>
-  <div class="hidden justify-self-end md:block">
+  <div class="hidden shrink-0 md:block">
     <Button href="/contact" class="md:!w-[clamp(9rem,14.6vw,13.125rem)]">
       {settings.headerCtaLabel}
     </Button>
