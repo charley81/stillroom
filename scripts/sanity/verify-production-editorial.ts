@@ -2,13 +2,12 @@ import { createClient } from '@sanity/client'
 import { stegaClean } from '@sanity/client/stega'
 import { pathToFileURL } from 'node:url'
 import { HOME_PAGE_ID, SANITY_API_VERSION } from '../../src/sanity/constants'
+import { requireConfiguredSiteOrigin } from '../../src/site-origin'
 import {
   PREVIEW_COOKIE_NAME,
   createPreviewSession,
 } from '../../src/sanity/preview'
 import { preparePublishedDocument } from './production-launch'
-
-const PRODUCTION_ORIGIN = 'https://stillroom-app.netlify.app'
 
 interface HomeDocument {
   _id: string
@@ -25,9 +24,9 @@ function loadLocalEnvironment() {
   }
 }
 
-async function fetchHome(cookie?: string) {
+async function fetchHome(productionOrigin: string, cookie?: string) {
   const response = await fetch(
-    `${PRODUCTION_ORIGIN}/?editorial-check=${Date.now()}`,
+    `${productionOrigin}/?editorial-check=${Date.now()}`,
     {
       headers: cookie ? { Cookie: cookie } : undefined,
       signal: AbortSignal.timeout(30_000),
@@ -40,12 +39,13 @@ async function fetchHome(cookie?: string) {
 }
 
 async function waitForPublishedText(
+  productionOrigin: string,
   text: string,
   expected: boolean,
   refresh?: () => Promise<unknown>,
 ) {
   for (let attempt = 0; attempt < 60; attempt += 1) {
-    const { response, html } = await fetchHome()
+    const { response, html } = await fetchHome(productionOrigin)
     if (response.status === 200 && html.includes(text) === expected) return
     if (refresh && attempt > 0 && attempt % 10 === 0) await refresh()
     await new Promise((resolve) => setTimeout(resolve, 2_000))
@@ -58,6 +58,7 @@ async function waitForPublishedText(
 async function run() {
   loadLocalEnvironment()
 
+  const productionOrigin = requireConfiguredSiteOrigin(process.env)
   const projectId = process.env.PUBLIC_SANITY_PROJECT_ID
   const token =
     process.env.SANITY_API_WRITE_TOKEN ?? process.env.SANITY_AUTH_TOKEN
@@ -108,12 +109,12 @@ async function run() {
   try {
     await client.createOrReplace(draft)
 
-    const publicPage = await fetchHome()
+    const publicPage = await fetchHome(productionOrigin)
     if (publicPage.html.includes(marker)) {
       throw new Error('The production draft leaked to the public page.')
     }
 
-    const previewPage = await fetchHome(cookie)
+    const previewPage = await fetchHome(productionOrigin, cookie)
     if (!previewPage.html.includes(marker)) {
       throw new Error('The production preview did not display the draft edit.')
     }
@@ -149,14 +150,14 @@ async function run() {
     if (!publishedHeading.includes(marker)) {
       throw new Error('Sanity did not publish the editorial verification edit.')
     }
-    await waitForPublishedText(marker, true)
+    await waitForPublishedText(productionOrigin, marker, true)
 
     console.log(
       'Verified draft preview, Visual Editing, and publication without a deployment.',
     )
   } finally {
     await restoreOriginal()
-    await waitForPublishedText(marker, false, restoreOriginal)
+    await waitForPublishedText(productionOrigin, marker, false, restoreOriginal)
   }
 
   console.log('Restored the verified Home content after the editorial check.')

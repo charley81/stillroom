@@ -1,11 +1,21 @@
 import { mkdir } from 'node:fs/promises'
 import puppeteer from 'puppeteer-core'
 import { ROUTE_VERIFICATION_CASES } from '../src/sanity/manifests/routes'
+import { LOCAL_DEVELOPMENT_ORIGIN, resolveSiteOrigin } from '../src/site-origin'
 import { validatePublicPage, validateStudioResponse } from './site-verification'
 
-const baseUrl = process.env.SITE_URL ?? 'http://localhost:4321'
-const canonicalOrigin =
-  process.env.CANONICAL_ORIGIN ?? 'https://stillroom-app.netlify.app'
+try {
+  process.loadEnvFile('.env')
+} catch {
+  // CI and production commands provide environment variables directly.
+}
+
+const canonicalOrigin = resolveSiteOrigin(process.env)
+const baseUrl =
+  process.env.SITE_URL ??
+  (process.env.VERIFY_PRODUCTION === 'true'
+    ? canonicalOrigin
+    : LOCAL_DEVELOPMENT_ORIGIN)
 const screenshotDirectory =
   process.env.SCREENSHOT_DIRECTORY ?? '.sanity/screenshots'
 const routes = ROUTE_VERIFICATION_CASES.map(({ route }) => route)

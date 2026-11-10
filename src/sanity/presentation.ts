@@ -3,8 +3,9 @@ import {
   type DocumentLocationsState,
   type PresentationPluginOptions,
 } from 'sanity/presentation'
+import { resolveRuntimeSiteOrigin } from '../site-origin'
 import { PUBLIC_ROUTE_PATTERNS, SITE_SETTINGS_ROUTES } from './manifests/routes'
-import { TRUSTED_PRESENTATION_ORIGINS } from './presentation-origins'
+import { createTrustedPresentationOrigins } from './presentation-origins'
 
 export { TRUSTED_PRESENTATION_ORIGINS } from './presentation-origins'
 
@@ -234,43 +235,53 @@ export const serviceLocations = {
   'title' | 'workProjects' | 'featuredOnHome' | 'shownOnServices'
 >
 
-export const PRESENTATION_OPTIONS = {
-  allowOrigins: [...TRUSTED_PRESENTATION_ORIGINS],
-  previewUrl: {
-    initial: ({ origin }) =>
-      TRUSTED_PRESENTATION_ORIGINS.some((trusted) => trusted === origin)
-        ? origin
-        : 'https://stillroom-app.netlify.app',
-    previewMode: async ({ targetOrigin }) =>
-      TRUSTED_PRESENTATION_ORIGINS.some((trusted) => trusted === targetOrigin)
-        ? {
-            enable: '/api/preview/enable',
-            shareAccess: false,
-          }
-        : false,
-  },
-  resolve: {
-    mainDocuments: [
-      {
-        route: [...SITE_SETTINGS_ROUTES],
-        type: 'siteSettings',
-      },
-      ...PUBLIC_ROUTE_PATTERNS,
-    ],
-    locations: {
-      siteSettings: siteSettingsLocations,
-      homePage: homePageLocations,
-      workPage: workPageLocations,
-      workProject: workProjectLocations,
-      servicesPage: servicesPageLocations,
-      journalPage: journalPageLocations,
-      journalArticle: journalArticleLocations,
-      author: authorLocations,
-      journalCategory: journalCategoryLocations,
-      contactPage: contactPageLocations,
-      aboutPage: aboutPageLocations,
-      clientLogo: clientLogoLocations,
-      service: serviceLocations,
+export function createPresentationOptions(
+  siteOrigin: string,
+): PresentationPluginOptions {
+  const trustedOrigins = createTrustedPresentationOrigins(siteOrigin)
+
+  return {
+    allowOrigins: [...trustedOrigins],
+    previewUrl: {
+      initial: ({ origin }) =>
+        trustedOrigins.some((trusted) => trusted === origin)
+          ? origin
+          : siteOrigin,
+      previewMode: async ({ targetOrigin }) =>
+        trustedOrigins.some((trusted) => trusted === targetOrigin)
+          ? {
+              enable: '/api/preview/enable',
+              shareAccess: false,
+            }
+          : false,
     },
-  },
-} satisfies PresentationPluginOptions
+    resolve: {
+      mainDocuments: [
+        {
+          route: [...SITE_SETTINGS_ROUTES],
+          type: 'siteSettings',
+        },
+        ...PUBLIC_ROUTE_PATTERNS,
+      ],
+      locations: {
+        siteSettings: siteSettingsLocations,
+        homePage: homePageLocations,
+        workPage: workPageLocations,
+        workProject: workProjectLocations,
+        servicesPage: servicesPageLocations,
+        journalPage: journalPageLocations,
+        journalArticle: journalArticleLocations,
+        author: authorLocations,
+        journalCategory: journalCategoryLocations,
+        contactPage: contactPageLocations,
+        aboutPage: aboutPageLocations,
+        clientLogo: clientLogoLocations,
+        service: serviceLocations,
+      },
+    },
+  }
+}
+
+export const PRESENTATION_OPTIONS = createPresentationOptions(
+  resolveRuntimeSiteOrigin(import.meta.env),
+)

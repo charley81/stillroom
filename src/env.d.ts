@@ -3,6 +3,14 @@
 import type { PreviewState } from './sanity/preview'
 
 declare global {
+  interface ImportMetaEnv {
+    readonly PUBLIC_SITE_ORIGIN?: string
+  }
+
+  interface ImportMeta {
+    readonly env: ImportMetaEnv
+  }
+
   namespace App {
     interface Locals {
       preview: PreviewState

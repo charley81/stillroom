@@ -1,6 +1,6 @@
 import reactRenderer from '@astrojs/react/server.js'
 import { experimental_AstroContainer as AstroContainer } from 'astro/container'
-import { describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import HomeRoute from './index.astro'
 
 const fixtures = vi.hoisted(() => {
@@ -114,6 +114,10 @@ vi.mock('../sanity/content', () => ({
   ),
 }))
 
+afterEach(() => {
+  vi.unstubAllEnvs()
+})
+
 async function createContainer() {
   const container = await AstroContainer.create()
   container.addServerRenderer({ renderer: reactRenderer })
@@ -152,6 +156,24 @@ describe('Home route', () => {
     expect(html).toContain('<script type="application/ld+json"')
     expect(html).toContain('"@type":"WebPage"')
     expect(html).not.toContain('Exit preview')
+  })
+
+  it('uses the configured production origin for canonical, social, and structured URLs', async () => {
+    vi.stubEnv('PUBLIC_SITE_ORIGIN', 'https://www.stillroom.example')
+    const container = await createContainer()
+    const html = await container.renderToString(HomeRoute, {
+      partial: false,
+      request: new Request('https://deploy-preview.example/'),
+      locals: { preview: { enabled: false, perspective: 'published' } },
+    })
+
+    expect(html).toContain(
+      '<link rel="canonical" href="https://www.stillroom.example/">',
+    )
+    expect(html).toContain(
+      '<meta property="og:url" content="https://www.stillroom.example/">',
+    )
+    expect(html).toContain('"url":"https://www.stillroom.example/"')
   })
 
   it('renders draft content and Visual Editing controls through the same route', async () => {
