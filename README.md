@@ -45,7 +45,9 @@ Run `pnpm sanity:migrate:all` to recreate development drafts or `pnpm sanity:mig
 
 Create a rollback-ready development export with `pnpm sanity:dataset:export`. The archive is written to `.sanity/backups/development.tar.gz` and intentionally ignored by Git.
 
-With the background dev server running, `pnpm verify:site` renders every public route at desktop and mobile viewports, checks response status, canonical URLs, internal links, image loading, and horizontal overflow, and writes full-page screenshots to `.sanity/screenshots/` for Figma comparison.
+Production launch is guarded by `ALLOW_PRODUCTION_LAUNCH=true` and runs pre-migration export, draft migration and validation, development parity comparison, dependency-ordered publication, published validation, and post-migration export. See [`docs/production-launch-runbook.md`](docs/production-launch-runbook.md) for the exact command, launch record, and tested Netlify and Sanity rollback procedures.
+
+With the background dev server running, `pnpm verify:site` renders every public route at desktop and mobile viewports, checks response status, canonical URLs, internal links, image loading, accessibility basics, Studio indexing, and horizontal overflow, and writes full-page screenshots to `.sanity/screenshots/` for Figma comparison. `pnpm verify:production` runs the same checks against the production origin.
 
 ## Structure
 

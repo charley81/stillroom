@@ -2,10 +2,13 @@ import { mkdir } from 'node:fs/promises'
 import puppeteer from 'puppeteer-core'
 import { JOURNAL_ARTICLE_SLUGS } from './sanity/migrate-journal'
 import { WORK_PROJECT_SLUGS } from './sanity/migrate-work'
+import { validatePublicPage, validateStudioResponse } from './site-verification'
 
 const baseUrl = process.env.SITE_URL ?? 'http://localhost:4321'
-const productionOrigin = 'https://stillroom-app.netlify.app'
-const screenshotDirectory = '.sanity/screenshots'
+const canonicalOrigin =
+  process.env.CANONICAL_ORIGIN ?? 'https://stillroom-app.netlify.app'
+const screenshotDirectory =
+  process.env.SCREENSHOT_DIRECTORY ?? '.sanity/screenshots'
 const routes = [
   '/',
   '/services',
@@ -16,7 +19,14 @@ const routes = [
   ...JOURNAL_ARTICLE_SLUGS.map((slug) => `/journal/${slug}`),
   '/contact',
   '/cutover-404-check',
+  '/work/cutover-404-check',
+  '/journal/cutover-404-check',
 ]
+const notFoundRoutes = new Set([
+  '/cutover-404-check',
+  '/work/cutover-404-check',
+  '/journal/cutover-404-check',
+])
 const viewports = [
   { name: 'desktop', width: 1440, height: 900, deviceScaleFactor: 1 },
   {
@@ -58,13 +68,6 @@ try {
         waitUntil: 'networkidle0',
         timeout: 60_000,
       })
-      const expectedStatus = route === '/cutover-404-check' ? 404 : 200
-      if (response?.status() !== expectedStatus) {
-        errors.push(
-          `${viewport.name} ${route}: expected ${expectedStatus}, received ${response?.status() ?? 'no response'}`,
-        )
-      }
-
       await page.evaluate(async () => {
         for (
           let top = 0;
@@ -90,10 +93,38 @@ try {
         ]
           .map((link) => link.href)
           .filter((href) => href.startsWith(location.origin))
+        const controls = [
+          ...document.querySelectorAll<HTMLElement>(
+            'input:not([type="hidden"]), textarea, select',
+          ),
+        ]
+        const unlabeledControlCount = controls.filter((control) => {
+          if (
+            control.getAttribute('aria-label')?.trim() ||
+            control.getAttribute('aria-labelledby')?.trim() ||
+            control.closest('label')
+          ) {
+            return false
+          }
+          const id = control.id
+          return (
+            !id || !document.querySelector(`label[for="${CSS.escape(id)}"]`)
+          )
+        }).length
         return {
           canonical,
           links,
           images,
+          title: document.title,
+          description:
+            document
+              .querySelector<HTMLMetaElement>('meta[name="description"]')
+              ?.content.trim() || undefined,
+          h1Count: document.querySelectorAll('h1').length,
+          missingAltCount: [...document.images].filter(
+            (image) => !image.hasAttribute('alt'),
+          ).length,
+          unlabeledControlCount,
           documentWidth: document.documentElement.scrollWidth,
           viewportWidth: window.innerWidth,
         }
@@ -101,21 +132,26 @@ try {
 
       result.links.forEach((link) => internalLinks.add(link))
       result.images.forEach((source) => imageSources.add(source))
-      if (result.documentWidth > result.viewportWidth) {
-        errors.push(
-          `${viewport.name} ${route}: horizontal overflow (${result.documentWidth}px document in ${result.viewportWidth}px viewport)`,
-        )
-      }
-      if (expectedStatus === 200) {
-        const expectedCanonical = new URL(route, productionOrigin).href
-        if (result.canonical !== expectedCanonical) {
-          errors.push(
-            `${viewport.name} ${route}: canonical ${result.canonical ?? 'missing'}; expected ${expectedCanonical}`,
-          )
-        }
-      } else if (result.canonical) {
-        errors.push(`${viewport.name} ${route}: 404 route has a canonical URL`)
-      }
+      errors.push(
+        ...validatePublicPage({
+          route,
+          viewport: viewport.name,
+          status: response?.status(),
+          expectedStatus: notFoundRoutes.has(route) ? 404 : 200,
+          canonical: result.canonical,
+          expectedCanonical: notFoundRoutes.has(route)
+            ? undefined
+            : new URL(route, canonicalOrigin).href,
+          title: result.title,
+          description: result.description,
+          h1Count: result.h1Count,
+          missingAltCount: result.missingAltCount,
+          unlabeledControlCount: result.unlabeledControlCount,
+          documentWidth: result.documentWidth,
+          viewportWidth: result.viewportWidth,
+          links: result.links,
+        }),
+      )
 
       const name = route === '/' ? 'home' : route.slice(1).replaceAll('/', '--')
       await page.screenshot({
@@ -127,6 +163,14 @@ try {
       )
     }
   }
+
+  const studioResponse = await fetch(new URL('/studio', baseUrl))
+  errors.push(
+    ...validateStudioResponse({
+      status: studioResponse.status,
+      robots: studioResponse.headers.get('x-robots-tag') ?? undefined,
+    }),
+  )
 
   for (const link of internalLinks) {
     const response = await fetch(link, { redirect: 'manual' })
