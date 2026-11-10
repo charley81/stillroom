@@ -60,6 +60,9 @@ importers:
       '@emnapi/runtime':
         specifier: 1.11.3
         version: 1.11.3
+      '@sanity/export':
+        specifier: 7.1.0
+        version: 7.1.0(vitest@5.1.0(@opentelemetry/api@1.9.1)(@types/node@22.20.5)(jsdom@29.1.1(@noble/hashes@2.4.0))(vite@8.3.6(@types/node@22.20.5)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)))
       '@tailwindcss/vite':
         specifier: ^4.3.3
         version: 4.3.3(vite@8.3.6(@types/node@22.20.5)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
@@ -84,6 +87,9 @@ importers:
       prettier-plugin-tailwindcss:
         specifier: ^0.8.1
         version: 0.8.1(prettier-plugin-astro@1.1.2(prettier@3.9.10))(prettier@3.9.10)
+      puppeteer-core:
+        specifier: 25.12.0
+        version: 25.12.0(yauzl@3.4.0)
       tailwindcss:
         specifier: ^4.3.3
         version: 4.3.3
@@ -2175,6 +2181,19 @@ packages:
   '@prettier/parse-srcset@3.1.0':
     resolution: {integrity: sha512-FIRv2rZotO9NP/r66taYqD1zICpPiBbrECqjKV/xqNotqDxF7fLzzUeK+1RSRx9Tenk0DajR/GcRmTJ2qtHaKQ==}
 
+  '@puppeteer/browsers@3.2.3':
+    resolution: {integrity: sha512-2Bt3m6dDAJqmZehn0wiXSYyQmuhyiHHZ7FjvrVaS1W2RoFGV6eCK71UvKYkNJjkwC1Q9nobjhvTMhLQztFVINA==}
+    engines: {node: '>=22.12.0'}
+    hasBin: true
+    peerDependencies:
+      proxy-agent: '>=8.0.1'
+      yauzl: ^2.10.0 || ^3.4.0
+    peerDependenciesMeta:
+      proxy-agent:
+        optional: true
+      yauzl:
+        optional: true
+
   '@rexxars/react-json-inspector@9.0.1':
     resolution: {integrity: sha512-4uZ4RnrVoOGOShIKKcPoF+qhwDCZJsPPqyoEoW/8HRdzNknN9Q2yhlbEgTX1lMZunF1fv7iHzAs+n1vgIgfg/g==}
     peerDependencies:
@@ -3581,6 +3600,12 @@ packages:
     resolution: {integrity: sha512-+IxzY9BZOQd/XuYPRmrvEVjF/nqj5kgT4kEq7VofrDoM1MxoRjEWkrCC3EtLi59TVawxTAn+orJwFQcrqEN1+g==}
     engines: {node: '>=18'}
 
+  chromium-bidi@17.0.2:
+    resolution: {integrity: sha512-5v9GQFhTktFvotn/OFNJBmKLKRAb6n9r0bVCwf7sHgWc3/JryK0bj1nn93L3pHFrfgcsu6Be6EWsDi+1XHTGDg==}
+    engines: {node: '>=20.19.0 <22.0.0 || >=22.12.0'}
+    peerDependencies:
+      devtools-protocol: '*'
+
   ci-info@4.4.0:
     resolution: {integrity: sha512-77PSwercCZU2Fc4sX94eF8k8Pxte6JAwL4/ICZLFjJLqegs7kCuAsqqj/70NQF6TvDpgFjkubQB2FW2ZZddvQg==}
     engines: {node: '>=8'}
@@ -3937,6 +3962,9 @@ packages:
 
   devlop@1.1.0:
     resolution: {integrity: sha512-RWmIqhcFf1lRYBvNmr7qTNuyCt/7/ns2jbpp1+PalgE/rDQcBT0fioSMUpJ93irlUhC5hrg4cYqe6U+0ImW0rA==}
+
+  devtools-protocol@0.0.1687809:
+    resolution: {integrity: sha512-t7kSb+UKYdyxcmqy98U2P86ne6rCve3DIJ4+lp54i/hhClgFuG35JrLj23rO14Jw3sWDsp7i+22QhNU0+/qk8g==}
 
   dialog-closedby-polyfill@1.4.0:
     resolution: {integrity: sha512-ndrASHRWiPhAN1Vu4kzSHFoeqvk04julTtfR4IMP+I7xJvFH9OodurjPAQgK90IvrGZSSIgYLZ3QwPt5oXSH4A==}
@@ -5292,6 +5320,9 @@ packages:
     resolution: {integrity: sha512-KZxYo1BUkWD2TVFLr0MQoM8vUUigWD3LlD83a/75BqC+4qE0Hb1Vo5v1FgcfaNXvfXzr+5EhQ6ing/CaBijTlw==}
     engines: {node: '>= 18'}
 
+  mitt@3.0.1:
+    resolution: {integrity: sha512-vKivATfr97l2/QBCYAkXYDbrIWPM2IIKEl7YPhjCvKlG3kE2gm+uBo6nEXK3M5/Ffh/FLpKExzOQ3JJoJGFKBw==}
+
   modern-tar@0.8.6:
     resolution: {integrity: sha512-LYSks0tNVqbtez/9OB0YFP6qLRSqkdAxJWOQpVaR67lNTbj2zNLyYpowkRMia5lXLCZKzxwoxkxH2MbbBR2aEg==}
     engines: {node: '>=18.0.0'}
@@ -5825,6 +5856,10 @@ packages:
   punycode@2.3.1:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
+
+  puppeteer-core@25.12.0:
+    resolution: {integrity: sha512-z6LQUt5SH7jwGtGA+nMtJuEjZIsqPiwQ+EFHCYuVDQrJpvifNmmGuyDvTzAKPyFzihxgHc5f3aMzu2kn8Ps37A==}
+    engines: {node: '>=22.12.0'}
 
   queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
@@ -6579,6 +6614,9 @@ packages:
     resolution: {integrity: sha512-phPGCwqr2+Qo0fwniCE8e4pKnGu/yFb5nD5Y8bf0EEeiI5GklnACYA9GFy/DrAeRrKHXvHn+1SUsOWgJp6RO+g==}
     engines: {node: '>= 0.4'}
 
+  typed-query-selector@2.12.3:
+    resolution: {integrity: sha512-/dtuMZyutHLlrxWhhC1uib00ELUr2dZ8C9B8YzZYsJmeE3V56OxRblrSM2UaF142pcMtak7ehZ6+poWGeehNIg==}
+
   typeid-js@0.3.0:
     resolution: {integrity: sha512-A1EmvIWG6xwYRfHuYUjPltHqteZ1EiDG+HOmbIYXeHUVztmnGrPIfU9KIK1QC30x59ko0r4JsMlwzsALCyiB3Q==}
 
@@ -7054,6 +7092,9 @@ packages:
   web-vitals@6.2.3:
     resolution: {integrity: sha512-Dmy+vdO1UPMqXiAtZSNayhl4f794Bxfd94W4HIj2HlYtczEQfEOon969memlcpcHrTuOKLa5baFjX7WbgmOq+A==}
 
+  webdriver-bidi-protocol@0.4.3:
+    resolution: {integrity: sha512-uuN0goWfxP22B7J/uAgBpOYNPttC+XVseYE+rSY5+rQ+YBeVz/VORw8WbmLVcqW78zNg5A4qnjNXYUWR3il2ig==}
+
   webidl-conversions@3.0.1:
     resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
 
@@ -7262,6 +7303,9 @@ packages:
   zip-stream@7.0.5:
     resolution: {integrity: sha512-dSvYKdvLsAHCDqPOhIwk/q5CvuWtTB3Dgpoe0uVEFjTzIOAmsQpprX25InCvrvJsirEbu1OHyy67n/kAj1Sw/w==}
     engines: {node: '>=18'}
+
+  zod@3.25.76:
+    resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
   zod@4.6.7:
     resolution: {integrity: sha512-g8W2D2kU6a8untc053fX1uVBKzM7yqAxW/3zwk83+6RyF2+SKOuV+c0wBDhUwzV1PaGapmZH+rmcUzPf+3CGwg==}
@@ -9677,6 +9721,13 @@ snapshots:
 
   '@prettier/parse-srcset@3.1.0': {}
 
+  '@puppeteer/browsers@3.2.3(yauzl@3.4.0)':
+    dependencies:
+      modern-tar: 0.8.6
+      yargs: 18.2.0
+    optionalDependencies:
+      yauzl: 3.4.0
+
   '@rexxars/react-json-inspector@9.0.1(react@19.3.1)':
     dependencies:
       debounce: 1.2.1
@@ -11521,6 +11572,12 @@ snapshots:
 
   chownr@3.0.0: {}
 
+  chromium-bidi@17.0.2(devtools-protocol@0.0.1687809):
+    dependencies:
+      devtools-protocol: 0.0.1687809
+      mitt: 3.0.1
+      zod: 3.25.76
+
   ci-info@4.4.0: {}
 
   cjs-module-lexer@2.3.0: {}
@@ -11864,6 +11921,8 @@ snapshots:
   devlop@1.1.0:
     dependencies:
       dequal: 2.0.3
+
+  devtools-protocol@0.0.1687809: {}
 
   dialog-closedby-polyfill@1.4.0: {}
 
@@ -13222,6 +13281,8 @@ snapshots:
     dependencies:
       minipass: 7.1.3
 
+  mitt@3.0.1: {}
+
   modern-tar@0.8.6: {}
 
   module-definition@6.0.2:
@@ -13671,6 +13732,20 @@ snapshots:
       pump: 2.0.1
 
   punycode@2.3.1: {}
+
+  puppeteer-core@25.12.0(yauzl@3.4.0):
+    dependencies:
+      '@puppeteer/browsers': 3.2.3(yauzl@3.4.0)
+      chromium-bidi: 17.0.2(devtools-protocol@0.0.1687809)
+      devtools-protocol: 0.0.1687809
+      typed-query-selector: 2.12.3
+      webdriver-bidi-protocol: 0.4.3
+      ws: 8.22.2
+    transitivePeerDependencies:
+      - bufferutil
+      - proxy-agent
+      - utf-8-validate
+      - yauzl
 
   queue-microtask@1.2.3: {}
 
@@ -14696,6 +14771,8 @@ snapshots:
       possible-typed-array-names: 1.1.0
       reflect.getprototypeof: 1.0.10
 
+  typed-query-selector@2.12.3: {}
+
   typeid-js@0.3.0:
     dependencies:
       uuidv7: 0.4.4
@@ -15047,6 +15124,8 @@ snapshots:
 
   web-vitals@6.2.3: {}
 
+  webdriver-bidi-protocol@0.4.3: {}
+
   webidl-conversions@3.0.1: {}
 
   webidl-conversions@8.0.1: {}
@@ -15265,6 +15344,8 @@ snapshots:
       compress-commons: 7.0.1
       normalize-path: 3.0.0
       readable-stream: 4.8.0
+
+  zod@3.25.76: {}
 
   zod@4.6.7: {}
 

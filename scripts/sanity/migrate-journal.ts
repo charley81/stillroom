@@ -2,13 +2,14 @@ import { createClient } from '@sanity/client'
 import { createHash } from 'node:crypto'
 import { readFileSync } from 'node:fs'
 import { readFile } from 'node:fs/promises'
-import { basename, extname, resolve } from 'node:path'
+import { basename, extname } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import {
   JOURNAL_PAGE_DRAFT_ID,
   JOURNAL_PAGE_ID,
   SANITY_API_VERSION,
 } from '../../src/sanity/constants'
+import { migrationAssetPath } from './migration-assets'
 
 interface SourceImage {
   src: string
@@ -380,7 +381,7 @@ export async function migrateJournal({
 }) {
   const assetIds: Record<string, string> = {}
   for (const publicPath of allAssetPaths()) {
-    const diskPath = resolve('public', publicPath.replace(/^\//, ''))
+    const diskPath = migrationAssetPath(publicPath)
     assetIds[publicPath] = await uploadImageOnce({
       client,
       path: diskPath,

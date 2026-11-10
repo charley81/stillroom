@@ -25,3 +25,7 @@ pnpm-debug.log*
 
 # Local Netlify folder
 .netlify
+
+# Local Sanity verification artifacts
+.sanity/backups/
+.sanity/screenshots/

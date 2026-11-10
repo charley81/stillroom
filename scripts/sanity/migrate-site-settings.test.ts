@@ -6,12 +6,17 @@ import {
 } from './migrate-site-settings'
 
 describe('Site Settings migration', () => {
-  it('creates the same draft and asset reference on every run', async () => {
+  it('reuses the same asset and draft document on every run', async () => {
     const upload = vi
       .fn()
       .mockResolvedValue({ _id: 'image-stable-1200x630-jpg' })
+    const fetch = vi
+      .fn()
+      .mockResolvedValueOnce(null)
+      .mockResolvedValue('image-stable-1200x630-jpg')
     const createOrReplace = vi.fn(async (document) => document)
     const client = {
+      fetch,
       assets: { upload },
       createOrReplace,
       transaction: vi.fn(),
@@ -33,6 +38,8 @@ describe('Site Settings migration', () => {
     expect(first.defaultSocialImage.asset.asset!._ref).toBe(
       'image-stable-1200x630-jpg',
     )
+    expect(fetch).toHaveBeenCalledTimes(2)
+    expect(upload).toHaveBeenCalledOnce()
     expect(createOrReplace).toHaveBeenCalledTimes(2)
   })
 
@@ -44,6 +51,7 @@ describe('Site Settings migration', () => {
       commit,
     }
     const client = {
+      fetch: vi.fn().mockResolvedValue(null),
       assets: {
         upload: vi.fn().mockResolvedValue({ _id: 'image-stable' }),
       },

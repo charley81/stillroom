@@ -1,6 +1,7 @@
 import { createClient } from '@sanity/client'
+import { createHash } from 'node:crypto'
 import { readFile } from 'node:fs/promises'
-import { basename, resolve } from 'node:path'
+import { basename } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import type { SiteSettings as SiteSettingsSchema } from '../../sanity.types'
 import {
@@ -8,11 +9,16 @@ import {
   SITE_SETTINGS_DRAFT_ID,
   SITE_SETTINGS_ID,
 } from '../../src/sanity/constants'
+import { migrationAssetPath } from './migration-assets'
 
 export { SITE_SETTINGS_DRAFT_ID }
 export const SITE_SETTINGS_PUBLISHED_ID = SITE_SETTINGS_ID
+export const SITE_SETTINGS_SOCIAL_IMAGE_PATH = migrationAssetPath(
+  'images/368-8150.webp',
+)
 
 interface MigrationClient {
+  fetch: (query: string, params: { sha1: string }) => Promise<string | null>
   assets: {
     upload: (
       type: 'image',
@@ -93,11 +99,20 @@ export async function migrateSiteSettings({
   publish?: boolean
 }): Promise<SiteSettingsDocument> {
   const image = await readAsset(socialImagePath)
-  const asset = await client.assets.upload('image', image, {
-    filename: basename(socialImagePath),
-    contentType: 'image/webp',
-  })
-  const draft = buildSiteSettingsDocument(asset._id)
+  const sha1 = createHash('sha1').update(image).digest('hex')
+  const existingAssetId = await client.fetch(
+    '*[_type == "sanity.imageAsset" && sha1hash == $sha1][0]._id',
+    { sha1 },
+  )
+  const assetId =
+    existingAssetId ??
+    (
+      await client.assets.upload('image', image, {
+        filename: basename(socialImagePath),
+        contentType: 'image/webp',
+      })
+    )._id
+  const draft = buildSiteSettingsDocument(assetId)
 
   await client.createOrReplace(draft)
 
@@ -152,7 +167,7 @@ async function run() {
   const publish = process.argv.includes('--publish')
   const draft = await migrateSiteSettings({
     client,
-    socialImagePath: resolve('public/images/368-8150.webp'),
+    socialImagePath: SITE_SETTINGS_SOCIAL_IMAGE_PATH,
     publish,
   })
 

@@ -143,6 +143,14 @@ describe('Home route', () => {
     expect(html).toContain(
       '<meta property="og:image" content="https://cdn.sanity.io/home.jpg">',
     )
+    expect(html).toContain(
+      '<link rel="canonical" href="https://stillroom-app.netlify.app/">',
+    )
+    expect(html).toContain(
+      '<meta property="og:url" content="https://stillroom-app.netlify.app/">',
+    )
+    expect(html).toContain('<script type="application/ld+json"')
+    expect(html).toContain('"@type":"WebPage"')
     expect(html).not.toContain('Exit preview')
   })
 

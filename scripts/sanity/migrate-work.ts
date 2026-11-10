@@ -2,13 +2,14 @@ import { createClient } from '@sanity/client'
 import { createHash } from 'node:crypto'
 import { readFileSync } from 'node:fs'
 import { readFile } from 'node:fs/promises'
-import { basename, extname, resolve } from 'node:path'
+import { basename, extname } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import {
   SANITY_API_VERSION,
   WORK_PAGE_DRAFT_ID,
   WORK_PAGE_ID,
 } from '../../src/sanity/constants'
+import { migrationAssetPath } from './migration-assets'
 import { SERVICE_IDS } from './migrate-services-contact'
 
 interface SourceImage {
@@ -359,7 +360,7 @@ export async function migrateWork({
 }) {
   const assetIds: Record<string, string> = {}
   for (const publicPath of allAssetPaths()) {
-    const diskPath = resolve('public', publicPath.replace(/^\//, ''))
+    const diskPath = migrationAssetPath(publicPath)
     assetIds[publicPath] = await uploadImageOnce({
       client,
       path: diskPath,

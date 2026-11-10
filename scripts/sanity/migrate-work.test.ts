@@ -83,6 +83,9 @@ describe('Work migration', () => {
           ),
         ),
     ).toBe(true)
+    expect(projects[0].outcomeHeading).toBe(
+      'A brand that feels like being welcomed in.',
+    )
     expect(projects.every((project) => project.services.length > 0)).toBe(true)
     expect(
       projects.every(

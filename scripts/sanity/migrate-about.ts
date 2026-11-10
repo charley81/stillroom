@@ -1,7 +1,7 @@
 import { createClient } from '@sanity/client'
 import { createHash } from 'node:crypto'
 import { readFile } from 'node:fs/promises'
-import { basename, extname, resolve } from 'node:path'
+import { basename, extname } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import type {
   AboutPage as AboutPageSchema,
@@ -13,6 +13,7 @@ import {
   ABOUT_PAGE_ID,
   SANITY_API_VERSION,
 } from '../../src/sanity/constants'
+import { migrationAssetPath } from './migration-assets'
 
 export const CLIENT_LOGO_IDS = [
   'client-logo-orlo-house',
@@ -28,6 +29,23 @@ interface AssetPaths {
   founder: string
   team: [string, string, string]
   clientLogos: [string, string, string, string, string]
+}
+
+export const ABOUT_ASSET_PATHS: AssetPaths = {
+  hero: migrationAssetPath('images/387-3526.webp'),
+  founder: migrationAssetPath('images/387-3529.webp'),
+  team: [
+    migrationAssetPath('figma-assets/alex-morgan.png'),
+    migrationAssetPath('figma-assets/maya-chen.png'),
+    migrationAssetPath('figma-assets/sam-rivera.png'),
+  ],
+  clientLogos: [
+    migrationAssetPath('figma-assets/client-logos/orlo-house.svg'),
+    migrationAssetPath('figma-assets/client-logos/juniper.svg'),
+    migrationAssetPath('figma-assets/client-logos/fieldwork.svg'),
+    migrationAssetPath('figma-assets/client-logos/the-long-table.svg'),
+    migrationAssetPath('figma-assets/client-logos/morrow.svg'),
+  ],
 }
 
 interface UploadedAssets {
@@ -383,22 +401,7 @@ async function run() {
   await migrateAbout({
     client: client as unknown as MigrationClient,
     publish,
-    assetPaths: {
-      hero: resolve('public/images/387-3526.webp'),
-      founder: resolve('public/images/387-3529.webp'),
-      team: [
-        resolve('public/figma-assets/alex-morgan.png'),
-        resolve('public/figma-assets/maya-chen.png'),
-        resolve('public/figma-assets/sam-rivera.png'),
-      ],
-      clientLogos: [
-        resolve('public/figma-assets/client-logos/orlo-house.svg'),
-        resolve('public/figma-assets/client-logos/juniper.svg'),
-        resolve('public/figma-assets/client-logos/fieldwork.svg'),
-        resolve('public/figma-assets/client-logos/the-long-table.svg'),
-        resolve('public/figma-assets/client-logos/morrow.svg'),
-      ],
-    },
+    assetPaths: ABOUT_ASSET_PATHS,
   })
 
   console.log(
