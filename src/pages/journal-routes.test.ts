@@ -1,6 +1,8 @@
 import reactRenderer from '@astrojs/react/server.js'
 import { experimental_AstroContainer as AstroContainer } from 'astro/container'
 import { describe, expect, it, vi } from 'vitest'
+import { JournalArticleNotFoundError } from '../sanity/content'
+import { createContentRequestStub } from '../sanity/content/request.test-support'
 import NotFoundRoute from './404.astro'
 import JournalArticleRoute from './journal/[slug].astro'
 import JournalRoute from './journal/index.astro'
@@ -146,28 +148,30 @@ const fixtures = vi.hoisted(() => {
   return { article, journalPage, siteSettings }
 })
 
-vi.mock('../sanity/content', () => {
-  class JournalArticleNotFoundError extends Error {}
-  return {
-    JournalArticleNotFoundError,
+function createRouteContent(preview: { enabled: boolean }) {
+  return createContentRequestStub({
     getSiteSettings: vi.fn(async () => fixtures.siteSettings),
-    getJournalPage: vi.fn(async (preview) =>
-      preview.enabled
+    loadJournalPage: vi.fn(async () => ({
+      content: preview.enabled
         ? { ...fixtures.journalPage, heading: 'Draft Journal heading' }
         : fixtures.journalPage,
-    ),
-    getJournalArticlePage: vi.fn(async (slug, preview) => {
+      siteSettings: fixtures.siteSettings,
+    })),
+    loadJournalArticlePage: vi.fn(async (slug: string) => {
       if (slug === 'missing' || (slug === 'draft-only' && !preview.enabled)) {
-        throw new JournalArticleNotFoundError()
+        throw new JournalArticleNotFoundError(slug)
       }
       return {
-        article: preview.enabled
-          ? { ...fixtures.article, title: 'Draft Journal Article' }
-          : fixtures.article,
+        content: {
+          article: preview.enabled
+            ? { ...fixtures.article, title: 'Draft Journal Article' }
+            : fixtures.article,
+        },
+        siteSettings: fixtures.siteSettings,
       }
     }),
-  }
-})
+  })
+}
 
 async function createContainer() {
   const container = await AstroContainer.create()
@@ -183,17 +187,30 @@ async function createContainer() {
 describe('Journal routes', () => {
   it('renders the featured article and date-ordered archive from public and preview content', async () => {
     const container = await createContainer()
+    const publishedPreview = {
+      enabled: false,
+      perspective: 'published',
+    } as const
+    const draftPreview = { enabled: true, perspective: 'drafts' } as const
+    const publishedContent = createRouteContent(publishedPreview)
     const published = await container.renderToString(JournalRoute, {
       partial: false,
       request: new Request('https://stillroom.test/journal'),
-      locals: { preview: { enabled: false, perspective: 'published' } },
+      locals: {
+        preview: publishedPreview,
+        content: publishedContent,
+      },
     })
     const preview = await container.renderToString(JournalRoute, {
       partial: false,
       request: new Request('https://stillroom.test/journal'),
-      locals: { preview: { enabled: true, perspective: 'drafts' } },
+      locals: {
+        preview: draftPreview,
+        content: createRouteContent(draftPreview),
+      },
     })
 
+    expect(publishedContent.loadJournalPage).toHaveBeenCalledTimes(1)
     expect(published).toContain('Published Journal heading')
     expect(published).toContain('What Makes a Place Stay With Us?')
     expect(published.indexOf('The Quiet Power of a Good Menu.')).toBeLessThan(
@@ -206,15 +223,18 @@ describe('Journal routes', () => {
 
   it('renders the Journal Article, constrained body, author note, related cards, and SEO fallbacks', async () => {
     const container = await createContainer()
+    const preview = { enabled: false, perspective: 'published' } as const
+    const content = createRouteContent(preview)
     const html = await container.renderToString(JournalArticleRoute, {
       partial: false,
       params: { slug: 'what-makes-a-place-stay-with-us' },
       request: new Request(
         'https://stillroom.test/journal/what-makes-a-place-stay-with-us',
       ),
-      locals: { preview: { enabled: false, perspective: 'published' } },
+      locals: { preview, content },
     })
 
+    expect(content.loadJournalArticlePage).toHaveBeenCalledTimes(1)
     expect(html).toContain('What Makes a Place Stay With Us?')
     expect(html).toContain('Published article paragraph.')
     expect(html).toContain('<h2')
@@ -230,20 +250,31 @@ describe('Journal routes', () => {
 
   it('previews an unpublished Journal Article without exposing it publicly', async () => {
     const container = await createContainer()
+    const publishedPreview = {
+      enabled: false,
+      perspective: 'published',
+    } as const
+    const draftPreview = { enabled: true, perspective: 'drafts' } as const
     const publicResponse = await container.renderToResponse(
       JournalArticleRoute,
       {
         partial: false,
         params: { slug: 'draft-only' },
         request: new Request('https://stillroom.test/journal/draft-only'),
-        locals: { preview: { enabled: false, perspective: 'published' } },
+        locals: {
+          preview: publishedPreview,
+          content: createRouteContent(publishedPreview),
+        },
       },
     )
     const previewHtml = await container.renderToString(JournalArticleRoute, {
       partial: false,
       params: { slug: 'draft-only' },
       request: new Request('https://stillroom.test/journal/draft-only'),
-      locals: { preview: { enabled: true, perspective: 'drafts' } },
+      locals: {
+        preview: draftPreview,
+        content: createRouteContent(draftPreview),
+      },
     })
 
     expect(publicResponse.status).toBe(404)
@@ -253,13 +284,17 @@ describe('Journal routes', () => {
 
   it('returns the 404 route for an unknown Journal Article slug', async () => {
     const container = await createContainer()
+    const preview = { enabled: false, perspective: 'published' } as const
+    const content = createRouteContent(preview)
     const response = await container.renderToResponse(JournalArticleRoute, {
       partial: false,
       params: { slug: 'missing' },
       request: new Request('https://stillroom.test/journal/missing'),
-      locals: { preview: { enabled: false, perspective: 'published' } },
+      locals: { preview, content },
     })
 
+    expect(content.loadJournalArticlePage).toHaveBeenCalledTimes(1)
+    expect(content.getSiteSettings).toHaveBeenCalledTimes(1)
     expect(response.status).toBe(404)
     expect(await response.text()).toContain('Page not found')
   })

@@ -3,18 +3,21 @@ import ArticleCard from '../../components/content/ArticleCard.astro'
 import EditorialImage from '../../components/content/EditorialImage.astro'
 import FeaturedArticle from '../../components/journal/FeaturedArticle.astro'
 import Layout from '../../layouts/Layout.astro'
-import { getJournalPage } from '../../sanity/content'
-import { PUBLIC_PREVIEW_STATE } from '../../sanity/preview'
 
-const preview = Astro.locals.preview ?? PUBLIC_PREVIEW_STATE
-const page = await getJournalPage(preview)
+const { content: page, siteSettings } =
+  await Astro.locals.content.loadJournalPage()
 const title = page.seo?.metaTitle ?? `${page.heading} — Stillroom`
 const description = page.seo?.metaDescription ?? page.introduction
 const socialImageUrl =
   page.seo?.socialImageUrl ?? page.featuredJournalArticle.heroImage.url
 ---
 
-<Layout title={title} description={description} socialImageUrl={socialImageUrl}>
+<Layout
+  settings={siteSettings}
+  title={title}
+  description={description}
+  socialImageUrl={socialImageUrl}
+>
   <section class="flex min-h-[362px] flex-col gap-8 px-4 pt-4 pb-16 md:min-h-[658px] md:px-8 md:pt-32 md:pb-20">
     <div class="w-full max-w-none p-0">
       <p class="m-0 font-body text-base leading-[16.2px] font-black text-dark-grey uppercase">

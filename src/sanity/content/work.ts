@@ -2,9 +2,8 @@ import type {
   WORK_PAGE_QUERY_RESULT,
   WORK_PROJECT_QUERY_RESULT,
 } from '../../../sanity.types'
-import { PUBLIC_PREVIEW_STATE, type PreviewState } from '../preview'
 import { WORK_PAGE_QUERY, WORK_PROJECT_QUERY } from '../queries/work'
-import { loadContentQuery } from './client'
+import type { ContentQueryClient } from './client'
 import { MissingContentError } from './errors'
 import {
   requireContentImage,
@@ -218,17 +217,17 @@ export function requireWorkProjectResult(
   }
 }
 
-export async function getWorkPage(
-  preview: PreviewState = PUBLIC_PREVIEW_STATE,
+export async function loadWorkPage(
+  content: ContentQueryClient,
 ): Promise<WorkPage> {
-  const { data } = await loadContentQuery(WORK_PAGE_QUERY, preview)
+  const { data } = await content.loadQuery(WORK_PAGE_QUERY)
   return requireWorkPage(data)
 }
 
-export async function getWorkProjectPage(
+export async function loadWorkProjectPage(
+  content: ContentQueryClient,
   slug: string,
-  preview: PreviewState = PUBLIC_PREVIEW_STATE,
 ): Promise<WorkProjectPage> {
-  const { data } = await loadContentQuery(WORK_PROJECT_QUERY, preview, { slug })
+  const { data } = await content.loadQuery(WORK_PROJECT_QUERY, { slug })
   return requireWorkProjectResult(data, slug)
 }

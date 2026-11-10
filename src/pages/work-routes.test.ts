@@ -1,6 +1,8 @@
 import reactRenderer from '@astrojs/react/server.js'
 import { experimental_AstroContainer as AstroContainer } from 'astro/container'
 import { describe, expect, it, vi } from 'vitest'
+import { WorkProjectNotFoundError } from '../sanity/content'
+import { createContentRequestStub } from '../sanity/content/request.test-support'
 import NotFoundRoute from './404.astro'
 import WorkProjectRoute from './work/[slug].astro'
 import WorkRoute from './work/index.astro'
@@ -87,29 +89,31 @@ const fixtures = vi.hoisted(() => {
   return { project, siteSettings, workPage }
 })
 
-vi.mock('../sanity/content', () => {
-  class WorkProjectNotFoundError extends Error {}
-  return {
-    WorkProjectNotFoundError,
+function createRouteContent(preview: { enabled: boolean }) {
+  return createContentRequestStub({
     getSiteSettings: vi.fn(async () => fixtures.siteSettings),
-    getWorkPage: vi.fn(async (preview) =>
-      preview.enabled
+    loadWorkPage: vi.fn(async () => ({
+      content: preview.enabled
         ? { ...fixtures.workPage, heading: 'Draft Work heading' }
         : fixtures.workPage,
-    ),
-    getWorkProjectPage: vi.fn(async (slug, preview) => {
-      if (slug === 'missing') throw new WorkProjectNotFoundError()
+      siteSettings: fixtures.siteSettings,
+    })),
+    loadWorkProjectPage: vi.fn(async (slug: string) => {
+      if (slug === 'missing') throw new WorkProjectNotFoundError(slug)
       return {
-        page: fixtures.workPage,
-        project: preview.enabled
-          ? { ...fixtures.project, title: 'Draft Work Project' }
-          : fixtures.project,
-        nextProject: fixtures.workPage.workProjects[1],
-        nextProjectNumber: 2,
+        content: {
+          page: fixtures.workPage,
+          project: preview.enabled
+            ? { ...fixtures.project, title: 'Draft Work Project' }
+            : fixtures.project,
+          nextProject: fixtures.workPage.workProjects[1],
+          nextProjectNumber: 2,
+        },
+        siteSettings: fixtures.siteSettings,
       }
     }),
-  }
-})
+  })
+}
 
 async function createContainer() {
   const container = await AstroContainer.create()
@@ -125,17 +129,30 @@ async function createContainer() {
 describe('Work routes', () => {
   it('renders the ordered Work listing from published and preview Sanity content', async () => {
     const container = await createContainer()
+    const publishedPreview = {
+      enabled: false,
+      perspective: 'published',
+    } as const
+    const draftPreview = { enabled: true, perspective: 'drafts' } as const
+    const publishedContent = createRouteContent(publishedPreview)
     const published = await container.renderToString(WorkRoute, {
       partial: false,
       request: new Request('https://stillroom.test/work'),
-      locals: { preview: { enabled: false, perspective: 'published' } },
+      locals: {
+        preview: publishedPreview,
+        content: publishedContent,
+      },
     })
     const preview = await container.renderToString(WorkRoute, {
       partial: false,
       request: new Request('https://stillroom.test/work'),
-      locals: { preview: { enabled: true, perspective: 'drafts' } },
+      locals: {
+        preview: draftPreview,
+        content: createRouteContent(draftPreview),
+      },
     })
 
+    expect(publishedContent.loadWorkPage).toHaveBeenCalledTimes(1)
     expect(published).toContain('Published Work heading')
     expect(published).toContain(
       '<meta name="description" content="Stillroom description">',
@@ -152,19 +169,32 @@ describe('Work routes', () => {
 
   it('renders published and changed Work Projects through the same route', async () => {
     const container = await createContainer()
+    const publishedPreview = {
+      enabled: false,
+      perspective: 'published',
+    } as const
+    const draftPreview = { enabled: true, perspective: 'drafts' } as const
+    const publishedContent = createRouteContent(publishedPreview)
     const published = await container.renderToString(WorkProjectRoute, {
       partial: false,
       params: { slug: 'the-good-table' },
       request: new Request('https://stillroom.test/work/the-good-table'),
-      locals: { preview: { enabled: false, perspective: 'published' } },
+      locals: {
+        preview: publishedPreview,
+        content: publishedContent,
+      },
     })
     const preview = await container.renderToString(WorkProjectRoute, {
       partial: false,
       params: { slug: 'the-good-table' },
       request: new Request('https://stillroom.test/work/the-good-table'),
-      locals: { preview: { enabled: true, perspective: 'drafts' } },
+      locals: {
+        preview: draftPreview,
+        content: createRouteContent(draftPreview),
+      },
     })
 
+    expect(publishedContent.loadWorkProjectPage).toHaveBeenCalledTimes(1)
     expect(published).toContain('The Good Table')
     expect(published).toContain('Published challenge')
     expect(published).toContain('Published outcome copy.')
@@ -178,13 +208,17 @@ describe('Work routes', () => {
 
   it('returns the 404 route for an unknown Work Project slug', async () => {
     const container = await createContainer()
+    const preview = { enabled: false, perspective: 'published' } as const
+    const content = createRouteContent(preview)
     const response = await container.renderToResponse(WorkProjectRoute, {
       partial: false,
       params: { slug: 'missing' },
       request: new Request('https://stillroom.test/work/missing'),
-      locals: { preview: { enabled: false, perspective: 'published' } },
+      locals: { preview, content },
     })
 
+    expect(content.loadWorkProjectPage).toHaveBeenCalledTimes(1)
+    expect(content.getSiteSettings).toHaveBeenCalledTimes(1)
     expect(response.status).toBe(404)
     const html = await response.text()
     expect(html).toContain('Page not found')

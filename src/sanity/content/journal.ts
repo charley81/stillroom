@@ -2,9 +2,8 @@ import type {
   JOURNAL_ARTICLE_QUERY_RESULT,
   JOURNAL_PAGE_QUERY_RESULT,
 } from '../../../sanity.types'
-import { PUBLIC_PREVIEW_STATE, type PreviewState } from '../preview'
 import { JOURNAL_ARTICLE_QUERY, JOURNAL_PAGE_QUERY } from '../queries/journal'
-import { loadContentQuery } from './client'
+import type { ContentQueryClient } from './client'
 import { MissingContentError } from './errors'
 import {
   cleanDocumentId,
@@ -237,19 +236,17 @@ export function requireJournalArticleResult(
   return { article: article as unknown as JournalArticle }
 }
 
-export async function getJournalPage(
-  preview: PreviewState = PUBLIC_PREVIEW_STATE,
+export async function loadJournalPage(
+  content: ContentQueryClient,
 ): Promise<JournalPage> {
-  const { data } = await loadContentQuery(JOURNAL_PAGE_QUERY, preview)
+  const { data } = await content.loadQuery(JOURNAL_PAGE_QUERY)
   return requireJournalPage(data)
 }
 
-export async function getJournalArticlePage(
+export async function loadJournalArticlePage(
+  content: ContentQueryClient,
   slug: string,
-  preview: PreviewState = PUBLIC_PREVIEW_STATE,
 ): Promise<JournalArticlePage> {
-  const { data } = await loadContentQuery(JOURNAL_ARTICLE_QUERY, preview, {
-    slug,
-  })
+  const { data } = await content.loadQuery(JOURNAL_ARTICLE_QUERY, { slug })
   return requireJournalArticleResult(data, slug)
 }

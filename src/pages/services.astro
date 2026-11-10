@@ -4,17 +4,20 @@ import ServiceProcess from '../components/services/ServiceProcess.astro'
 import ServicesCatalog from '../components/services/ServicesCatalog.astro'
 import ServicesHero from '../components/services/ServicesHero.astro'
 import Layout from '../layouts/Layout.astro'
-import { getServicesPage } from '../sanity/content'
-import { PUBLIC_PREVIEW_STATE } from '../sanity/preview'
 
-const preview = Astro.locals.preview ?? PUBLIC_PREVIEW_STATE
-const page = await getServicesPage(preview)
+const { content: page, siteSettings } =
+  await Astro.locals.content.loadServicesPage()
 const title = page.seo?.metaTitle ?? `${page.heroHeading} — Stillroom`
 const description = page.seo?.metaDescription ?? page.heroIntroduction
 const socialImageUrl = page.seo?.socialImageUrl ?? page.heroImage.url
 ---
 
-<Layout title={title} description={description} socialImageUrl={socialImageUrl}>
+<Layout
+  settings={siteSettings}
+  title={title}
+  description={description}
+  socialImageUrl={socialImageUrl}
+>
   <ServicesHero page={page} />
 
   <ServicesCatalog page={page} />

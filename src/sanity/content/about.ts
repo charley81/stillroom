@@ -1,7 +1,6 @@
 import type { ABOUT_PAGE_QUERY_RESULT } from '../../../sanity.types'
-import { PUBLIC_PREVIEW_STATE, type PreviewState } from '../preview'
 import { ABOUT_PAGE_QUERY } from '../queries/about'
-import { loadContentQuery } from './client'
+import type { ContentQueryClient } from './client'
 import { MissingContentError } from './errors'
 import {
   requireClientLogos,
@@ -98,9 +97,9 @@ export function requireAboutPage(value: unknown): AboutPage {
   return value as AboutPage
 }
 
-export async function getAboutPage(
-  preview: PreviewState = PUBLIC_PREVIEW_STATE,
+export async function loadAboutPage(
+  content: ContentQueryClient,
 ): Promise<AboutPage> {
-  const { data } = await loadContentQuery(ABOUT_PAGE_QUERY, preview)
+  const { data } = await content.loadQuery(ABOUT_PAGE_QUERY)
   return requireAboutPage(data)
 }
