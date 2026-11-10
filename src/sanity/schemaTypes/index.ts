@@ -2,6 +2,7 @@ import { aboutPage } from './documents/about-page'
 import { author } from './documents/author'
 import { clientLogo } from './documents/client-logo'
 import { contactPage } from './documents/contact-page'
+import { homePage } from './documents/home-page'
 import { journalArticle } from './documents/journal-article'
 import { journalCategory } from './documents/journal-category'
 import { journalPage } from './documents/journal-page'
@@ -24,6 +25,7 @@ import { workProjectGalleryImage } from './objects/work-project-gallery-image'
 
 export const schemaTypes = [
   siteSettings,
+  homePage,
   aboutPage,
   workPage,
   servicesPage,

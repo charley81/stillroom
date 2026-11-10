@@ -2,6 +2,7 @@ import type { StructureResolver } from 'sanity/structure'
 import {
   ABOUT_PAGE_ID,
   CONTACT_PAGE_ID,
+  HOME_PAGE_ID,
   JOURNAL_PAGE_ID,
   SERVICES_PAGE_ID,
   SITE_SETTINGS_ID,
@@ -11,6 +12,7 @@ import {
 export {
   ABOUT_PAGE_ID,
   CONTACT_PAGE_ID,
+  HOME_PAGE_ID,
   JOURNAL_PAGE_ID,
   SERVICES_PAGE_ID,
   SITE_SETTINGS_ID,
@@ -19,6 +21,7 @@ export {
 
 const SINGLETON_IDS = new Map([
   ['siteSettings', SITE_SETTINGS_ID],
+  ['homePage', HOME_PAGE_ID],
   ['workPage', WORK_PAGE_ID],
   ['servicesPage', SERVICES_PAGE_ID],
   ['contactPage', CONTACT_PAGE_ID],
@@ -90,6 +93,15 @@ export const structure: StructureResolver = (S) =>
           S.list()
             .title('Pages')
             .items([
+              S.listItem()
+                .title('Home')
+                .schemaType('homePage')
+                .child(
+                  S.document()
+                    .title('Home')
+                    .schemaType('homePage')
+                    .documentId(HOME_PAGE_ID),
+                ),
               S.listItem()
                 .title('Work')
                 .schemaType('workPage')

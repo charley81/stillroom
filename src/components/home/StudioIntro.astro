@@ -1,5 +1,12 @@
 ---
-import { Image } from 'astro:assets'
+import type { HomePage } from '../../sanity/content'
+import EditorialImage from '../content/EditorialImage.astro'
+
+interface Props {
+  page: HomePage
+}
+
+const { page } = Astro.props
 ---
 
 <section class="grid h-[695.155px] grid-cols-1 items-center gap-8 px-4 py-16 md:h-[716px] md:grid-cols-2 md:px-8 md:py-32">
@@ -8,26 +15,22 @@ import { Image } from 'astro:assets'
       <span class="hidden md:inline">The studio</span>
       <span class="inline md:hidden">The studio</span>
     </p>
-    <h2 class="m-0 font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[72px] md:leading-[70.72px]">
-      Small team.
-      <br />
-      Plenty of soul.
+    <h2 class="m-0 whitespace-pre-line font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[72px] md:leading-[70.72px]">
+      {page.studioHeading}
     </h2>
     <p class="m-0 w-full max-w-[620px] text-base leading-[27px] text-dark-grey">
-      A senior-led team with a shared love of hospitality. We work closely,
-      think clearly, and care about the details.
+      {page.studioIntroduction}
     </p>
     <a
       class="text-base leading-[21.6px] font-black text-primary hover:text-dark"
       href="/about"
     >
-      Meet Stillroom →
+      {page.studioCtaLabel}
     </a>
   </div>
-  <Image
+  <EditorialImage
     class="h-[223.155px] w-full max-w-none object-cover md:h-[460px]"
-    src="/images/368-8334.webp"
-    alt="Stillroom studio collage"
+    image={page.studioImage}
     width={672}
     height={460}
   />

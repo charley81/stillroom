@@ -6,6 +6,7 @@ import {
   authorLocations,
   clientLogoLocations,
   contactPageLocations,
+  homePageLocations,
   journalArticleLocations,
   journalCategoryLocations,
   journalPageLocations,
@@ -73,6 +74,17 @@ describe('Sanity Presentation configuration', () => {
     )
   })
 
+  it('locates the Home singleton on the Home route', () => {
+    expect(homePageLocations.locations).toEqual([{ title: 'Home', href: '/' }])
+    expect(PRESENTATION_OPTIONS.resolve?.mainDocuments).toContainEqual({
+      route: '/',
+      type: 'homePage',
+    })
+    expect(PRESENTATION_OPTIONS.resolve?.locations).toEqual(
+      expect.objectContaining({ homePage: homePageLocations }),
+    )
+  })
+
   it('locates Work documents on their routes and shared placements', () => {
     expect(workPageLocations.locations).toEqual([
       { title: 'Work', href: '/work' },
@@ -81,6 +93,7 @@ describe('Sanity Presentation configuration', () => {
       workProjectLocations.resolve({
         title: 'The Good Table',
         slug: 'the-good-table',
+        featuredOnHome: true,
       }),
     ).toEqual({
       locations: [
@@ -89,6 +102,13 @@ describe('Sanity Presentation configuration', () => {
         { title: 'Home featured Work placement', href: '/' },
       ],
     })
+    expect(
+      workProjectLocations.resolve({
+        title: 'Fieldwork',
+        slug: 'fieldwork',
+        featuredOnHome: false,
+      }).locations,
+    ).not.toContainEqual({ title: 'Home featured Work placement', href: '/' })
     expect(PRESENTATION_OPTIONS.resolve?.locations).toEqual(
       expect.objectContaining({
         workPage: workPageLocations,
@@ -111,6 +131,7 @@ describe('Sanity Presentation configuration', () => {
             slug: 'the-quiet-power-of-a-good-menu',
           },
         ],
+        featuredOnHome: true,
       }).locations,
     ).toEqual([
       {
@@ -124,6 +145,17 @@ describe('Sanity Presentation configuration', () => {
         href: '/journal/the-quiet-power-of-a-good-menu',
       },
     ])
+    expect(
+      journalArticleLocations.resolve({
+        title: 'Made for Good Company',
+        slug: 'made-for-good-company',
+        relatedIn: [],
+        featuredOnHome: false,
+      }).locations,
+    ).not.toContainEqual({
+      title: 'Home featured Journal placement',
+      href: '/',
+    })
     expect(
       authorLocations.resolve({
         name: 'Stillroom',
@@ -168,13 +200,27 @@ describe('Sanity Presentation configuration', () => {
     )
   })
 
-  it('locates About and Client Logo documents on the About route', () => {
+  it('locates About and Client Logo documents on every referenced route', () => {
     expect(aboutPageLocations.locations).toEqual([
       { title: 'About', href: '/about' },
     ])
     expect(
-      clientLogoLocations.resolve({ clientName: 'Orlo House' }).locations,
-    ).toEqual([{ title: 'About', href: '/about' }])
+      clientLogoLocations.resolve({
+        clientName: 'Orlo House',
+        featuredOnHome: true,
+        shownOnAbout: true,
+      }).locations,
+    ).toEqual([
+      { title: 'Home', href: '/' },
+      { title: 'About', href: '/about' },
+    ])
+    expect(
+      clientLogoLocations.resolve({
+        clientName: 'Unused Logo',
+        featuredOnHome: false,
+        shownOnAbout: false,
+      }).locations,
+    ).toEqual([])
     expect(PRESENTATION_OPTIONS.resolve?.locations).toEqual(
       expect.objectContaining({
         aboutPage: aboutPageLocations,
@@ -195,6 +241,8 @@ describe('Sanity Presentation configuration', () => {
       serviceLocations.resolve({
         title: 'Brand strategy',
         workProjects: [{ title: 'The Good Table', slug: 'the-good-table' }],
+        featuredOnHome: true,
+        shownOnServices: true,
       }).locations,
     ).toEqual([
       { title: 'Services', href: '/services' },
@@ -202,6 +250,14 @@ describe('Sanity Presentation configuration', () => {
       { title: 'Home featured Services placement', href: '/' },
       { title: 'The Good Table', href: '/work/the-good-table' },
     ])
+    expect(
+      serviceLocations.resolve({
+        title: 'Unused Service',
+        workProjects: [],
+        featuredOnHome: false,
+        shownOnServices: false,
+      }).locations,
+    ).toEqual([])
     expect(PRESENTATION_OPTIONS.resolve?.locations).toEqual(
       expect.objectContaining({
         servicesPage: servicesPageLocations,

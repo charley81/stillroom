@@ -22,6 +22,8 @@
     "sanity:migrate:journal:publish": "tsx scripts/sanity/migrate-journal.ts --publish",
     "sanity:migrate:about": "tsx scripts/sanity/migrate-about.ts",
     "sanity:migrate:about:publish": "tsx scripts/sanity/migrate-about.ts --publish",
+    "sanity:migrate:home": "tsx scripts/sanity/migrate-home.ts",
+    "sanity:migrate:home:publish": "tsx scripts/sanity/migrate-home.ts --publish",
     "sanity:typegen": "sanity schema extract --enforce-required-fields --force && sanity typegen generate",
     "sanity:typegen:check": "pnpm sanity:typegen && git diff --exit-code -- schema.json sanity.types.ts",
     "format": "prettier . --write",
