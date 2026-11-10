@@ -92,10 +92,7 @@ export const homePage = defineType({
     {
       ...requiredText('featuredWorkHeading', 'Featured Work heading', 2),
       group: 'work',
-      validation: (rule) => [
-        rule.required(),
-        rule.max(100).warning('Long headings may not fit the Work layout.'),
-      ],
+      validation: (rule) => rule.required(),
     },
     referenceList({
       name: 'featuredWorkProjects',
@@ -163,10 +160,7 @@ export const homePage = defineType({
     {
       ...requiredText('processHeading', 'Process heading', 2),
       group: 'process',
-      validation: (rule) => [
-        rule.required(),
-        rule.max(100).warning('Long headings may not fit the process layout.'),
-      ],
+      validation: (rule) => rule.required(),
     },
     defineField({
       name: 'processSteps',
@@ -190,10 +184,7 @@ export const homePage = defineType({
     {
       ...requiredText('journalHeading', 'Journal heading', 2),
       group: 'journal',
-      validation: (rule) => [
-        rule.required(),
-        rule.max(100).warning('Long headings may not fit the Journal layout.'),
-      ],
+      validation: (rule) => rule.required(),
     },
     referenceList({
       name: 'featuredJournalArticles',

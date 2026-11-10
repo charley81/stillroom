@@ -8,7 +8,7 @@ interface Props {
 const { page } = Astro.props
 ---
 
-<section class="flex h-[846px] flex-col overflow-hidden px-4 py-16 md:h-[637px] md:px-8 md:py-32">
+<section class="flex min-h-[846px] flex-col px-4 py-16 md:min-h-[637px] md:px-8 md:py-32">
   <div class="flex w-full max-w-none flex-col gap-8 p-0">
     <p class="m-0 font-body text-base leading-[16.2px] font-black text-dark-grey uppercase">
       How the work connects
@@ -24,7 +24,7 @@ const { page } = Astro.props
           <span class="text-primary">{String(index + 1).padStart(2, '0')}</span>{' '}
           {phase.title}
         </h3>
-        <p class="m-0 w-full text-base leading-[27px] text-dark-grey md:w-72">
+        <p class="m-0 w-full max-w-72 text-base leading-[27px] text-dark-grey">
           {phase.description}
         </p>
       </div>

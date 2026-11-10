@@ -9,7 +9,7 @@ interface Props {
 const { page } = Astro.props
 ---
 
-<section class="flex h-[1496.276px] flex-col gap-8 overflow-hidden px-4 py-16 md:h-[872px] md:px-8 md:py-32">
+<section class="flex min-h-[1496.276px] flex-col gap-8 px-4 py-16 md:min-h-[872px] md:px-8 md:py-32">
   <p class="m-0 font-body text-base leading-[16.2px] font-black text-dark-grey uppercase">
     <span class="hidden md:inline">05 / Notes from Stillroom</span>
     <span class="inline md:hidden">Notes from Stillroom</span>
@@ -25,11 +25,11 @@ const { page } = Astro.props
       {page.journalCtaLabel}
     </a>
   </div>
-  <div class="grid h-[1186.276px] w-full grid-cols-1 gap-8 md:h-[463px] md:grid-cols-3">
+  <div class="grid min-h-[1186.276px] w-full grid-cols-1 gap-8 md:min-h-[463px] md:grid-cols-3">
     {page.featuredJournalArticles.map((article, index) => (
       <article
         class:list={[
-          'flex h-auto min-h-[350.092px] flex-col gap-4 bg-light px-4 py-8 md:h-[463px] md:min-h-0',
+          'flex min-h-[350.092px] flex-col gap-4 bg-light px-4 py-8 md:min-h-[463px]',
           index < 2 && 'min-h-[386.092px]',
         ]}
       >

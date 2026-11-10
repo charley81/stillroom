@@ -12,7 +12,7 @@ const href = `/journal/${article.slug}`
 const date = formatJournalDate(article.publicationDate, 'short')
 ---
 
-<article class="mx-4 grid h-[723.447px] w-[calc(100%_-_32px)] grid-cols-1 overflow-hidden md:mx-8 md:h-[640px] md:w-[calc(100%_-_64px)] md:grid-cols-[minmax(0,752fr)_minmax(0,624fr)]">
+<article class="mx-4 grid min-h-[723.447px] w-[calc(100%_-_32px)] grid-cols-1 md:mx-8 md:min-h-[640px] md:w-[calc(100%_-_64px)] md:grid-cols-[minmax(0,752fr)_minmax(0,624fr)]">
   <a class="h-[277.447px] w-full md:h-[640px]" href={href}>
     <EditorialImage
       class="h-[277.447px] w-full object-cover md:h-[640px]"
@@ -22,7 +22,7 @@ const date = formatJournalDate(article.publicationDate, 'short')
       loading="eager"
     />
   </a>
-  <div class="m-0 flex h-[446px] w-full flex-col justify-center gap-4 bg-primary px-4 py-16 text-light md:my-[44.5px] md:h-[551px] md:gap-[clamp(16px,2.223vw,32px)] md:p-[clamp(32px,4.445vw,64px)]">
+  <div class="m-0 flex min-h-[446px] w-full flex-col justify-center gap-4 bg-primary px-4 py-16 text-light md:my-[44.5px] md:min-h-[551px] md:gap-[clamp(16px,2.223vw,32px)] md:p-[clamp(32px,4.445vw,64px)]">
     <p class="m-0 font-body text-base leading-5 font-normal text-light uppercase">
       Featured / {article.category.title} / {article.readingTime}
     </p>

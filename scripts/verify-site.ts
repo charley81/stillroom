@@ -27,15 +27,30 @@ const notFoundRoutes = new Set([
   '/work/cutover-404-check',
   '/journal/cutover-404-check',
 ])
-const viewports = [
-  { name: 'desktop', width: 1440, height: 900, deviceScaleFactor: 1 },
+const scenarios = [
+  {
+    name: 'desktop',
+    viewport: { width: 1440, height: 900, deviceScaleFactor: 1 },
+  },
+  {
+    name: 'intermediate',
+    viewport: { width: 1024, height: 768, deviceScaleFactor: 1 },
+  },
   {
     name: 'mobile',
-    width: 390,
-    height: 844,
-    deviceScaleFactor: 1,
-    isMobile: true,
-    hasTouch: true,
+    viewport: {
+      width: 390,
+      height: 844,
+      deviceScaleFactor: 1,
+      isMobile: true,
+      hasTouch: true,
+    },
+  },
+  {
+    name: 'desktop-text-125-stress',
+    viewport: { width: 1440, height: 900, deviceScaleFactor: 1 },
+    rootFontScale: 1.25,
+    stressContent: true,
   },
 ]
 
@@ -60,26 +75,50 @@ try {
     ),
   )
 
-  for (const viewport of viewports) {
-    await page.setViewport(viewport)
+  for (const scenario of scenarios) {
+    await page.setViewport(scenario.viewport)
 
     for (const route of routes) {
       const response = await page.goto(new URL(route, baseUrl).href, {
         waitUntil: 'networkidle0',
         timeout: 60_000,
       })
-      await page.evaluate(async () => {
-        for (
-          let top = 0;
-          top < document.documentElement.scrollHeight;
-          top += 700
-        ) {
-          window.scrollTo(0, top)
-          await new Promise((resolve) => setTimeout(resolve, 25))
-        }
-        window.scrollTo(0, 0)
-        await new Promise((resolve) => setTimeout(resolve, 100))
-      })
+      await page.evaluate(
+        async ({ rootFontScale = 1, stressContent = false }) => {
+          document.documentElement.style.fontSize = `${rootFontScale * 100}%`
+          if (stressContent) {
+            document
+              .querySelectorAll<HTMLElement>(
+                'main h1, main h2, main h3, main p',
+              )
+              .forEach((element) => {
+                const walker = document.createTreeWalker(
+                  element,
+                  NodeFilter.SHOW_TEXT,
+                )
+                const textNodes: Text[] = []
+                while (walker.nextNode())
+                  textNodes.push(walker.currentNode as Text)
+                textNodes.forEach((node) => {
+                  const text = node.textContent?.trim()
+                  if (text) node.textContent = `${text} ${text}`
+                })
+              })
+          }
+
+          for (
+            let top = 0;
+            top < document.documentElement.scrollHeight;
+            top += 700
+          ) {
+            window.scrollTo(0, top)
+            await new Promise((resolve) => setTimeout(resolve, 25))
+          }
+          window.scrollTo(0, 0)
+          await new Promise((resolve) => setTimeout(resolve, 100))
+        },
+        scenario,
+      )
 
       const result = await page.evaluate(() => {
         const images = [...document.images].map(
@@ -111,6 +150,38 @@ try {
             !id || !document.querySelector(`label[for="${CSS.escape(id)}"]`)
           )
         }).length
+        const clippedTextContainers = [
+          ...document.querySelectorAll<HTMLElement>('body *'),
+        ]
+          .filter((element) => {
+            if (
+              !element.textContent?.trim() ||
+              element.clientHeight === 0 ||
+              element.classList.contains('sr-only')
+            ) {
+              return false
+            }
+            const style = getComputedStyle(element)
+            const clipsVertically = ['hidden', 'clip'].includes(style.overflowY)
+            const clipsHorizontally = ['hidden', 'clip'].includes(
+              style.overflowX,
+            )
+            return (
+              (clipsVertically &&
+                element.scrollHeight > element.clientHeight + 1) ||
+              (clipsHorizontally &&
+                element.scrollWidth > element.clientWidth + 1)
+            )
+          })
+          .map((element) =>
+            [
+              element.tagName.toLowerCase(),
+              element.id && `#${element.id}`,
+              ...element.classList,
+            ]
+              .filter(Boolean)
+              .join('.'),
+          )
         return {
           canonical,
           links,
@@ -125,6 +196,7 @@ try {
             (image) => !image.hasAttribute('alt'),
           ).length,
           unlabeledControlCount,
+          clippedTextContainers,
           documentWidth: document.documentElement.scrollWidth,
           viewportWidth: window.innerWidth,
         }
@@ -135,7 +207,7 @@ try {
       errors.push(
         ...validatePublicPage({
           route,
-          viewport: viewport.name,
+          viewport: scenario.name,
           status: response?.status(),
           expectedStatus: notFoundRoutes.has(route) ? 404 : 200,
           canonical: result.canonical,
@@ -147,6 +219,7 @@ try {
           h1Count: result.h1Count,
           missingAltCount: result.missingAltCount,
           unlabeledControlCount: result.unlabeledControlCount,
+          clippedTextCount: result.clippedTextContainers.length,
           documentWidth: result.documentWidth,
           viewportWidth: result.viewportWidth,
           links: result.links,
@@ -155,11 +228,11 @@ try {
 
       const name = route === '/' ? 'home' : route.slice(1).replaceAll('/', '--')
       await page.screenshot({
-        path: `${screenshotDirectory}/${name}-${viewport.name}.png`,
+        path: `${screenshotDirectory}/${name}-${scenario.name}.png`,
         fullPage: true,
       })
       console.log(
-        `${viewport.name} ${route}: ${response?.status()} (${result.documentWidth}px/${result.viewportWidth}px)`,
+        `${scenario.name} ${route}: ${response?.status()} (${result.documentWidth}px/${result.viewportWidth}px, ${result.clippedTextContainers.length} clipped text containers${result.clippedTextContainers.length ? `: ${result.clippedTextContainers.join(', ')}` : ''})`,
       )
     }
   }
@@ -189,5 +262,5 @@ try {
 if (errors.length > 0) throw new Error(errors.join('\n'))
 
 console.log(
-  `Verified ${routes.length} routes at ${viewports.length} responsive viewports, ${internalLinks.size} internal links, and ${imageSources.size} images.`,
+  `Verified ${routes.length} routes across ${scenarios.length} responsive and content-stress scenarios, ${internalLinks.size} internal links, and ${imageSources.size} images.`,
 )

@@ -26,9 +26,9 @@ const isActive = (href: string) =>
   pathname === href || pathname.startsWith(`${href}/`)
 ---
 
-<header class="relative z-20 grid h-[108px] grid-cols-[1fr_auto] items-center px-8 py-8 md:h-[120px] md:grid-cols-[1fr_auto_1fr]">
+<header class="relative z-20 grid min-h-[108px] grid-cols-[1fr_auto] items-center px-4 py-8 md:min-h-[120px] md:grid-cols-[auto_minmax(0,1fr)_auto] md:gap-4 md:px-8">
   <a
-    class="font-display text-[36px] leading-[36px] font-normal tracking-normal text-dark lowercase"
+    class="min-w-0 [overflow-wrap:anywhere] font-display text-[36px] leading-[36px] font-normal tracking-normal text-dark lowercase"
     href="/"
     aria-label={`${cleanStudioName} home`}
   >
@@ -36,13 +36,13 @@ const isActive = (href: string) =>
     {hasRegisteredMark && <span class="text-primary">®</span>}
   </a>
   <nav
-    class="hidden w-[550px] items-center justify-center gap-16 md:flex"
+    class="hidden w-full max-w-[550px] items-center justify-center gap-[clamp(0.5rem,2vw,4rem)] md:flex"
     aria-label="Primary navigation"
   >
     {links.map((link) => (
       <a
         class:list={[
-          'w-[90px] text-base leading-[20.25px] font-bold hover:text-primary',
+          'min-w-0 flex-1 text-center text-base leading-[20.25px] font-bold hover:text-primary',
           isActive(link.href) ? 'text-primary' : 'text-dark-grey',
         ]}
         href={link.href}
@@ -52,7 +52,9 @@ const isActive = (href: string) =>
     ))}
   </nav>
   <div class="hidden justify-self-end md:block">
-    <Button href="/contact">{settings.headerCtaLabel}</Button>
+    <Button href="/contact" class="md:!w-[clamp(9rem,14.6vw,13.125rem)]">
+      {settings.headerCtaLabel}
+    </Button>
   </div>
   <button
     class="grid size-11 place-items-center justify-self-end border-0 bg-transparent p-2.5 md:hidden"
@@ -73,7 +75,7 @@ const isActive = (href: string) =>
 </header>
 
 <div
-  class="fixed inset-0 z-50 bg-dark px-4 py-8 text-light"
+  class="fixed inset-0 z-50 overflow-y-auto bg-dark px-4 py-8 text-light"
   id="mobile-menu"
   hidden
   data-mobile-menu
@@ -98,14 +100,14 @@ const isActive = (href: string) =>
   <nav class="mt-20 grid gap-4" aria-label="Mobile navigation">
     {links.map((link) => (
       <a
-        class="font-display text-[clamp(2.8rem,14vw,5rem)] leading-none uppercase hover:text-primary"
+        class="[overflow-wrap:anywhere] font-display text-[clamp(2.8rem,14vw,5rem)] leading-none uppercase hover:text-primary"
         href={link.href}
       >
         {link.label}
       </a>
     ))}
     <a
-      class="font-display text-[clamp(2.8rem,14vw,5rem)] leading-none uppercase hover:text-primary"
+      class="[overflow-wrap:anywhere] font-display text-[clamp(2.8rem,14vw,5rem)] leading-none uppercase hover:text-primary"
       href="/contact"
     >
       {settings.headerCtaLabel} →

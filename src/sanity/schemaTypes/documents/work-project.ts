@@ -46,10 +46,7 @@ export const workProject = defineType({
       type: 'text',
       rows: 3,
       group: 'identity',
-      validation: (rule) => [
-        rule.required(),
-        rule.max(180).warning('Long summaries may not fit Work Project cards.'),
-      ],
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'cardImage',
