@@ -37,7 +37,7 @@ export async function runMigrationPlan(steps: MigrationStep[]) {
   }
 }
 
-function buildMigrationPlan(client: SanityClient, publish: boolean) {
+export function buildMigrationPlan(client: SanityClient, publish: boolean) {
   return [
     {
       name: 'Site Settings',

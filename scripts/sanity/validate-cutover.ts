@@ -71,35 +71,53 @@ interface InventoryDocument {
   _type: string
 }
 
-export function assertCutoverInventory(documents: InventoryDocument[]) {
+export type CutoverPerspective = 'drafts' | 'published'
+
+export function assertCutoverInventory(
+  documents: InventoryDocument[],
+  perspective: CutoverPerspective = 'published',
+) {
   const expectedById = new Map(
     EXPECTED_CUTOVER_DOCUMENTS.map((document) => [document.id, document.type]),
   )
-  const published = new Map(
+  const expectedPrefix = perspective === 'drafts' ? 'drafts.' : ''
+  const documentState = perspective === 'drafts' ? 'draft' : 'published'
+  const selected = new Map(
     documents
-      .filter(({ _id }) => !_id.startsWith('drafts.'))
+      .filter(({ _id }) =>
+        perspective === 'drafts'
+          ? _id.startsWith('drafts.')
+          : !_id.startsWith('drafts.'),
+      )
       .map(({ _id, _type }) => [_id, _type]),
   )
   const errors: string[] = []
 
   for (const { id, type } of EXPECTED_CUTOVER_DOCUMENTS) {
-    const actualType = published.get(id)
-    if (!actualType) errors.push(`Missing published document: ${id}`)
-    else if (actualType !== type) {
-      errors.push(`Document ${id} has type ${actualType}; expected ${type}`)
+    const expectedId = `${expectedPrefix}${id}`
+    const actualType = selected.get(expectedId)
+    if (!actualType) {
+      errors.push(`Missing ${documentState} document: ${expectedId}`)
+    } else if (actualType !== type) {
+      errors.push(
+        `Document ${expectedId} has type ${actualType}; expected ${type}`,
+      )
     }
   }
 
   const unexpected = documents
-    .filter(({ _id }) => !_id.startsWith('drafts.') && !expectedById.has(_id))
+    .filter(({ _id }) => !expectedById.has(_id.replace(/^drafts\./, '')))
     .map(({ _id }) => `Unexpected cutover document: ${_id}`)
-  const leftoverDrafts = documents
-    .filter(
-      ({ _id }) =>
-        _id.startsWith('drafts.') &&
-        expectedById.has(_id.replace(/^drafts\./, '')),
-    )
-    .map(({ _id }) => `Leftover migration draft: ${_id}`)
+  const leftoverDrafts =
+    perspective === 'published'
+      ? documents
+          .filter(
+            ({ _id }) =>
+              _id.startsWith('drafts.') &&
+              expectedById.has(_id.replace(/^drafts\./, '')),
+          )
+          .map(({ _id }) => `Leftover migration draft: ${_id}`)
+      : []
 
   errors.push(...unexpected, ...leftoverDrafts)
   if (errors.length > 0) throw new Error(errors.join('\n'))
@@ -131,31 +149,15 @@ function loadLocalEnvironment() {
   }
 }
 
-async function run() {
-  loadLocalEnvironment()
-
-  const projectId = process.env.PUBLIC_SANITY_PROJECT_ID
-  const dataset = process.env.SANITY_MIGRATION_DATASET ?? 'development'
-  const token = process.env.SANITY_API_READ_TOKEN
-
-  if (!projectId) throw new Error('PUBLIC_SANITY_PROJECT_ID is required.')
-  if (
-    dataset === 'production' &&
-    process.env.ALLOW_PRODUCTION_VALIDATION !== 'true'
-  ) {
-    throw new Error(
-      'Production validation is blocked. Set ALLOW_PRODUCTION_VALIDATION=true explicitly.',
-    )
-  }
-
-  const client = createClient({
-    projectId,
-    dataset,
-    apiVersion: SANITY_API_VERSION,
-    token,
-    useCdn: false,
-    perspective: 'published',
-  })
+export async function validateCutoverDataset({
+  client,
+  dataset,
+  perspective = 'published',
+}: {
+  client: ReturnType<typeof createClient>
+  dataset: string
+  perspective?: CutoverPerspective
+}) {
   const contentTypes = [
     ...new Set(EXPECTED_CUTOVER_DOCUMENTS.map(({ type }) => type)),
   ]
@@ -164,23 +166,24 @@ async function run() {
     { types: contentTypes },
     { perspective: 'raw' },
   )
-  assertCutoverInventory(inventory)
+  assertCutoverInventory(inventory, perspective)
 
+  const perspectiveClient = client.withConfig({ perspective })
   const [siteSettings, home, services, contact, about, work, journal] =
     await Promise.all([
-      client.fetch(SITE_SETTINGS_QUERY).then(requireSiteSettings),
-      client.fetch(HOME_PAGE_QUERY).then(requireHomePage),
-      client.fetch(SERVICES_PAGE_QUERY).then(requireServicesPage),
-      client.fetch(CONTACT_PAGE_QUERY).then(requireContactPage),
-      client.fetch(ABOUT_PAGE_QUERY).then(requireAboutPage),
-      client.fetch(WORK_PAGE_QUERY).then(requireWorkPage),
-      client.fetch(JOURNAL_PAGE_QUERY).then(requireJournalPage),
+      perspectiveClient.fetch(SITE_SETTINGS_QUERY).then(requireSiteSettings),
+      perspectiveClient.fetch(HOME_PAGE_QUERY).then(requireHomePage),
+      perspectiveClient.fetch(SERVICES_PAGE_QUERY).then(requireServicesPage),
+      perspectiveClient.fetch(CONTACT_PAGE_QUERY).then(requireContactPage),
+      perspectiveClient.fetch(ABOUT_PAGE_QUERY).then(requireAboutPage),
+      perspectiveClient.fetch(WORK_PAGE_QUERY).then(requireWorkPage),
+      perspectiveClient.fetch(JOURNAL_PAGE_QUERY).then(requireJournalPage),
     ])
 
   await Promise.all(
     WORK_PROJECT_SLUGS.map(async (slug) =>
       requireWorkProjectResult(
-        await client.fetch(WORK_PROJECT_QUERY, { slug }),
+        await perspectiveClient.fetch(WORK_PROJECT_QUERY, { slug }),
         slug,
       ),
     ),
@@ -188,7 +191,7 @@ async function run() {
   await Promise.all(
     JOURNAL_ARTICLE_SLUGS.map(async (slug) =>
       requireJournalArticleResult(
-        await client.fetch(JOURNAL_ARTICLE_QUERY, { slug }),
+        await perspectiveClient.fetch(JOURNAL_ARTICLE_QUERY, { slug }),
         slug,
       ),
     ),
@@ -221,11 +224,47 @@ async function run() {
   )
 
   console.log(
-    `Validated ${EXPECTED_CUTOVER_DOCUMENTS.length} published content documents in ${dataset}.`,
+    `Validated ${EXPECTED_CUTOVER_DOCUMENTS.length} ${perspective} content documents in ${dataset}.`,
   )
   console.log(
     `Site Settings: ${siteSettings._id}; Contact options: ${contact.serviceOptions.length}.`,
   )
+}
+
+async function run() {
+  loadLocalEnvironment()
+
+  const projectId = process.env.PUBLIC_SANITY_PROJECT_ID
+  const dataset = process.env.SANITY_MIGRATION_DATASET ?? 'development'
+  const token = process.env.SANITY_API_READ_TOKEN
+  const perspective = process.env.SANITY_VALIDATION_PERSPECTIVE ?? 'published'
+
+  if (!projectId) throw new Error('PUBLIC_SANITY_PROJECT_ID is required.')
+  if (perspective !== 'drafts' && perspective !== 'published') {
+    throw new Error(
+      'SANITY_VALIDATION_PERSPECTIVE must be drafts or published.',
+    )
+  }
+  if (
+    dataset === 'production' &&
+    process.env.ALLOW_PRODUCTION_VALIDATION !== 'true'
+  ) {
+    throw new Error(
+      'Production validation is blocked. Set ALLOW_PRODUCTION_VALIDATION=true explicitly.',
+    )
+  }
+
+  await validateCutoverDataset({
+    client: createClient({
+      projectId,
+      dataset,
+      apiVersion: SANITY_API_VERSION,
+      token,
+      useCdn: false,
+    }),
+    dataset,
+    perspective,
+  })
 }
 
 if (

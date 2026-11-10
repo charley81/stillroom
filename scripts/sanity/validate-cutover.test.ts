@@ -33,4 +33,36 @@ describe('development cutover inventory', () => {
       ].join('\n'),
     )
   })
+
+  it('validates the complete draft inventory before production publication', () => {
+    expect(() =>
+      assertCutoverInventory(
+        [
+          ...EXPECTED_CUTOVER_DOCUMENTS.map(({ id, type }) => ({
+            _id: `drafts.${id}`,
+            _type: type,
+          })),
+          ...EXPECTED_CUTOVER_DOCUMENTS.map(({ id, type }) => ({
+            _id: id,
+            _type: type,
+          })),
+        ],
+        'drafts',
+      ),
+    ).not.toThrow()
+  })
+
+  it('blocks publication when a production migration draft is missing', () => {
+    const [missing, ...documents] = EXPECTED_CUTOVER_DOCUMENTS
+
+    expect(() =>
+      assertCutoverInventory(
+        documents.map(({ id, type }) => ({
+          _id: `drafts.${id}`,
+          _type: type,
+        })),
+        'drafts',
+      ),
+    ).toThrow(`Missing draft document: drafts.${missing.id}`)
+  })
 })
