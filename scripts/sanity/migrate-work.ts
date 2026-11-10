@@ -1,10 +1,4 @@
-import { createClient } from '@sanity/client'
-import { createHash } from 'node:crypto'
 import { readFileSync } from 'node:fs'
-import { readFile } from 'node:fs/promises'
-import { basename, extname } from 'node:path'
-import { pathToFileURL } from 'node:url'
-import { SANITY_API_VERSION } from '../../src/sanity/constants'
 import {
   SERVICE_IDS,
   WORK_PAGE_DRAFT_ID,
@@ -13,6 +7,15 @@ import {
   draftId,
 } from '../../src/sanity/manifests/content'
 import { migrationAssetPath } from './migration-assets'
+import {
+  createMigrationAssets,
+  draftReference,
+  runMigrationCommand,
+  writeMigrationDocuments,
+  type MigrationClient,
+  type MigrationDocument,
+  type ReadMigrationAsset,
+} from './migration-runtime'
 
 export {
   WORK_PAGE_DRAFT_ID,
@@ -53,31 +56,6 @@ interface SourceProject {
   outcome: { heading: string; copy: string }
 }
 
-interface MigrationDocument {
-  _id: string
-  _type: string
-  [key: string]: unknown
-}
-
-interface MigrationClient {
-  fetch: (query: string, params: { sha1: string }) => Promise<string | null>
-  assets: {
-    upload: (
-      type: 'image',
-      body: Buffer,
-      options: { filename: string; contentType: string },
-    ) => Promise<{ _id: string }>
-  }
-  createOrReplace: <Document extends MigrationDocument>(
-    document: Document,
-  ) => Promise<Document>
-  transaction: () => {
-    createOrReplace: (document: MigrationDocument) => unknown
-    delete: (documentId: string) => unknown
-    commit: () => Promise<unknown>
-  }
-}
-
 const WORK_PAGE_HERO_PATH = '/images/381-1857.webp'
 
 function loadSourceProject(slug: string): SourceProject {
@@ -106,15 +84,11 @@ const serviceAliases = new Map<string, string>([
 ])
 
 function reference(id: string, key = id) {
-  return {
-    _key: key,
-    _type: 'reference' as const,
-    _ref: id,
-    _weak: true,
-    _strengthenOnPublish: {
-      type: id.startsWith('service-') ? 'service' : 'workProject',
-    },
-  }
+  return draftReference(
+    id,
+    id.startsWith('service-') ? 'service' : 'workProject',
+    key,
+  )
 }
 
 function editorialImage(assetId: string, source: SourceImage) {
@@ -284,82 +258,21 @@ function allAssetPaths() {
   return [...paths]
 }
 
-function contentType(path: string) {
-  switch (extname(path).toLowerCase()) {
-    case '.jpg':
-    case '.jpeg':
-      return 'image/jpeg'
-    case '.png':
-      return 'image/png'
-    case '.webp':
-      return 'image/webp'
-    case '.svg':
-      return 'image/svg+xml'
-    default:
-      throw new Error(`Unsupported image type: ${path}`)
-  }
-}
-
-async function uploadImageOnce({
-  client,
-  path,
-  readAsset,
-}: {
-  client: MigrationClient
-  path: string
-  readAsset: (path: string) => Promise<Buffer>
-}) {
-  const body = await readAsset(path)
-  const sha1 = createHash('sha1').update(body).digest('hex')
-  const existing = await client.fetch(
-    '*[_type == "sanity.imageAsset" && sha1hash == $sha1][0]._id',
-    { sha1 },
-  )
-  if (existing) return existing
-
-  const asset = await client.assets.upload('image', body, {
-    filename: basename(path),
-    contentType: contentType(path),
-  })
-  return asset._id
-}
-
-function publishedDocument(document: MigrationDocument): MigrationDocument {
-  const strengthen = (value: unknown): unknown => {
-    if (Array.isArray(value)) return value.map(strengthen)
-    if (!value || typeof value !== 'object') return value
-
-    const source = value as Record<string, unknown>
-    return Object.fromEntries(
-      Object.entries(source)
-        .filter(([key]) => key !== '_weak' && key !== '_strengthenOnPublish')
-        .map(([key, child]) => [key, strengthen(child)]),
-    )
-  }
-
-  return strengthen({
-    ...document,
-    _id: document._id.replace(/^drafts\./, ''),
-  }) as MigrationDocument
-}
-
 export async function migrateWork({
   client,
-  readAsset = async (path) => readFile(path),
+  readAsset,
   publish = false,
 }: {
   client: MigrationClient
-  readAsset?: (path: string) => Promise<Buffer>
+  readAsset?: ReadMigrationAsset
   publish?: boolean
 }) {
+  const assetStore = createMigrationAssets(client, readAsset)
   const assetIds: Record<string, string> = {}
   for (const publicPath of allAssetPaths()) {
-    const diskPath = migrationAssetPath(publicPath)
-    assetIds[publicPath] = await uploadImageOnce({
-      client,
-      path: diskPath,
-      readAsset,
-    })
+    assetIds[publicPath] = await assetStore.uploadImage(
+      migrationAssetPath(publicPath),
+    )
   }
 
   const documents = buildWorkDocuments(assetIds)
@@ -368,70 +281,14 @@ export async function migrateWork({
     documents.workPage,
   ]
 
-  for (const document of drafts) {
-    await client.createOrReplace(document)
-  }
-
-  if (publish) {
-    const transaction = client.transaction()
-    for (const document of drafts) {
-      transaction.createOrReplace(publishedDocument(document))
-    }
-    for (const document of drafts) transaction.delete(document._id)
-    await transaction.commit()
-  }
+  await writeMigrationDocuments({ client, documents: drafts, publish })
 
   return documents
 }
 
-function loadLocalEnvironment() {
-  try {
-    process.loadEnvFile('.env')
-  } catch {
-    // CI and production commands provide environment variables directly.
-  }
-}
-
-async function run() {
-  loadLocalEnvironment()
-
-  const projectId = process.env.PUBLIC_SANITY_PROJECT_ID
-  const token =
-    process.env.SANITY_API_WRITE_TOKEN ?? process.env.SANITY_AUTH_TOKEN
-  const dataset = process.env.SANITY_MIGRATION_DATASET ?? 'development'
-
-  if (!projectId || !token) {
-    throw new Error(
-      'PUBLIC_SANITY_PROJECT_ID and SANITY_API_WRITE_TOKEN are required.',
-    )
-  }
-  if (
-    dataset === 'production' &&
-    process.env.ALLOW_PRODUCTION_MIGRATION !== 'true'
-  ) {
-    throw new Error(
-      'Production migration is blocked. Set ALLOW_PRODUCTION_MIGRATION=true explicitly.',
-    )
-  }
-
-  const client = createClient({
-    projectId,
-    dataset,
-    apiVersion: SANITY_API_VERSION,
-    token,
-    useCdn: false,
-  })
-  const publish = process.argv.includes('--publish')
-  await migrateWork({ client: client as unknown as MigrationClient, publish })
-
-  console.log(
+await runMigrationCommand({
+  moduleUrl: import.meta.url,
+  migrate: ({ client, publish }) => migrateWork({ client, publish }),
+  successMessage: ({ dataset, publish }) =>
     `${publish ? 'Published' : 'Migrated'} Work content in ${dataset}.`,
-  )
-}
-
-if (
-  process.argv[1] &&
-  import.meta.url === pathToFileURL(process.argv[1]).href
-) {
-  await run()
-}
+})

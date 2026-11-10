@@ -1,20 +1,22 @@
-import { createClient } from '@sanity/client'
-import { createHash } from 'node:crypto'
-import { readFile } from 'node:fs/promises'
-import { basename, extname } from 'node:path'
-import { pathToFileURL } from 'node:url'
 import type {
   AboutPage as AboutPageSchema,
   ClientLogo as ClientLogoSchema,
   ConstrainedRichText,
 } from '../../sanity.types'
-import { SANITY_API_VERSION } from '../../src/sanity/constants'
 import {
   ABOUT_PAGE_DRAFT_ID,
   CLIENT_LOGO_IDS,
   draftId,
 } from '../../src/sanity/manifests/content'
 import { migrationAssetPath } from './migration-assets'
+import {
+  createMigrationAssets,
+  draftReference,
+  runMigrationCommand,
+  writeMigrationDocuments,
+  type MigrationClient,
+  type ReadMigrationAsset,
+} from './migration-runtime'
 
 export {
   ABOUT_PAGE_DRAFT_ID,
@@ -62,25 +64,6 @@ type AboutPageDocument = Omit<
   '_createdAt' | '_updatedAt' | '_rev'
 >
 type MigrationDocument = ClientLogoDocument | AboutPageDocument
-
-interface MigrationClient {
-  fetch: (query: string, params: { sha1: string }) => Promise<string | null>
-  assets: {
-    upload: (
-      type: 'image',
-      body: Buffer,
-      options: { filename: string; contentType: string },
-    ) => Promise<{ _id: string }>
-  }
-  createOrReplace: <Document extends MigrationDocument>(
-    document: Document,
-  ) => Promise<Document>
-  transaction: () => {
-    createOrReplace: (document: MigrationDocument) => unknown
-    delete: (documentId: string) => unknown
-    commit: () => Promise<unknown>
-  }
-}
 
 const clientNames = [
   'Orlo House',
@@ -223,13 +206,11 @@ export function buildAboutDocuments(assets: UploadedAssets) {
       'Restaurants, hotels, cafés and food & drink brands. Different worlds, united by a belief that the details matter.',
     clientLogos: CLIENT_LOGO_IDS.map(
       (id) =>
-        ({
-          _key: id.replace('client-logo-', ''),
-          _type: 'reference',
-          _ref: id,
-          _weak: true,
-          _strengthenOnPublish: { type: 'clientLogo' },
-        }) as AboutPageDocument['clientLogos'][number],
+        draftReference(
+          id,
+          'clientLogo',
+          id.replace('client-logo-', ''),
+        ) as AboutPageDocument['clientLogos'][number],
     ),
     clientProofCtaLabel: 'Explore our work →',
     finalCtaEyebrow: 'Good people. Good projects. Let’s meet.',
@@ -247,90 +228,29 @@ export function buildAboutDocuments(assets: UploadedAssets) {
   return { clientLogos, aboutPage }
 }
 
-function contentType(path: string) {
-  switch (extname(path).toLowerCase()) {
-    case '.jpg':
-    case '.jpeg':
-      return 'image/jpeg'
-    case '.png':
-      return 'image/png'
-    case '.svg':
-      return 'image/svg+xml'
-    case '.webp':
-      return 'image/webp'
-    default:
-      throw new Error(`Unsupported image type: ${path}`)
-  }
-}
-
-async function uploadImageOnce({
-  client,
-  path,
-  readAsset,
-}: {
-  client: MigrationClient
-  path: string
-  readAsset: (path: string) => Promise<Buffer>
-}) {
-  const body = await readAsset(path)
-  const sha1 = createHash('sha1').update(body).digest('hex')
-  const existing = await client.fetch(
-    '*[_type == "sanity.imageAsset" && sha1hash == $sha1][0]._id',
-    { sha1 },
-  )
-  if (existing) return existing
-
-  const asset = await client.assets.upload('image', body, {
-    filename: basename(path),
-    contentType: contentType(path),
-  })
-  return asset._id
-}
-
-function publishedDocument(document: MigrationDocument): MigrationDocument {
-  const published = { ...document, _id: document._id.replace(/^drafts\./, '') }
-  if (published._type === 'aboutPage') {
-    return {
-      ...published,
-      clientLogos: published.clientLogos.map((reference) => {
-        const draftReference = reference as typeof reference & {
-          _strengthenOnPublish?: unknown
-        }
-        const { _strengthenOnPublish, _weak, ...strongReference } =
-          draftReference
-        return strongReference
-      }),
-    }
-  }
-  return published
-}
-
 export async function migrateAbout({
   client,
   assetPaths,
-  readAsset = readFile,
+  readAsset,
   publish = false,
 }: {
   client: MigrationClient
   assetPaths: AssetPaths
-  readAsset?: (path: string) => Promise<Buffer>
+  readAsset?: ReadMigrationAsset
   publish?: boolean
 }) {
+  const assetStore = createMigrationAssets(client, readAsset)
   const teamAssets = [] as string[]
   for (const path of assetPaths.team) {
-    teamAssets.push(await uploadImageOnce({ client, path, readAsset }))
+    teamAssets.push(await assetStore.uploadImage(path))
   }
   const logoAssets = [] as string[]
   for (const path of assetPaths.clientLogos) {
-    logoAssets.push(await uploadImageOnce({ client, path, readAsset }))
+    logoAssets.push(await assetStore.uploadImage(path))
   }
   const assets: UploadedAssets = {
-    hero: await uploadImageOnce({ client, path: assetPaths.hero, readAsset }),
-    founder: await uploadImageOnce({
-      client,
-      path: assetPaths.founder,
-      readAsset,
-    }),
+    hero: await assetStore.uploadImage(assetPaths.hero),
+    founder: await assetStore.uploadImage(assetPaths.founder),
     team: teamAssets as UploadedAssets['team'],
     clientLogos: logoAssets as UploadedAssets['clientLogos'],
   }
@@ -340,76 +260,19 @@ export async function migrateAbout({
     documents.aboutPage,
   ]
 
-  for (const document of drafts) {
-    await client.createOrReplace(document)
-  }
-
-  if (publish) {
-    const transaction = client.transaction()
-    for (const document of drafts) {
-      transaction.createOrReplace(publishedDocument(document))
-    }
-    for (const document of drafts) {
-      transaction.delete(document._id)
-    }
-    await transaction.commit()
-  }
+  await writeMigrationDocuments({ client, documents: drafts, publish })
 
   return documents
 }
 
-function loadLocalEnvironment() {
-  try {
-    process.loadEnvFile('.env')
-  } catch {
-    // CI and production commands provide environment variables directly.
-  }
-}
-
-async function run() {
-  loadLocalEnvironment()
-
-  const projectId = process.env.PUBLIC_SANITY_PROJECT_ID
-  const token =
-    process.env.SANITY_API_WRITE_TOKEN ?? process.env.SANITY_AUTH_TOKEN
-  const dataset = process.env.SANITY_MIGRATION_DATASET ?? 'development'
-
-  if (!projectId || !token) {
-    throw new Error(
-      'PUBLIC_SANITY_PROJECT_ID and SANITY_API_WRITE_TOKEN are required.',
-    )
-  }
-  if (
-    dataset === 'production' &&
-    process.env.ALLOW_PRODUCTION_MIGRATION !== 'true'
-  ) {
-    throw new Error(
-      'Production migration is blocked. Set ALLOW_PRODUCTION_MIGRATION=true explicitly.',
-    )
-  }
-
-  const client = createClient({
-    projectId,
-    dataset,
-    apiVersion: SANITY_API_VERSION,
-    token,
-    useCdn: false,
-  })
-  const publish = process.argv.includes('--publish')
-  await migrateAbout({
-    client: client as unknown as MigrationClient,
-    publish,
-    assetPaths: ABOUT_ASSET_PATHS,
-  })
-
-  console.log(
+await runMigrationCommand({
+  moduleUrl: import.meta.url,
+  migrate: ({ client, publish }) =>
+    migrateAbout({
+      client,
+      publish,
+      assetPaths: ABOUT_ASSET_PATHS,
+    }),
+  successMessage: ({ dataset, publish }) =>
     `${publish ? 'Published' : 'Migrated'} About and Client Logo content in ${dataset}.`,
-  )
-}
-
-if (
-  process.argv[1] &&
-  import.meta.url === pathToFileURL(process.argv[1]).href
-) {
-  await run()
-}
+})

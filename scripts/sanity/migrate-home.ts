@@ -1,19 +1,20 @@
-import { createClient } from '@sanity/client'
-import { createHash } from 'node:crypto'
-import { readFile } from 'node:fs/promises'
-import { basename, extname } from 'node:path'
-import { pathToFileURL } from 'node:url'
 import type { HomePage as HomePageSchema } from '../../sanity.types'
-import { SANITY_API_VERSION } from '../../src/sanity/constants'
 import {
   CLIENT_LOGO_IDS,
   HOME_PAGE_DRAFT_ID,
-  HOME_PAGE_ID,
   JOURNAL_ARTICLE_IDS,
   SERVICE_IDS,
   WORK_PROJECT_IDS,
 } from '../../src/sanity/manifests/content'
 import { migrationAssetPath } from './migration-assets'
+import {
+  createMigrationAssets,
+  draftReference,
+  runMigrationCommand,
+  writeMigrationDocuments,
+  type MigrationClient,
+  type ReadMigrationAsset,
+} from './migration-runtime'
 
 export {
   HOME_PAGE_DRAFT_ID,
@@ -39,33 +40,6 @@ type HomePageDocument = Omit<
   HomePageSchema,
   '_createdAt' | '_updatedAt' | '_rev'
 >
-
-interface MigrationClient {
-  fetch: (query: string, params: { sha1: string }) => Promise<string | null>
-  assets: {
-    upload: (
-      type: 'image',
-      body: Buffer,
-      options: { filename: string; contentType: string },
-    ) => Promise<{ _id: string }>
-  }
-  createOrReplace: (document: HomePageDocument) => Promise<HomePageDocument>
-  transaction: () => {
-    createOrReplace: (document: HomePageDocument) => unknown
-    delete: (documentId: string) => unknown
-    commit: () => Promise<unknown>
-  }
-}
-
-function reference(id: string, type: string, key = id) {
-  return {
-    _key: key,
-    _type: 'reference' as const,
-    _ref: id,
-    _weak: true,
-    _strengthenOnPublish: { type },
-  }
-}
 
 function image(assetId: string, alt: string) {
   return {
@@ -99,7 +73,7 @@ export function buildHomeDocument(assets: UploadedAssets): HomePageDocument {
     heroSecondaryCtaLabel: 'View Our Work',
     clientLogos: CLIENT_LOGO_IDS.map(
       (id) =>
-        reference(
+        draftReference(
           id,
           'clientLogo',
           id.replace('client-logo-', ''),
@@ -108,7 +82,7 @@ export function buildHomeDocument(assets: UploadedAssets): HomePageDocument {
     featuredWorkHeading: 'Full of character.',
     featuredWorkProjects: WORK_PROJECT_IDS.slice(0, 2).map(
       (id) =>
-        reference(
+        draftReference(
           id,
           'workProject',
           id.replace('work-project-', ''),
@@ -117,7 +91,7 @@ export function buildHomeDocument(assets: UploadedAssets): HomePageDocument {
     featuredWorkCtaLabel: 'View Our Work →',
     featuredServices: SERVICE_IDS.map(
       (id) =>
-        reference(
+        draftReference(
           id,
           'service',
           id.replace('service-', ''),
@@ -172,7 +146,7 @@ export function buildHomeDocument(assets: UploadedAssets): HomePageDocument {
     journalHeading: 'Food for thought.',
     featuredJournalArticles: JOURNAL_ARTICLE_IDS.slice(0, 3).map(
       (id) =>
-        reference(
+        draftReference(
           id,
           'journalArticle',
           id.replace('journal-article-', ''),
@@ -192,152 +166,37 @@ export function buildHomeDocument(assets: UploadedAssets): HomePageDocument {
   }
 }
 
-function contentType(path: string) {
-  switch (extname(path).toLowerCase()) {
-    case '.jpg':
-    case '.jpeg':
-      return 'image/jpeg'
-    case '.png':
-      return 'image/png'
-    case '.svg':
-      return 'image/svg+xml'
-    case '.webp':
-      return 'image/webp'
-    default:
-      throw new Error(`Unsupported image type: ${path}`)
-  }
-}
-
-async function uploadImageOnce({
-  client,
-  path,
-  readAsset,
-}: {
-  client: MigrationClient
-  path: string
-  readAsset: (path: string) => Promise<Buffer>
-}) {
-  const body = await readAsset(path)
-  const sha1 = createHash('sha1').update(body).digest('hex')
-  const existing = await client.fetch(
-    '*[_type == "sanity.imageAsset" && sha1hash == $sha1][0]._id',
-    { sha1 },
-  )
-  if (existing) return existing
-
-  const asset = await client.assets.upload('image', body, {
-    filename: basename(path),
-    contentType: contentType(path),
-  })
-  return asset._id
-}
-
-function publishedDocument(document: HomePageDocument): HomePageDocument {
-  const stripWeak = <Reference extends { _weak?: boolean }>(
-    reference: Reference,
-  ) => {
-    const draftReference = reference as Reference & {
-      _strengthenOnPublish?: unknown
-    }
-    const { _strengthenOnPublish, _weak, ...strongReference } = draftReference
-    return strongReference as Reference
-  }
-
-  return {
-    ...document,
-    _id: HOME_PAGE_ID,
-    clientLogos: document.clientLogos.map(stripWeak),
-    featuredWorkProjects: document.featuredWorkProjects.map(stripWeak),
-    featuredServices: document.featuredServices.map(stripWeak),
-    featuredJournalArticles: document.featuredJournalArticles.map(stripWeak),
-  }
-}
-
 export async function migrateHome({
   client,
   assetPaths,
-  readAsset = readFile,
+  readAsset,
   publish = false,
 }: {
   client: MigrationClient
   assetPaths: AssetPaths
-  readAsset?: (path: string) => Promise<Buffer>
+  readAsset?: ReadMigrationAsset
   publish?: boolean
 }) {
+  const assetStore = createMigrationAssets(client, readAsset)
   const assets = {
-    hero: await uploadImageOnce({ client, path: assetPaths.hero, readAsset }),
-    studio: await uploadImageOnce({
-      client,
-      path: assetPaths.studio,
-      readAsset,
-    }),
+    hero: await assetStore.uploadImage(assetPaths.hero),
+    studio: await assetStore.uploadImage(assetPaths.studio),
   }
   const homePage = buildHomeDocument(assets)
 
-  await client.createOrReplace(homePage)
-
-  if (publish) {
-    const transaction = client.transaction()
-    transaction.createOrReplace(publishedDocument(homePage))
-    transaction.delete(homePage._id)
-    await transaction.commit()
-  }
+  await writeMigrationDocuments({ client, documents: [homePage], publish })
 
   return homePage
 }
 
-function loadLocalEnvironment() {
-  try {
-    process.loadEnvFile('.env')
-  } catch {
-    // CI and production commands provide environment variables directly.
-  }
-}
-
-async function run() {
-  loadLocalEnvironment()
-
-  const projectId = process.env.PUBLIC_SANITY_PROJECT_ID
-  const token =
-    process.env.SANITY_API_WRITE_TOKEN ?? process.env.SANITY_AUTH_TOKEN
-  const dataset = process.env.SANITY_MIGRATION_DATASET ?? 'development'
-
-  if (!projectId || !token) {
-    throw new Error(
-      'PUBLIC_SANITY_PROJECT_ID and SANITY_API_WRITE_TOKEN are required.',
-    )
-  }
-  if (
-    dataset === 'production' &&
-    process.env.ALLOW_PRODUCTION_MIGRATION !== 'true'
-  ) {
-    throw new Error(
-      'Production migration is blocked. Set ALLOW_PRODUCTION_MIGRATION=true explicitly.',
-    )
-  }
-
-  const client = createClient({
-    projectId,
-    dataset,
-    apiVersion: SANITY_API_VERSION,
-    token,
-    useCdn: false,
-  })
-  const publish = process.argv.includes('--publish')
-  await migrateHome({
-    client: client as unknown as MigrationClient,
-    publish,
-    assetPaths: HOME_ASSET_PATHS,
-  })
-
-  console.log(
+await runMigrationCommand({
+  moduleUrl: import.meta.url,
+  migrate: ({ client, publish }) =>
+    migrateHome({
+      client,
+      publish,
+      assetPaths: HOME_ASSET_PATHS,
+    }),
+  successMessage: ({ dataset, publish }) =>
     `${publish ? 'Published' : 'Migrated'} Home content in ${dataset}.`,
-  )
-}
-
-if (
-  process.argv[1] &&
-  import.meta.url === pathToFileURL(process.argv[1]).href
-) {
-  await run()
-}
+})
