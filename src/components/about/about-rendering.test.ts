@@ -1,6 +1,6 @@
 import { experimental_AstroContainer as AstroContainer } from 'astro/container'
 import { describe, expect, it } from 'vitest'
-import type { AboutPage } from '../../sanity/content'
+import type { AboutPage } from '../../sanity/content/about'
 import ClientLogos from '../site/ClientLogos.astro'
 import ProjectInvitation from '../site/ProjectInvitation.astro'
 import ClientProof from './ClientProof.astro'

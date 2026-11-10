@@ -1,9 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
-import {
-  MissingContentError,
-  createContent,
-  requireSiteSettings,
-} from './content'
+import { createContent } from './content/client'
+import { MissingContentError } from './content/errors'
+import { requireSiteSettings } from './content/site-settings'
 import { SITE_SETTINGS_QUERY } from './queries/site-settings'
 
 const completeSiteSettings = {

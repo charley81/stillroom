@@ -1,16 +1,20 @@
 import { createClient } from '@sanity/client'
 import { pathToFileURL } from 'node:url'
+import { requireAboutPage } from '../../src/sanity/content/about'
+import { requireHomePage } from '../../src/sanity/content/home'
 import {
-  requireAboutPage,
-  requireContactPage,
-  requireHomePage,
   requireJournalArticleResult,
   requireJournalPage,
+} from '../../src/sanity/content/journal'
+import {
+  requireContactPage,
   requireServicesPage,
-  requireSiteSettings,
+} from '../../src/sanity/content/services-contact'
+import { requireSiteSettings } from '../../src/sanity/content/site-settings'
+import {
   requireWorkPage,
   requireWorkProjectResult,
-} from '../../src/sanity/content'
+} from '../../src/sanity/content/work'
 import {
   ABOUT_PAGE_ID,
   CONTACT_PAGE_ID,

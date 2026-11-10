@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
+import { MissingContentError } from './content/errors'
 import {
-  MissingContentError,
   requireContactPage,
   requireServicesPage,
-} from './content'
+} from './content/services-contact'
 
 const image = {
   decorative: false,
