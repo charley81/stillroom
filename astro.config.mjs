@@ -7,6 +7,7 @@ import { defineConfig, fontProviders } from 'astro/config'
 import { loadEnv } from 'vite'
 import { SANITY_API_VERSION } from './src/sanity/constants.ts'
 import { resolveSanityEnvironment } from './src/sanity/environment.ts'
+import { resolveSiteOrigin } from './src/site-origin.ts'
 
 const mode =
   process.env.NODE_ENV === 'production' ? 'production' : 'development'
@@ -15,9 +16,11 @@ const { projectId, dataset } = resolveSanityEnvironment({
   ...env,
   CONTEXT: process.env.CONTEXT,
 })
+const siteOrigin = resolveSiteOrigin(env)
 
 // https://astro.build/config
 export default defineConfig({
+  site: siteOrigin,
   output: 'server',
   adapter: netlify(),
   session: false,

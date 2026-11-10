@@ -6,6 +6,7 @@ import Footer from '../components/site/Footer.astro'
 import Header from '../components/site/Header.astro'
 import { getSiteSettings } from '../sanity/content'
 import { PUBLIC_PREVIEW_STATE } from '../sanity/preview'
+import { resolveRuntimeSiteOrigin } from '../site-origin'
 import '../styles/global.css'
 
 interface Props {
@@ -26,13 +27,13 @@ const {
   noindex = false,
 } = Astro.props
 
-const SITE_ORIGIN = 'https://stillroom-app.netlify.app'
+const siteOrigin = resolveRuntimeSiteOrigin(import.meta.env)
 const pathname = Astro.url.pathname.replace(/\/+$/, '') || '/'
 const cleanTitle = stegaClean(title)
 const cleanDescription = stegaClean(description)
 const cleanSocialImageUrl = stegaClean(socialImageUrl)
 const cleanStudioName = stegaClean(settings.studioName)
-const canonicalUrl = new URL(pathname, SITE_ORIGIN).href
+const canonicalUrl = new URL(pathname, siteOrigin).href
 const robots =
   noindex || preview.enabled ? 'noindex, nofollow' : 'index, follow'
 const structuredData = JSON.stringify({
@@ -45,7 +46,7 @@ const structuredData = JSON.stringify({
   isPartOf: {
     '@type': 'WebSite',
     name: cleanStudioName,
-    url: `${SITE_ORIGIN}/`,
+    url: `${siteOrigin}/`,
   },
 }).replace(/</g, '\\u003c')
 const exitPreviewHref = `/api/preview/exit?redirect=${encodeURIComponent(pathname)}`

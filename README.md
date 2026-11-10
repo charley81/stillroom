@@ -35,7 +35,9 @@ Site Settings is loaded at request time from published Sanity content through th
 
 Local development uses the public `development` dataset. Netlify production must set `PUBLIC_SANITY_DATASET=production`. Copy `.env.example` to `.env`, add local-only migration credentials, a Viewer `SANITY_API_READ_TOKEN`, and a random `SANITY_PREVIEW_SESSION_SECRET` of at least 32 characters. The write token is not needed by the deployed website.
 
-Presentation enables draft preview through `/api/preview/enable`; `/api/preview/exit` clears the signed, secure preview cookie. Authenticated Studio and preview access are restricted to `http://localhost:4321` and `https://stillroom-app.netlify.app`. Configure those exact origins with credentials in Sanity project CORS settings; do not add Netlify Deploy Preview wildcards.
+`PUBLIC_SITE_ORIGIN` is the single non-secret production-origin setting used by Astro, canonical and Open Graph metadata, structured data, Sanity Presentation, trusted-preview checks, and verification tooling. It must be an HTTP(S) origin without a path, query, credentials, or fragment. When it is unset, runtime rendering, builds, Presentation, and read-only site verification fall back to the current production origin, `https://stillroom-app.netlify.app`. The production editorial mutation check requires the variable explicitly so it cannot target an implicit destination.
+
+Presentation enables draft preview through `/api/preview/enable`; `/api/preview/exit` clears the signed, secure preview cookie. Authenticated Studio and preview access are restricted to the explicit allowlist containing `http://localhost:4321` and `PUBLIC_SITE_ORIGIN` (or its documented fallback). Configure those exact origins with credentials in Sanity project CORS settings; do not add Netlify Deploy Preview wildcards or individual Deploy Preview origins.
 
 Sanity source is organized under `src/sanity/`, with generated schema and query types in `sanity.types.ts`. Regenerate them with `pnpm sanity:typegen`.
 
@@ -47,7 +49,7 @@ Create a rollback-ready development export with `pnpm sanity:dataset:export`. Th
 
 Production launch is guarded by `ALLOW_PRODUCTION_LAUNCH=true` and runs pre-migration export, draft migration and validation, development parity comparison, dependency-ordered publication, published validation, and post-migration export. See [`docs/production-launch-runbook.md`](docs/production-launch-runbook.md) for the exact command, launch record, and tested Netlify and Sanity rollback procedures.
 
-With the background dev server running, `pnpm verify:site` renders every public route at desktop and mobile viewports, checks response status, canonical URLs, internal links, image loading, accessibility basics, Studio indexing, and horizontal overflow, and writes full-page screenshots to `.sanity/screenshots/` for Figma comparison. `pnpm verify:production` runs the same checks against the production origin.
+With the background dev server running, `pnpm verify:site` renders every public route at desktop and mobile viewports, checks response status, canonical URLs, internal links, image loading, accessibility basics, Studio indexing, and horizontal overflow, and writes full-page screenshots to `.sanity/screenshots/` for Figma comparison. `pnpm verify:production` runs the same checks against `PUBLIC_SITE_ORIGIN` or its documented fallback.
 
 ## Structure
 

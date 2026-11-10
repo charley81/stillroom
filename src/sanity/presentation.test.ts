@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { isTrustedPresentationOrigin } from './presentation-origins'
 import {
   PRESENTATION_OPTIONS,
   TRUSTED_PRESENTATION_ORIGINS,
@@ -6,6 +7,7 @@ import {
   authorLocations,
   clientLogoLocations,
   contactPageLocations,
+  createPresentationOptions,
   homePageLocations,
   journalArticleLocations,
   journalCategoryLocations,
@@ -26,6 +28,53 @@ describe('Sanity Presentation configuration', () => {
     expect(PRESENTATION_OPTIONS.allowOrigins).toEqual(
       TRUSTED_PRESENTATION_ORIGINS,
     )
+    expect(isTrustedPresentationOrigin('http://localhost:4321')).toBe(true)
+    expect(
+      isTrustedPresentationOrigin('https://stillroom-app.netlify.app'),
+    ).toBe(true)
+    expect(
+      isTrustedPresentationOrigin(
+        'https://deploy-preview-42--stillroom-app.netlify.app',
+      ),
+    ).toBe(false)
+  })
+
+  it('uses the configured production origin as the explicit Presentation fallback', async () => {
+    const configuredOrigin = 'https://www.stillroom.example'
+    const options = createPresentationOptions(configuredOrigin)
+    const previewUrl = options.previewUrl
+
+    expect(options.allowOrigins).toEqual([
+      'http://localhost:4321',
+      configuredOrigin,
+    ])
+    expect(typeof previewUrl).toBe('object')
+    if (typeof previewUrl !== 'object') {
+      throw new Error('Expected preview options')
+    }
+    expect(previewUrl.initial).toBeTypeOf('function')
+    if (typeof previewUrl.initial !== 'function') {
+      throw new Error('Expected an initial URL resolver')
+    }
+    expect(
+      previewUrl.initial({
+        origin: 'https://deploy-preview-42--stillroom-app.netlify.app',
+      } as never),
+    ).toBe(configuredOrigin)
+    expect(previewUrl.previewMode).toBeTypeOf('function')
+    if (typeof previewUrl.previewMode !== 'function') {
+      throw new Error('Expected a preview mode resolver')
+    }
+    await expect(
+      previewUrl.previewMode({
+        client: {} as never,
+        origin: configuredOrigin,
+        targetOrigin: configuredOrigin,
+      }),
+    ).resolves.toEqual({
+      enable: '/api/preview/enable',
+      shareAccess: false,
+    })
   })
 
   it('enables preview mode only for trusted target origins', async () => {
