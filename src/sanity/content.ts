@@ -8,6 +8,7 @@ import { stegaClean } from '@sanity/client/stega'
 import type {
   ABOUT_PAGE_QUERY_RESULT,
   CONTACT_PAGE_QUERY_RESULT,
+  HOME_PAGE_QUERY_RESULT,
   JOURNAL_ARTICLE_QUERY_RESULT,
   JOURNAL_PAGE_QUERY_RESULT,
   SERVICES_PAGE_QUERY_RESULT,
@@ -22,6 +23,7 @@ import {
 } from './environment'
 import { PUBLIC_PREVIEW_STATE, type PreviewState } from './preview'
 import { ABOUT_PAGE_QUERY } from './queries/about'
+import { HOME_PAGE_QUERY } from './queries/home'
 import {
   CONTACT_PAGE_QUERY,
   SERVICES_PAGE_QUERY,
@@ -197,6 +199,23 @@ export interface JournalArticlePage {
 export type ContactPage = Omit<GeneratedContactPage, 'supportingImage'> & {
   supportingImage: ContentImage
   serviceOptions: ContactServiceOption[]
+}
+
+type GeneratedHomePage = NonNullable<HOME_PAGE_QUERY_RESULT>
+
+export type HomePage = Omit<
+  GeneratedHomePage,
+  | 'heroImage'
+  | 'studioImage'
+  | 'clientLogos'
+  | 'featuredWorkProjects'
+  | 'featuredJournalArticles'
+> & {
+  heroImage: ContentImage
+  studioImage: ContentImage
+  clientLogos: ClientLogo[]
+  featuredWorkProjects: WorkProjectCard[]
+  featuredJournalArticles: JournalArticleCard[]
 }
 
 export class MissingContentError extends Error {
@@ -583,6 +602,155 @@ export function requireAboutPage(value: unknown): AboutPage {
   }
 
   return value as AboutPage
+}
+
+export function requireHomePage(value: unknown): HomePage {
+  if (!value || typeof value !== 'object') {
+    throw new MissingContentError(
+      'Required Home document "homePage" was not found in Sanity content.',
+    )
+  }
+
+  const page = value as Record<string, unknown>
+  ;[
+    'heroHeading',
+    'heroPrimaryCtaLabel',
+    'heroSecondaryCtaLabel',
+    'featuredWorkHeading',
+    'featuredWorkCtaLabel',
+    'studioHeading',
+    'studioIntroduction',
+    'studioCtaLabel',
+    'pointOfViewHeading',
+    'pointOfViewCopy',
+    'processHeading',
+    'processCtaLabel',
+    'journalHeading',
+    'journalCtaLabel',
+    'finalCtaEyebrow',
+    'finalCtaHeading',
+    'finalCtaLabel',
+  ].forEach((field) => requireString(page, field, 'Home'))
+  requireContentImage(page.heroImage, 'heroImage')
+  requireContentImage(page.studioImage, 'studioImage')
+
+  const clientLogos = page.clientLogos
+  if (!Array.isArray(clientLogos) || clientLogos.length !== 5) {
+    throw new MissingContentError(
+      'Home requires exactly five Client Logo references.',
+    )
+  }
+  const clientLogoIds = clientLogos.map((item, index) => {
+    if (!item || typeof item !== 'object') {
+      throw new MissingContentError(`Home is missing clientLogos[${index}].`)
+    }
+    const logo = item as Record<string, unknown>
+    requireString(logo, '_id', `Home clientLogos[${index}]`)
+    requireString(logo, 'clientName', `Home clientLogos[${index}]`)
+    requireString(logo, 'url', `Home clientLogos[${index}]`)
+    if (logo.mimeType !== null && typeof logo.mimeType !== 'string') {
+      throw new MissingContentError(
+        `Home clientLogos[${index}] is missing required content: mimeType`,
+      )
+    }
+    return String(logo._id).replace(/^drafts\./, '')
+  })
+  if (new Set(clientLogoIds).size !== clientLogos.length) {
+    throw new MissingContentError(
+      'Home requires five unique Client Logo references.',
+    )
+  }
+
+  const workProjects = page.featuredWorkProjects
+  if (!Array.isArray(workProjects) || workProjects.length !== 2) {
+    throw new MissingContentError(
+      'Home requires exactly two featured Work Project references.',
+    )
+  }
+  workProjects.forEach((project, index) =>
+    requireWorkProjectCard(project, `Home.featuredWorkProjects[${index}]`),
+  )
+  const workProjectIds = workProjects.map((project) =>
+    String((project as Record<string, unknown>)._id).replace(/^drafts\./, ''),
+  )
+  if (new Set(workProjectIds).size !== workProjects.length) {
+    throw new MissingContentError(
+      'Home requires two unique featured Work Project references.',
+    )
+  }
+
+  const services = page.featuredServices
+  if (!Array.isArray(services) || services.length !== 4) {
+    throw new MissingContentError(
+      'Home requires exactly four featured Service references.',
+    )
+  }
+  const serviceIds = services.map((item, index) => {
+    if (!item || typeof item !== 'object') {
+      throw new MissingContentError(
+        `Home is missing featuredServices[${index}].`,
+      )
+    }
+    const service = item as Record<string, unknown>
+    ;['_id', 'title', 'shortSummary'].forEach((field) =>
+      requireString(service, field, `Home featuredServices[${index}]`),
+    )
+    return String(service._id).replace(/^drafts\./, '')
+  })
+  if (new Set(serviceIds).size !== services.length) {
+    throw new MissingContentError(
+      'Home requires four unique featured Service references.',
+    )
+  }
+
+  const sectors = page.sectorLabels
+  if (
+    !Array.isArray(sectors) ||
+    sectors.length !== 4 ||
+    sectors.some((sector) => typeof sector !== 'string') ||
+    !uniqueStrings(sectors as string[])
+  ) {
+    throw new MissingContentError(
+      'Home requires exactly four unique sector labels.',
+    )
+  }
+
+  const processSteps = page.processSteps
+  if (!Array.isArray(processSteps) || processSteps.length !== 4) {
+    throw new MissingContentError('Home requires exactly four process steps.')
+  }
+  processSteps.forEach((item, index) => {
+    if (!item || typeof item !== 'object') {
+      throw new MissingContentError(`Home is missing processSteps[${index}].`)
+    }
+    const step = item as Record<string, unknown>
+    ;['title', 'description'].forEach((field) =>
+      requireString(step, field, `Home processSteps[${index}]`),
+    )
+  })
+
+  const journalArticles = page.featuredJournalArticles
+  if (!Array.isArray(journalArticles) || journalArticles.length !== 3) {
+    throw new MissingContentError(
+      'Home requires exactly three featured Journal Article references.',
+    )
+  }
+  journalArticles.forEach((article, index) =>
+    requireJournalArticleCard(
+      article,
+      `Home.featuredJournalArticles[${index}]`,
+    ),
+  )
+  const journalArticleIds = journalArticles.map((article) =>
+    String((article as Record<string, unknown>)._id).replace(/^drafts\./, ''),
+  )
+  if (new Set(journalArticleIds).size !== journalArticles.length) {
+    throw new MissingContentError(
+      'Home requires three unique featured Journal Article references.',
+    )
+  }
+
+  return value as HomePage
 }
 
 export function requireContactPage(value: unknown): ContactPage {
@@ -986,6 +1154,13 @@ export async function getSiteSettings(
 ): Promise<SiteSettings> {
   const { data } = await getContent(preview).loadQuery(SITE_SETTINGS_QUERY)
   return requireSiteSettings(data)
+}
+
+export async function getHomePage(
+  preview: PreviewState = PUBLIC_PREVIEW_STATE,
+): Promise<HomePage> {
+  const { data } = await getContent(preview).loadQuery(HOME_PAGE_QUERY)
+  return requireHomePage(data)
 }
 
 export async function getServicesPage(

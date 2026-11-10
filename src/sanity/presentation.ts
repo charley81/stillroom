@@ -18,12 +18,20 @@ export const siteSettingsLocations = {
   ],
 } satisfies DocumentLocationsState
 
+export const homePageLocations = {
+  locations: [{ title: 'Home', href: '/' }],
+} satisfies DocumentLocationsState
+
 export const workPageLocations = {
   locations: [{ title: 'Work', href: '/work' }],
 } satisfies DocumentLocationsState
 
 const workProjectLocationResolver = {
-  select: { title: 'title', slug: 'slug.current' },
+  select: {
+    title: 'title',
+    slug: 'slug.current',
+    featuredOnHome: 'count(*[_type == "homePage" && references(^._id)]) > 0',
+  },
   resolve: (document) => {
     if (!document?.slug) {
       return { message: 'Add a slug to preview this Work Project.' }
@@ -35,11 +43,13 @@ const workProjectLocationResolver = {
           href: `/work/${document.slug}`,
         },
         { title: 'Work listing', href: '/work' },
-        { title: 'Home featured Work placement', href: '/' },
+        ...(document.featuredOnHome
+          ? [{ title: 'Home featured Work placement', href: '/' }]
+          : []),
       ],
     }
   },
-} satisfies DocumentLocationResolverObject<'title' | 'slug'>
+} satisfies DocumentLocationResolverObject<'title' | 'slug' | 'featuredOnHome'>
 
 export const workProjectLocations = workProjectLocationResolver
 
@@ -51,6 +61,7 @@ interface JournalArticleLocationValue {
   title?: string
   slug?: string
   relatedIn?: Array<{ title?: string; slug?: string }>
+  featuredOnHome?: boolean
 }
 
 export const journalArticleLocations = {
@@ -59,6 +70,7 @@ export const journalArticleLocations = {
     slug: 'slug.current',
     relatedIn:
       '*[_type == "journalArticle" && references(^._id)]{title, "slug": slug.current}',
+    featuredOnHome: 'count(*[_type == "homePage" && references(^._id)]) > 0',
   },
   resolve: (document: JournalArticleLocationValue | null) => {
     if (!document?.slug) {
@@ -71,7 +83,9 @@ export const journalArticleLocations = {
           href: `/journal/${document.slug}`,
         },
         { title: 'Journal listing', href: '/journal' },
-        { title: 'Home featured Journal placement', href: '/' },
+        ...(document.featuredOnHome
+          ? [{ title: 'Home featured Journal placement', href: '/' }]
+          : []),
         ...(document.relatedIn ?? []).flatMap((article) =>
           article.slug
             ? [
@@ -85,7 +99,9 @@ export const journalArticleLocations = {
       ],
     }
   },
-} satisfies DocumentLocationResolverObject<'title' | 'slug' | 'relatedIn'>
+} satisfies DocumentLocationResolverObject<
+  'title' | 'slug' | 'relatedIn' | 'featuredOnHome'
+>
 
 interface JournalReferenceLocationValue {
   name?: string
@@ -152,16 +168,33 @@ export const aboutPageLocations = {
   locations: [{ title: 'About', href: '/about' }],
 } satisfies DocumentLocationsState
 
+interface ClientLogoLocationValue {
+  clientName?: string
+  featuredOnHome?: boolean
+  shownOnAbout?: boolean
+}
+
 export const clientLogoLocations = {
-  select: { clientName: 'clientName' },
-  resolve: (_document: { clientName?: string } | null) => ({
-    locations: [{ title: 'About', href: '/about' }],
+  select: {
+    clientName: 'clientName',
+    featuredOnHome: 'count(*[_type == "homePage" && references(^._id)]) > 0',
+    shownOnAbout: 'count(*[_type == "aboutPage" && references(^._id)]) > 0',
+  },
+  resolve: (document: ClientLogoLocationValue | null) => ({
+    locations: [
+      ...(document?.featuredOnHome ? [{ title: 'Home', href: '/' }] : []),
+      ...(document?.shownOnAbout ? [{ title: 'About', href: '/about' }] : []),
+    ],
   }),
-} satisfies DocumentLocationResolverObject<'clientName'>
+} satisfies DocumentLocationResolverObject<
+  'clientName' | 'featuredOnHome' | 'shownOnAbout'
+>
 
 interface ServiceLocationValue {
   title?: string
   workProjects?: Array<{ title?: string; slug?: string }>
+  featuredOnHome?: boolean
+  shownOnServices?: boolean
 }
 
 export const serviceLocations = {
@@ -169,12 +202,21 @@ export const serviceLocations = {
     title: 'title',
     workProjects:
       '*[_type == "workProject" && references(^._id)]{title, "slug": slug.current}',
+    featuredOnHome: 'count(*[_type == "homePage" && references(^._id)]) > 0',
+    shownOnServices:
+      'count(*[_type == "servicesPage" && references(^._id)]) > 0',
   },
   resolve: (document: ServiceLocationValue | null) => ({
     locations: [
-      { title: 'Services', href: '/services' },
-      { title: 'Contact form', href: '/contact' },
-      { title: 'Home featured Services placement', href: '/' },
+      ...(document?.shownOnServices
+        ? [
+            { title: 'Services', href: '/services' },
+            { title: 'Contact form', href: '/contact' },
+          ]
+        : []),
+      ...(document?.featuredOnHome
+        ? [{ title: 'Home featured Services placement', href: '/' }]
+        : []),
       ...(document?.workProjects ?? []).flatMap((project) =>
         project.slug
           ? [
@@ -187,7 +229,9 @@ export const serviceLocations = {
       ),
     ],
   }),
-} satisfies DocumentLocationResolverObject<'title' | 'workProjects'>
+} satisfies DocumentLocationResolverObject<
+  'title' | 'workProjects' | 'featuredOnHome' | 'shownOnServices'
+>
 
 export const PRESENTATION_OPTIONS = {
   allowOrigins: [...TRUSTED_PRESENTATION_ORIGINS],
@@ -210,6 +254,7 @@ export const PRESENTATION_OPTIONS = {
         route: ['/', '/work', '/services', '/about', '/journal', '/contact'],
         type: 'siteSettings',
       },
+      { route: '/', type: 'homePage' },
       { route: '/work', type: 'workPage' },
       { route: '/work/:slug', type: 'workProject' },
       { route: '/services', type: 'servicesPage' },
@@ -220,6 +265,7 @@ export const PRESENTATION_OPTIONS = {
     ],
     locations: {
       siteSettings: siteSettingsLocations,
+      homePage: homePageLocations,
       workPage: workPageLocations,
       workProject: workProjectLocations,
       servicesPage: servicesPageLocations,

@@ -8,10 +8,19 @@ import StudioIntro from '../components/home/StudioIntro.astro'
 import ClientLogos from '../components/site/ClientLogos.astro'
 import ProjectInvitation from '../components/site/ProjectInvitation.astro'
 import Layout from '../layouts/Layout.astro'
+import { getHomePage } from '../sanity/content'
+import { PUBLIC_PREVIEW_STATE } from '../sanity/preview'
+
+const preview = Astro.locals.preview ?? PUBLIC_PREVIEW_STATE
+const page = await getHomePage(preview)
+const visibleTitle = page.heroHeading.replace(/\s+/g, ' ').trim()
+const title = page.seo?.metaTitle ?? `${visibleTitle} — Stillroom`
+const description = page.seo?.metaDescription ?? page.studioIntroduction
+const socialImageUrl = page.seo?.socialImageUrl ?? page.heroImage.url
 ---
 
-<Layout>
-  <HomeHero />
+<Layout title={title} description={description} socialImageUrl={socialImageUrl}>
+  <HomeHero page={page} />
   <section class="flex h-[694px] flex-col gap-8 px-4 py-16 md:h-[417px] md:px-8 md:py-32">
     <p class="m-0 font-body text-base leading-[14.85px] font-black text-dark-grey uppercase">
       <span class="hidden md:inline">
@@ -19,35 +28,37 @@ import Layout from '../layouts/Layout.astro'
       </span>
       <span class="inline md:hidden">Explorations in hospitality</span>
     </p>
-    <ClientLogos />
+    <ClientLogos logos={page.clientLogos} />
   </section>
-  <SelectedConcepts />
-  <ServicesOverview />
+  <SelectedConcepts page={page} />
+  <ServicesOverview page={page} />
   <section class="flex h-[369px] flex-col gap-8 px-4 py-16 md:h-[505px] md:px-8 md:py-32">
     <p class="m-0 font-body text-base leading-[16.2px] font-black text-dark-grey uppercase">
       Made for the world of hospitality
     </p>
     <h2 class="m-0 font-display text-5xl leading-12 font-normal text-dark uppercase md:text-[72px] md:leading-[100px]">
-      Restaurants / Boutique hotels
+      {page.sectorLabels[0]} / {page.sectorLabels[1]}
       <br />
-      Cafés & bars / Food & drink
+      {page.sectorLabels[2]} / {page.sectorLabels[3]}
     </h2>
   </section>
-  <StudioIntro />
+  <StudioIntro page={page} />
   <section class="relative isolate flex h-[440px] flex-col gap-8 overflow-hidden bg-primary bg-[length:1440px_1002px] bg-left-top bg-no-repeat px-4 py-16 text-light after:absolute after:inset-0 after:-z-10 after:bg-dark after:opacity-[0.64] after:content-[''] md:h-[506px] md:px-8 md:py-32">
     <p class="m-0 font-body text-base leading-[16.2px] font-black text-light uppercase">
       Our point of view
     </p>
-    <h2 class="m-0 font-display text-5xl leading-12 font-normal text-light uppercase md:text-[72px] md:leading-[74.88px]">
-      A good brand should feel
-      <br />
-      like a place you belong!
+    <h2 class="m-0 whitespace-pre-line font-display text-5xl leading-12 font-normal text-light uppercase md:text-[72px] md:leading-[74.88px]">
+      {page.pointOfViewHeading}
     </h2>
     <p class="m-0 text-base leading-[20.25px] text-light">
-      The Stillroom approach / Strategy, identity and digital, together.
+      {page.pointOfViewCopy}
     </p>
   </section>
-  <ProcessOverview />
-  <JournalHighlights />
-  <ProjectInvitation />
+  <ProcessOverview page={page} />
+  <JournalHighlights page={page} />
+  <ProjectInvitation
+    eyebrow={page.finalCtaEyebrow}
+    title={page.finalCtaHeading}
+    label={page.finalCtaLabel}
+  />
 </Layout>

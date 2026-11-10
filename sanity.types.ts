@@ -439,6 +439,60 @@ export type AboutPage = {
   seo?: SeoFields
 }
 
+export type HomePage = {
+  _id: string
+  _type: 'homePage'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  heroHeading: string
+  heroImage: EditorialImage
+  heroPrimaryCtaLabel: string
+  heroSecondaryCtaLabel: string
+  clientLogos: Array<
+    {
+      _key: string
+    } & ClientLogoReference
+  >
+  featuredWorkHeading: string
+  featuredWorkProjects: Array<
+    {
+      _key: string
+    } & WorkProjectReference
+  >
+  featuredWorkCtaLabel: string
+  featuredServices: Array<
+    {
+      _key: string
+    } & ServiceReference
+  >
+  sectorLabels: Array<string>
+  studioHeading: string
+  studioIntroduction: string
+  studioImage: EditorialImage
+  studioCtaLabel: string
+  pointOfViewHeading: string
+  pointOfViewCopy: string
+  processHeading: string
+  processSteps: Array<
+    {
+      _key: string
+    } & ProcessStep
+  >
+  processCtaLabel: string
+  journalHeading: string
+  featuredJournalArticles: Array<
+    {
+      _key: string
+    } & JournalArticleReference
+  >
+  journalCtaLabel: string
+  finalCtaEyebrow: string
+  finalCtaHeading: string
+  finalCtaLabel: string
+  seo?: SeoFields
+}
+
 export type SiteSettings = {
   _id: string
   _type: 'siteSettings'
@@ -598,6 +652,7 @@ export type AllSanitySchemaTypes =
   | WorkPage
   | ClientLogoReference
   | AboutPage
+  | HomePage
   | SiteSettings
   | SanityImagePaletteSwatch
   | SanityImagePalette
@@ -664,6 +719,106 @@ export type ABOUT_PAGE_QUERY_RESULT = {
     mimeType: string | null
   }>
   clientProofCtaLabel: string
+  finalCtaEyebrow: string
+  finalCtaHeading: string
+  finalCtaLabel: string
+  seo: {
+    metaTitle: string | null
+    metaDescription: string | null
+    socialImageUrl: string | null
+  } | null
+} | null
+
+// Source: src/sanity/queries/home.ts
+// Variable: HOME_PAGE_QUERY
+// Query: *[_type == "homePage" && _id == "homePage"][0]{    _id,    heroHeading,    heroImage{        decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url    },    heroPrimaryCtaLabel,    heroSecondaryCtaLabel,    clientLogos[]->{      _id,      clientName,      "url": logo.asset->url,      "mimeType": logo.asset->mimeType    },    featuredWorkHeading,    featuredWorkProjects[]->{        _id,  title,  "slug": slug.current,  sectorLabel,  cardSummary,  cardImage{      decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url  },  services[]->{      _id,  title  },  positioningStatement    },    featuredWorkCtaLabel,    featuredServices[]->{      _id,      title,      shortSummary    },    sectorLabels,    studioHeading,    studioIntroduction,    studioImage{        decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url    },    studioCtaLabel,    pointOfViewHeading,    pointOfViewCopy,    processHeading,    processSteps[]{      _key,      _type,      title,      description    },    processCtaLabel,    journalHeading,    featuredJournalArticles[]->{        _id,  title,  "slug": slug.current,  category->{      _id,  title,  "slug": slug.current  },  publicationDate,  standfirst,  readingTime,  heroImage{      decorative,  alt,  caption,  "url": asset.asset->url,  "mobileUrl": mobileOverride.asset->url  }    },    journalCtaLabel,    finalCtaEyebrow,    finalCtaHeading,    finalCtaLabel,    seo{        metaTitle,  metaDescription,  "socialImageUrl": socialImage.asset->url    }  }
+export type HOME_PAGE_QUERY_RESULT = {
+  _id: 'homePage'
+  heroHeading: string
+  heroImage: {
+    decorative: boolean
+    alt: string | null
+    caption: string | null
+    url: string | null
+    mobileUrl: string | null
+  }
+  heroPrimaryCtaLabel: string
+  heroSecondaryCtaLabel: string
+  clientLogos: Array<{
+    _id: string
+    clientName: string
+    url: string | null
+    mimeType: string | null
+  }>
+  featuredWorkHeading: string
+  featuredWorkProjects: Array<{
+    _id: string
+    title: string
+    slug: string
+    sectorLabel: string
+    cardSummary: string
+    cardImage: {
+      decorative: boolean
+      alt: string | null
+      caption: string | null
+      url: string | null
+      mobileUrl: string | null
+    }
+    services: Array<{
+      _id: string
+      title: string
+    }>
+    positioningStatement: string
+  }>
+  featuredWorkCtaLabel: string
+  featuredServices: Array<{
+    _id: string
+    title: string
+    shortSummary: string
+  }>
+  sectorLabels: Array<string>
+  studioHeading: string
+  studioIntroduction: string
+  studioImage: {
+    decorative: boolean
+    alt: string | null
+    caption: string | null
+    url: string | null
+    mobileUrl: string | null
+  }
+  studioCtaLabel: string
+  pointOfViewHeading: string
+  pointOfViewCopy: string
+  processHeading: string
+  processSteps: Array<{
+    _key: string
+    _type: 'processStep'
+    title: string
+    description: string
+  }>
+  processCtaLabel: string
+  journalHeading: string
+  featuredJournalArticles: Array<{
+    _id: string
+    title: string
+    slug: string
+    category: {
+      _id: string
+      title: string
+      slug: string
+    }
+    publicationDate: string
+    standfirst: string
+    readingTime: string
+    heroImage: {
+      decorative: boolean
+      alt: string | null
+      caption: string | null
+      url: string | null
+      mobileUrl: string | null
+    }
+  }>
+  journalCtaLabel: string
   finalCtaEyebrow: string
   finalCtaHeading: string
   finalCtaLabel: string
@@ -1106,6 +1261,7 @@ export type WORK_PROJECT_QUERY_RESULT = {
 declare global {
   interface SanityQueries {
     '\n  *[_type == "aboutPage" && _id == "aboutPage"][0]{\n    _id,\n    heading,\n    heroImage{\n      \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n    },\n    founderHeading,\n    founderStory,\n    founderName,\n    founderRole,\n    founderImage{\n      \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n    },\n    teamHeading,\n    teamIntroduction,\n    teamMembers[]{\n      _key,\n      _type,\n      name,\n      role,\n      biography,\n      portrait{\n        \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n      }\n    },\n    principles[]{\n      _key,\n      _type,\n      title,\n      description\n    },\n    principlesHeading,\n    clientProofHeading,\n    clientProofCopy,\n    clientLogos[]->{\n      _id,\n      clientName,\n      "url": logo.asset->url,\n      "mimeType": logo.asset->mimeType\n    },\n    clientProofCtaLabel,\n    finalCtaEyebrow,\n    finalCtaHeading,\n    finalCtaLabel,\n    seo{\n      \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n    }\n  }\n': ABOUT_PAGE_QUERY_RESULT
+    '\n  *[_type == "homePage" && _id == "homePage"][0]{\n    _id,\n    heroHeading,\n    heroImage{\n      \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n    },\n    heroPrimaryCtaLabel,\n    heroSecondaryCtaLabel,\n    clientLogos[]->{\n      _id,\n      clientName,\n      "url": logo.asset->url,\n      "mimeType": logo.asset->mimeType\n    },\n    featuredWorkHeading,\n    featuredWorkProjects[]->{\n      \n  _id,\n  title,\n  "slug": slug.current,\n  sectorLabel,\n  cardSummary,\n  cardImage{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n  },\n  services[]->{\n    \n  _id,\n  title\n\n  },\n  positioningStatement\n\n    },\n    featuredWorkCtaLabel,\n    featuredServices[]->{\n      _id,\n      title,\n      shortSummary\n    },\n    sectorLabels,\n    studioHeading,\n    studioIntroduction,\n    studioImage{\n      \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n    },\n    studioCtaLabel,\n    pointOfViewHeading,\n    pointOfViewCopy,\n    processHeading,\n    processSteps[]{\n      _key,\n      _type,\n      title,\n      description\n    },\n    processCtaLabel,\n    journalHeading,\n    featuredJournalArticles[]->{\n      \n  _id,\n  title,\n  "slug": slug.current,\n  category->{\n    \n  _id,\n  title,\n  "slug": slug.current\n\n  },\n  publicationDate,\n  standfirst,\n  readingTime,\n  heroImage{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n  }\n\n    },\n    journalCtaLabel,\n    finalCtaEyebrow,\n    finalCtaHeading,\n    finalCtaLabel,\n    seo{\n      \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n    }\n  }\n': HOME_PAGE_QUERY_RESULT
     '\n  {\n    "page": *[_type == "journalPage" && _id == "journalPage"][0]{\n      _id,\n      heading,\n      introduction,\n      introductionArtwork{\n        \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n      },\n      featuredJournalArticle->{\n        \n  _id,\n  title,\n  "slug": slug.current,\n  category->{\n    \n  _id,\n  title,\n  "slug": slug.current\n\n  },\n  publicationDate,\n  standfirst,\n  readingTime,\n  heroImage{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n  }\n\n      },\n      seo{\n        \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n      }\n    },\n    "articles": *[\n      _type == "journalArticle" &&\n      !(_id in [\n        *[_type == "journalPage" && _id == "journalPage"][0].featuredJournalArticle._ref,\n        "drafts." + *[_type == "journalPage" && _id == "journalPage"][0].featuredJournalArticle._ref\n      ])\n    ] | order(publicationDate desc){\n      \n  _id,\n  title,\n  "slug": slug.current,\n  category->{\n    \n  _id,\n  title,\n  "slug": slug.current\n\n  },\n  publicationDate,\n  standfirst,\n  readingTime,\n  heroImage{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n  }\n\n    }\n  }\n': JOURNAL_PAGE_QUERY_RESULT
     '\n  {\n    "article": *[_type == "journalArticle" && slug.current == $slug][0]{\n      \n  _id,\n  title,\n  "slug": slug.current,\n  category->{\n    \n  _id,\n  title,\n  "slug": slug.current\n\n  },\n  publicationDate,\n  standfirst,\n  readingTime,\n  heroImage{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n  }\n,\n      author->{\n        \n  _id,\n  name,\n  biography\n\n      },\n      body[]{\n        _key,\n        _type,\n        _type == "journalArticleSection" => {\n          label,\n          content\n        },\n        _type == "journalArticlePullQuote" => {\n          label,\n          quote\n        }\n      },\n      relatedJournalArticles[]->{\n        \n  _id,\n  title,\n  "slug": slug.current,\n  category->{\n    \n  _id,\n  title,\n  "slug": slug.current\n\n  },\n  publicationDate,\n  standfirst,\n  readingTime,\n  heroImage{\n    \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n  }\n\n      },\n      seo{\n        \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n      }\n    }\n  }\n': JOURNAL_ARTICLE_QUERY_RESULT
     '\n  *[_type == "servicesPage" && _id == "servicesPage"][0]{\n    _id,\n    heroHeading,\n    heroIntroduction,\n    heroImage{\n      \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n    },\n    heroCtaLabel,\n    services[]->{\n      _id,\n      title,\n      shortSummary,\n      description,\n      image{\n        \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n      },\n      deliverables\n    },\n    processHeading,\n    processSteps[]{\n      _key,\n      title,\n      description\n    },\n    hospitalityHeading,\n    hospitalitySectorLabels,\n    hospitalityPointOfView,\n    hospitalityImage{\n      \n  decorative,\n  alt,\n  caption,\n  "url": asset.asset->url,\n  "mobileUrl": mobileOverride.asset->url\n\n    },\n    hospitalityCtaLabel,\n    finalStatementEyebrow,\n    finalStatementHeading,\n    seo{\n      \n  metaTitle,\n  metaDescription,\n  "socialImageUrl": socialImage.asset->url\n\n    }\n  }\n': SERVICES_PAGE_QUERY_RESULT

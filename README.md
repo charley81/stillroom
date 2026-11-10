@@ -37,7 +37,7 @@ Presentation enables draft preview through `/api/preview/enable`; `/api/preview/
 
 Sanity source is organized under `src/sanity/`, with generated schema and query types in `sanity.types.ts`. Regenerate them with `pnpm sanity:typegen`.
 
-Work Projects and the complete Journal journey load from Sanity at request time. Journal Articles, Authors, Journal Categories, and the Journal singleton are migrated with `pnpm sanity:migrate:journal` (drafts) or `pnpm sanity:migrate:journal:publish`.
+Home, Work Projects, Services, About, Contact, and the complete Journal journey load from Sanity at request time. Migrate the Home singleton as a development draft with `pnpm sanity:migrate:home`; publish it explicitly with `pnpm sanity:migrate:home:publish` only after review.
 
 ## Structure
 

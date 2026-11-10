@@ -3,46 +3,11 @@ import { stegaClean } from '@sanity/client/stega'
 import type { ClientLogo } from '../../sanity/content'
 
 interface Props {
-  logos?: ClientLogo[]
+  logos: ClientLogo[]
   variant?: 'strip' | 'proof'
 }
 
 const { logos, variant = 'strip' } = Astro.props
-
-const fallbackLogos: ClientLogo[] = [
-  {
-    _id: 'client-logo-orlo-house',
-    clientName: 'Orlo House',
-    url: '/figma-assets/client-logos/orlo-house.svg',
-    mimeType: 'image/svg+xml',
-  },
-  {
-    _id: 'client-logo-juniper',
-    clientName: 'Juniper',
-    url: '/figma-assets/client-logos/juniper.svg',
-    mimeType: 'image/svg+xml',
-  },
-  {
-    _id: 'client-logo-fieldwork',
-    clientName: 'Fieldwork',
-    url: '/figma-assets/client-logos/fieldwork.svg',
-    mimeType: 'image/svg+xml',
-  },
-  {
-    _id: 'client-logo-the-long-table',
-    clientName: 'The Long Table',
-    url: '/figma-assets/client-logos/the-long-table.svg',
-    mimeType: 'image/svg+xml',
-  },
-  {
-    _id: 'client-logo-morrow',
-    clientName: 'Morrow',
-    url: '/figma-assets/client-logos/morrow.svg',
-    mimeType: 'image/svg+xml',
-  },
-]
-
-const renderedLogos = logos ?? fallbackLogos
 const mobileHeights = [
   'h-[92px]',
   'h-[89px]',
@@ -57,7 +22,7 @@ const desktopHeight = variant === 'proof' ? 'md:h-[289px]' : 'md:h-[114px]'
   class="grid w-full grid-cols-1 gap-5 md:min-h-[114px] md:grid-cols-5"
   aria-label="Client Logos"
 >
-  {renderedLogos.map((logo, index) => (
+  {logos.map((logo, index) => (
     <div
       class:list={[
         'flex min-h-0 items-center justify-center overflow-hidden',
