@@ -10,6 +10,7 @@
     "build": "astro build",
     "check": "astro check",
     "test": "vitest run",
+    "test:browser": "vitest run --config vitest.browser.config.ts",
     "test:watch": "vitest",
     "verify:site": "tsx scripts/verify-site.ts",
     "verify:production": "VERIFY_PRODUCTION=true SCREENSHOT_DIRECTORY=.sanity/screenshots/production tsx scripts/verify-site.ts",
