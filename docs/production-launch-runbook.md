@@ -52,7 +52,7 @@ The archives and JSON integrity manifests are intentionally gitignored. Copy the
 - The temporary Home edit was published and observed publicly without changing the active Netlify deploy, then the verified content was restored.
 - The obsolete `sanity content published` Netlify build hook was deleted. The site now has zero Netlify build hooks.
 - Netlify’s public “Built with Netlify” badge was disabled and the final responsive screenshots were recaptured without the overlay.
-- Both dataset archives passed gzip/tar integrity checks. The pre-migration archive was parsed successfully by Sanity document validation. A full restore rehearsal into a temporary dataset requires a project-admin token with `sanity.project.datasets/create` and `delete`; the local least-privilege migration token intentionally does not have those grants.
+- Both dataset archives passed gzip/tar integrity and SHA-256 checks. The pre-migration archive was parsed successfully by Sanity document validation. A temporary restore rehearsal was attempted with project-admin access, but Sanity rejected dataset creation before making changes because the project’s two dataset slots are used by `production` and `development`. For this portfolio project, the owner waived the restore rehearsal and secure backup retention requirements and accepted the remaining recovery risk. Issue #11 is complete under this revised scope; the original restore-rehearsal criterion was waived, not passed. The archives remain local and gitignored.
 
 ## Netlify rollback
 
